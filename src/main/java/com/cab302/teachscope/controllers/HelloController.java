@@ -1,4 +1,4 @@
-package com.cab302.teachscope;
+package com.cab302.teachscope.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
