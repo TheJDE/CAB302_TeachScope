@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.text.Text?>
+
+
+
+<HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="0"
+      fx:controller="com.cab302.teachscope.controllers.LoginController">
+
+    <!-- login form -->
+    <VBox alignment="CENTER" spacing="15.0" prefWidth="400" style="-fx-background-color: white;">
+        <padding>
+            <Insets top="70" right="70" bottom="70" left="320"/>
+        </padding>
+
+        <!-- logo -->
+        <ImageView pickOnBounds="true" preserveRatio="true" fitWidth="500">
+            <image>
+                <Image url="@../images/logo_teachscope.png"/>
+            </image>
+        </ImageView>
+
+        <!-- welcome text -->
+        <Label text="Welcome back" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+        <!-- email -->
+        <TextField promptText="Email" styleClass="form-control"/>
+
+        <!-- password -->
+        <PasswordField promptText="Password" styleClass="form-control"/>
+
+        <!-- login button -->
+        <Button text="Login" styleClass="btn-primary" maxWidth="Infinity"/>
+
+        <!-- sign up link -->
+        <HBox alignment="CENTER" spacing="5">
+            <Label text="Don't have an account?"/>
+            <Hyperlink text="Sign up"/>
+        </HBox>
+    </VBox>
+
+    <!-- image -->
+    <ImageView pickOnBounds="true" preserveRatio="true">
+        <image>
+            <Image url="@../images/login_picture.png"/>
+        </image>
+    </ImageView>
+
+</HBox>

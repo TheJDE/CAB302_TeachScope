@@ -1,4 +1,4 @@
 package com.cab302.teachscope.controllers;
 
-public class HelloControllerTest {
+public class LoginControllerTest {
 }
