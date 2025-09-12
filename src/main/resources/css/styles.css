@@ -1,0 +1,57 @@
+.button {
+    -fx-background-color: #152259;
+    -fx-text-fill: white;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-padding: 12px 20px;
+    -fx-min-height: 40px;
+    -fx-font-size: 18px;
+}
+
+.button:hover {
+    -fx-background-color: #1e2d73;
+}
+
+.button.active {
+    -fx-background-color: #D279B1;
+    -fx-text-fill: white;
+}
+
+.text-field, .password-field, .combo-box {
+    -fx-background-color: #f9f9f9;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+
+    -fx-padding: 12px 20px;
+    -fx-min-height: 40px;
+    -fx-font-size: 14px;
+    -fx-pref-width: 250px;
+}
+
+.label {
+    -fx-font-size: 14px;
+}
+
+.h2 {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #152259;
+}
+
+.h1 {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #152259;
+}
+
+
+.hyperlink {
+    -fx-font-size: 14px;
+    -fx-text-fill: #152259;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+.hyperlink:hover {
+    -fx-text-fill: #D279B1;
+}

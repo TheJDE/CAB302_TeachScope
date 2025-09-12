@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.ComboBox?>
+<?import java.lang.String?>
+
+<HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="0"
+      fx:controller="com.cab302.teachscope.controllers.StudentController" stylesheets="@../css/styles.css">
+
+    <!-- sidebar menu -->
+    <VBox spacing="20" style="-fx-background-color: #E5E5E5;" prefWidth="220">
+        <padding>
+            <Insets top="20" right="10" bottom="20" left="10"/>
+        </padding>
+
+        <!-- logo -->
+        <VBox alignment="CENTER" spacing="10">
+            <ImageView pickOnBounds="true" preserveRatio="true" fitWidth="250">
+                <image>
+                    <Image url="@../images/logo_teachscope.png"/>
+                </image>
+            </ImageView>
+        </VBox>
+
+        <!-- nav -->
+        <VBox spacing="10">
+            <Button text="Students" styleClass="active" maxWidth="Infinity"/>
+            <Button text="Timeline" styleClass="" maxWidth="Infinity"/>
+        </VBox>
+
+        <VBox VBox.vgrow="ALWAYS"/>
+
+        <!-- logout button -->
+        <Button fx:id="logoutButton" text="Logout" styleClass="" maxWidth="Infinity" onAction="#onLogoutClick"/>
+    </VBox>
+
+    <VBox spacing="20" HBox.hgrow="ALWAYS">
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" spacing="20">
+        <Label text="Add New Student" styleClass="h1">
+            <padding>
+                <Insets top="20" left="30"/>
+            </padding>
+        </Label>
+        </HBox>
+
+        <!-- form for new student -->
+        <VBox spacing="20" style="-fx-background-color: #f7f7f7;" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="20" right="40" bottom="20" left="40"/>
+            </padding>
+
+
+            <HBox spacing="15">
+                <VBox spacing="5">
+                    <Label text="First Name"/>
+                    <TextField fx:id="firstName" promptText="First Name"/>
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="Last Name"/>
+                    <TextField fx:id="lastName" promptText="Last Name"/>
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="Gender"/>
+                    <ComboBox fx:id="gender" promptText="Select an option">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Female"/>
+                                <String fx:value="Male"/>
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                </VBox>
+            </HBox>
+
+
+            <HBox spacing="15">
+                <VBox spacing="5">
+                    <Label text="Grade Level"/>
+                    <ComboBox fx:id="gradeLevel">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Prep"/>
+                                <String fx:value="Grade 1"/>
+                                <String fx:value="Grade 2"/>
+                                <String fx:value="Grade 3"/>
+                                <String fx:value="Grade 4"/>
+                                <String fx:value="Grade 5"/>
+                                <String fx:value="Grade 6"/>
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="Class"/>
+                    <TextField fx:id="classField" promptText="Class"/>
+                </VBox>
+            </HBox>
+
+
+            <HBox spacing="15">
+                <VBox spacing="5">
+                    <Label text="Enrolment Status"/>
+                    <ComboBox fx:id="studentStatus">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Active"/>
+                                <String fx:value="Withdrawn"/>
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                </VBox>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT">
+                <Button text="Add student" fx:id="addStudentButton"/>
+            </HBox>
+        </VBox>
+    </VBox>
+
+</HBox>

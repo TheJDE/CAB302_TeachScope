@@ -10,7 +10,7 @@
 
 
 <HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="0"
-      fx:controller="com.cab302.teachscope.controllers.LoginController" stylesheets="@../css/styles.css">
+      fx:controller="com.cab302.teachscope.controllers.SignupController" stylesheets="@../css/styles.css">
 
     <!-- login form -->
     <VBox alignment="CENTER" spacing="15.0" prefWidth="400" style="-fx-background-color: white;">
@@ -26,7 +26,10 @@
         </ImageView>
 
         <!-- welcome text -->
-        <Label text="Welcome back" style="-fx-font-size: 25px; -fx-font-weight: bold;"/>
+        <Label text="Sign up" style="-fx-font-size: 25px; -fx-font-weight: bold;"/>
+
+        <!-- full name -->
+        <TextField promptText="FullName" styleClass="form-control"/>
 
         <!-- email -->
         <TextField promptText="Email" styleClass="form-control"/>
@@ -34,13 +37,17 @@
         <!-- password -->
         <PasswordField promptText="Password" styleClass="form-control"/>
 
+        <!-- confirm password -->
+        <PasswordField promptText="ConfirmPassword" styleClass="form-control"/>
+
         <!-- login button -->
-        <Button fx:id="loginButton" text="Login" styleClass="" maxWidth="Infinity" onAction="#onLoginClick"/>
+        <Button text="Sign up" styleClass="" maxWidth="Infinity"/>
 
         <!-- sign up link -->
         <HBox alignment="CENTER" spacing="5">
-            <Label text="Don't have an account?"/>
-            <Hyperlink fx:id="signUpLink" text="Sign Up" onAction="#onSignUpClick"/>
+            <Label text="Already have an account?"/>
+            <Hyperlink fx:id="loginLink" text="Login" onAction="#onLoginLinkClick"/>
+
         </HBox>
     </VBox>
 

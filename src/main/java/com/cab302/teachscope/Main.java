@@ -19,6 +19,7 @@ public class Main extends Application {
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.setTitle("Login");
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 
