@@ -1,5 +1,5 @@
 package com.cab302.teachscope.models.dao;
-import com.cab302.teachscope.models.entities.Users;
+import com.cab302.teachscope.models.entities.User;
 import java.util.List;
 
 /**
@@ -12,30 +12,30 @@ public interface UserDao {
      * Adds a new user to the database
      * @param user - the user to add
      */
-    public void addUser(Users user);
+    public void addUser(User user);
 
     /**
      * Updates existing user password in the database
      * @param user - the user to update
      */
-    public void updateUserPassword(Users user);
+    public void updateUserPassword(User user);
 
     /**
      * Deletes a user from the database
      * @param user - the user to delete
      */
-    public void deleteUser(Users user);
+    public void deleteUser(User user);
 
     /**
      * Retrieves a specific user from the database
      * @param userName - the user to retrieve
      * @return - the user with the given userName, or null if not found.
      */
-    public Users getUser(String userName);
+    public User getUser(String userName);
 
     /**
      * Retrieves all users from the database
      * @return - the user with the given userName, or null if not found.
      */
-    public List<Users> getAllUsers();
+    public List<User> getAllUsers();
 }

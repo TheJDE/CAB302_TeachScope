@@ -1,27 +1,41 @@
 package com.cab302.teachscope.models.entities;
 
-public class Users {
+import java.util.regex.Pattern;
+
+public class User {
     //Fields
-    private String userName;
-    private String passWord;
+    private String email;
+    private String passwordHash;
 
     //Constructors
-    public Users(String passWord){
-        this.passWord = passWord;
+    public User(String email, String passwordHash){
+        setEmail(email);
+        setPasswordHash(passwordHash);
     }
 
     //Getters and Setters
-    public String getUserName() {
-        return userName;
-    }
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-    public String getPassWord() {
-        return passWord;
-    }
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public String getEmail() {
+        return email;
     }
 
+    public void setEmail(String email) {
+        if (email == null) {
+            throw new IllegalArgumentException("Email cannot be null.");
+        }
+
+        this.email = email;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    // Public Methods
+    public Boolean checkPassword(String password) {
+        return passwordHash.equals(password); // CHANGE THIS TO CHECK IF IT MATCHES THE HASH OF password
+    }
 }

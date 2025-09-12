@@ -1,6 +1,6 @@
 package com.cab302.teachscope.models.dao;
 import com.cab302.teachscope.DatabaseConnection;
-import com.cab302.teachscope.models.entities.Users;
+import com.cab302.teachscope.models.entities.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,10 +21,13 @@ public class DbUserDao implements UserDao{
     private void createTable() {
         try {
             Statement statement = connection.createStatement();
+
             String query = "CREATE TABLE IF NOT EXISTS users ("
-            + "userName STRING PRIMARY KEY,"
+            + "email STRING PRIMARY KEY,"
             + "passWord STRING NOT NULL"
             + ")";
+
+            statement.executeQuery(query);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,7 +41,7 @@ public class DbUserDao implements UserDao{
             clearStatement.execute(clearQuery);
             // Insert the test login data
             Statement insertStatement = connection.createStatement();
-            String insertQuery = "INSERT INO users (userName, passWord) VALUES "
+            String insertQuery = "INSERT INO users (email, passWord) VALUES "
                     + "('testLogin', 'testPassWord')";
             insertStatement.execute(insertQuery);
         } catch (Exception e) {
@@ -48,11 +51,11 @@ public class DbUserDao implements UserDao{
 
 
     @Override
-    public void addUser(Users user) {
+    public void addUser(User user) {
         try{
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO users (userName, passWord) VALUES (?, ?)");
-            statement.setString(1, user.getUserName());
-            statement.setString(2, user.getPassWord());
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO users (email, password) VALUES (?, ?)");
+            statement.setString(1, user.getEmail());
+            statement.setString(2, user.getPasswordHash());
             statement.executeUpdate();
         } catch (Exception e){
             e.printStackTrace();
@@ -61,11 +64,11 @@ public class DbUserDao implements UserDao{
     }
 
     @Override
-    public void updateUserPassword(Users user) {
+    public void updateUserPassword(User user) {
         try{
-            PreparedStatement statement = connection.prepareStatement("UPDATE users SET passWord = ? WHERE userName = ?");
-            statement.setString(1, user.getPassWord());
-            statement.setString(2, user.getUserName());
+            PreparedStatement statement = connection.prepareStatement("UPDATE users SET password = ? WHERE email = ?");
+            statement.setString(1, user.getPasswordHash());
+            statement.setString(2, user.getEmail());
             statement.executeUpdate();
         } catch (Exception e){
             e.printStackTrace();
@@ -74,10 +77,10 @@ public class DbUserDao implements UserDao{
     }
 
     @Override
-    public void deleteUser(Users user) {
+    public void deleteUser(User user) {
         try{
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM contacts WHERE userName = ?");
-            statement.setString(1,user.getUserName());
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM contacts WHERE email = ?");
+            statement.setString(1,user.getEmail());
             statement.executeUpdate();
         } catch (Exception e){
             e.printStackTrace();
@@ -85,14 +88,14 @@ public class DbUserDao implements UserDao{
     }
 
     @Override
-    public Users getUser(String userName) {
+    public User getUser(String email) {
         try{
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE username = ?");
-            statement.setString(1,userName);
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE email = ?");
+            statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                String passWord = resultSet.getString("passWord");
-                return new Users(passWord);
+                String password = resultSet.getString("password");
+                return new User(email, password);
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -101,17 +104,16 @@ public class DbUserDao implements UserDao{
     }
 
     @Override
-    public List<Users> getAllUsers() {
-        List<Users> users = new ArrayList<>();
+    public List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
         try {
-            Statement statment = connection.createStatement();
+            Statement statement = connection.createStatement();
             String query = "SELECT * FROM users";
-            ResultSet resultSet = statment.executeQuery(query);
+            ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                String userName = resultSet.getString("userName");
-                String passWord = resultSet.getString("passWord");
-                Users user = new Users(passWord);
-                user.setUserName(userName);
+                String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
+                User user = new User(email, password);
                 users.add(user);
             }
         } catch (Exception e) {
