@@ -108,4 +108,5 @@ public class Student {
     public EnrolmentStatus getEnrolmentStatus() {
         return enrolmentStatus;
     }
+
 }
