@@ -35,7 +35,9 @@ public class SignupController {
 
     @FXML
     protected void onSignUpClick() {
-        //save details to the database
+        if (!passwordField.equals(confirmPasswordField)) {
+            throw new IllegalArgumentException("Passwords must match");
+        }
     }
 
     @FXML
