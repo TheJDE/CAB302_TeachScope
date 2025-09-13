@@ -11,7 +11,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
+import com.cab302.teachscope.models.dao.DbUserDao;
+import com.cab302.teachscope.models.services.UserService;
+
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class SignupController {
 
@@ -33,10 +37,34 @@ public class SignupController {
     @FXML
     private Hyperlink loginLink;
 
+    private final UserService userService = new UserService(new DbUserDao());
+
     @FXML
     protected void onSignUpClick() {
-        if (!passwordField.equals(confirmPasswordField)) {
-            throw new IllegalArgumentException("Passwords must match");
+        String email = emailField.getText();
+        String password = passwordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
+
+        if (!password.equals(confirmPassword)) {
+            throw new IllegalArgumentException("Passwords do not match");
+        }
+
+        try {
+            userService.registerUser(email, password);
+
+            Stage stage = (Stage) signUpButton.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/login.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+            stage.setScene(scene);
+            stage.setMaximized(true);
+            stage.setTitle("Login");
+            stage.show();
+
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load login.fxml", e);
         }
     }
 
