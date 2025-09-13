@@ -34,7 +34,7 @@ public interface StudentDao {
      * @param id - the user to retrieve
      * @return - the user with the given userName, or null if not found.
      */
-    public Student getStudent(UUID id);
+    public Student getStudent(String id);
 
     /**
      * Retrieves all users from the database

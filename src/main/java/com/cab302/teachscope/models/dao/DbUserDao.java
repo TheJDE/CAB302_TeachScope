@@ -41,8 +41,8 @@ public class DbUserDao implements UserDao{
             clearStatement.execute(clearQuery);
             // Insert the test login data
             Statement insertStatement = connection.createStatement();
-            String insertQuery = "INSERT INO users (email, passWord) VALUES "
-                    + "('testLogin', 'testPassWord')";
+            String insertQuery = "INSERT INO users (email, passWord) "
+                    + "VALUES ('testLogin', 'testPassWord')";
             insertStatement.execute(insertQuery);
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,7 +79,7 @@ public class DbUserDao implements UserDao{
     @Override
     public void deleteUser(User user) {
         try{
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM contacts WHERE email = ?");
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM users WHERE email = ?");
             statement.setString(1,user.getEmail());
             statement.executeUpdate();
         } catch (Exception e){
