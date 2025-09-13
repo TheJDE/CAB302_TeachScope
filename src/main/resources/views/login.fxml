@@ -29,10 +29,10 @@
         <Label text="Welcome back" style="-fx-font-size: 25px; -fx-font-weight: bold;"/>
 
         <!-- email -->
-        <TextField promptText="Email" styleClass="form-control"/>
+        <TextField promptText="Email" fx:id="emailField" styleClass="form-control"/>
 
         <!-- password -->
-        <PasswordField promptText="Password" styleClass="form-control"/>
+        <PasswordField promptText="Password" fx:id="passwordField" styleClass="form-control"/>
 
         <!-- login button -->
         <Button fx:id="loginButton" text="Login" styleClass="" maxWidth="Infinity" onAction="#onLoginClick"/>
@@ -42,6 +42,7 @@
             <Label text="Don't have an account?"/>
             <Hyperlink fx:id="signUpLink" text="Sign Up" onAction="#onSignUpClick"/>
         </HBox>
+        <Label fx:id="errorLabel" textFill="red" wrapText="true"/>
     </VBox>
 
     <!-- image -->

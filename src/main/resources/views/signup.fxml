@@ -49,6 +49,7 @@
             <Hyperlink fx:id="loginLink" text="Login" onAction="#onLoginLinkClick"/>
 
         </HBox>
+        <Label fx:id="errorLabel" textFill="red" wrapText="true"/>
     </VBox>
 
     <!-- image -->

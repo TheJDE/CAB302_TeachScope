@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -37,6 +38,9 @@ public class SignupController {
     @FXML
     private Hyperlink loginLink;
 
+    @FXML
+    private Label errorLabel;
+
     private final UserService userService = new UserService(new DbUserDao());
 
     @FXML
@@ -45,9 +49,13 @@ public class SignupController {
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
+        errorLabel.setText("");
+
         if (!password.equals(confirmPassword)) {
-            throw new IllegalArgumentException("Passwords do not match");
+            errorLabel.setText("Passwords do not match");
+            return;
         }
+
 
         try {
             userService.registerUser(email, password);
