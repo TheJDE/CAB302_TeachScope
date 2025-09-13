@@ -25,7 +25,13 @@ public class LoginController {
     private Button loginButton;
 
     @FXML
+    private Button resetPasswordButton;
+
+    @FXML
     private Hyperlink signUpLink;
+
+    @FXML
+    private Hyperlink forgotPasswordLink;
 
     @FXML
     protected void onLoginClick() throws IOException {
@@ -48,6 +54,30 @@ public class LoginController {
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.setTitle("Sign Up");
+        stage.show();
+    }
+
+    @FXML
+    protected void forgotPasswordClick() throws IOException {
+        Stage stage = (Stage) forgotPasswordLink.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/forgotpassword.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+        stage.setScene(scene);
+        stage.setMaximized(true);
+        stage.setTitle("Forgot Password");
+        stage.show();
+    }
+
+    @FXML
+    protected void onResetPasswordClick() throws IOException {
+        Stage stage = (Stage) resetPasswordButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/login.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+        stage.setScene(scene);
+        stage.setMaximized(true);
+        stage.setTitle("Login");
         stage.show();
     }
 }
