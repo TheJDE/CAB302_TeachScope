@@ -2,8 +2,9 @@ package com.cab302.teachscope.models.services;
 
 import com.cab302.teachscope.models.dao.UserDao;
 import com.cab302.teachscope.models.entities.User;
+import com.cab302.teachscope.util.PasswordUtils;
 
-import java.util.regex.Pattern;
+import java.sql.SQLException;
 
 public class UserService {
 
@@ -14,7 +15,7 @@ public class UserService {
     };
 
     // Public Methods
-    public void registerUser(String email, String password) {
+    public void registerUser(String email, String password) throws IllegalArgumentException{
         // Validate user inputs
         // Basic email RE
         if (email == null || !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
@@ -27,14 +28,47 @@ public class UserService {
         }
 
         // Throw error if user already exists
-        if (userDAO.getUser(email) != null) {
-            throw new IllegalArgumentException("User already exists in the database");
+        try {
+            if (userDAO.getUser(email) != null) {
+                throw new IllegalArgumentException("User already exists in the database");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
 
-        // Create and add user
-        User user = new User(email, password);
 
-        userDAO.addUser(user);
+        // Hash Password
+        String passwordHash = PasswordUtils.hashPassword(password);
+
+        // Create and add user
+        User user = new User(email, passwordHash);
+
+        try {
+            userDAO.addUser(user);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void login(String email, String password) throws IllegalArgumentException {
+
+        try {
+            User user = userDAO.getUser(email);
+
+            if (user == null) {
+                throw new IllegalArgumentException("User does not exist");
+            }
+
+            if (password == null) {
+                throw new IllegalArgumentException("No password provided");
+            }
+
+            if (!user.checkPasswordMatches(password)) {
+                throw new IllegalArgumentException("Incorrect password");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // Private Methods

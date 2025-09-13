@@ -1,6 +1,6 @@
 package com.cab302.teachscope.models.entities;
 
-import java.util.regex.Pattern;
+import com.cab302.teachscope.util.PasswordUtils;
 
 public class User {
     //Fields
@@ -35,7 +35,7 @@ public class User {
     }
 
     // Public Methods
-    public Boolean checkPassword(String password) {
-        return passwordHash.equals(password); // CHANGE THIS TO CHECK IF IT MATCHES THE HASH OF password
+    public Boolean checkPasswordMatches(String password) {
+        return PasswordUtils.hashPassword(password).equals(passwordHash);
     }
 }
