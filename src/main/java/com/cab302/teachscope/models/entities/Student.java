@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class Student {
     //Fields
-    private UUID id;
+    private String id;
     private String firstName;
     private String lastName;
     private String classCode;
@@ -42,8 +42,7 @@ public class Student {
     }
 
     //Constructors
-    public Student(UUID id, String firstName, String lastName, Gender gender, GradeLevel gradeLevel, String classCode, EnrolmentStatus enrolmentStatus){
-        this.id = id;
+    public Student(String firstName, String lastName, Gender gender, GradeLevel gradeLevel, String classCode, EnrolmentStatus enrolmentStatus){
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -53,26 +52,23 @@ public class Student {
     }
 
     //Getters and Setters
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
-
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setFirstName() {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-
     public String getFirstName() {
         return firstName;
     }
 
-    public void setLastName() {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
     public String getLastName() {
         return lastName;
     }
@@ -80,7 +76,6 @@ public class Student {
     public void setGender(Gender gender) {
         this.gender = gender;
     }
-
     public Gender getGender() {
         return gender;
     }
@@ -88,7 +83,6 @@ public class Student {
     public void setGradeLevel(GradeLevel gradeLevel) {
         this.gradeLevel = gradeLevel;
     }
-
     public GradeLevel getGradeLevel() {
         return gradeLevel;
     }
@@ -96,7 +90,6 @@ public class Student {
     public void setClassCode(String classCode) {
         this.classCode = classCode;
     }
-
     public String getClassCode() {
         return classCode;
     }
@@ -104,9 +97,10 @@ public class Student {
     public void setEnrolmentStatus(EnrolmentStatus enrolmentStatus) {
         this.enrolmentStatus = enrolmentStatus;
     }
-
     public EnrolmentStatus getEnrolmentStatus() {
         return enrolmentStatus;
     }
 
 }
+
+
