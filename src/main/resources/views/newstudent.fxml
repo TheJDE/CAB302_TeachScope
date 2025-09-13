@@ -47,7 +47,16 @@
                 <Insets top="20" left="30"/>
             </padding>
         </Label>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button fx:id="viewFormsButton" text="View Weekly Forms" styleClass="" onAction="#viewFormsClick">
+                <HBox.margin>
+                    <Insets top="10" right="15"/>
+                </HBox.margin>
+            </Button>
         </HBox>
+
+
+
 
         <!-- form for new student -->
         <VBox spacing="20" style="-fx-background-color: #f7f7f7;" HBox.hgrow="ALWAYS">

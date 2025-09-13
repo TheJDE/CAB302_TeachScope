@@ -21,6 +21,10 @@ public class StudentController {
     private Button newStudentButton;
 
     @FXML
+    private Button viewFormsButton;
+
+
+    @FXML
     protected void onLogoutClick() throws IOException {
         // go back to login.fxml
         Stage stage = (Stage) logoutButton.getScene().getWindow();
@@ -36,13 +40,26 @@ public class StudentController {
     @FXML
     protected void newStudentClick() throws IOException {
         // go to newstudent.fxml
-        Stage stage = (Stage) logoutButton.getScene().getWindow();
+        Stage stage = (Stage) newStudentButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/newstudent.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.setTitle("Add New Student");
+        stage.show();
+    }
+
+    @FXML
+    protected void viewFormsClick() throws IOException {
+        // go to addnewforms.fxml
+        Stage stage = (Stage) viewFormsButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/addnewform.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+        stage.setScene(scene);
+        stage.setMaximized(true);
+        stage.setTitle("View Weekly Forms");
         stage.show();
     }
 
