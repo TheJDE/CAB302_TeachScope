@@ -6,15 +6,32 @@ import com.cab302.teachscope.util.PasswordUtils;
 
 import java.sql.SQLException;
 
+/**
+ * Service class for user authentication.
+ */
 public class UserService {
 
+    /**
+     * The specified DAO for the user service.
+     */
     private final UserDao userDAO;
 
+    /**
+     * Constructor
+     * @param userDao The selected user data access object.
+     */
     public UserService(UserDao userDao) {
         this.userDAO = userDao;
     };
 
     // Public Methods
+
+    /**
+     * Method to add a new user into the system, successful if no exceptions thrown.
+     * @param email The user's email address.
+     * @param password The user's password.
+     * @throws IllegalArgumentException If arguments are invalid or user exists already.
+     */
     public void registerUser(String email, String password) throws IllegalArgumentException{
         // Validate user inputs
         // Basic email RE
@@ -36,7 +53,6 @@ public class UserService {
             throw new RuntimeException(e);
         }
 
-
         // Hash Password
         String passwordHash = PasswordUtils.hashPassword(password);
 
@@ -50,8 +66,13 @@ public class UserService {
         }
     }
 
+    /**
+     * Method to log in to the system, successful if no exceptions thrown.
+     * @param email The user's email.
+     * @param password The user's password.
+     * @throws IllegalArgumentException If arguments are invalid or if user doesn't exist.
+     */
     public void login(String email, String password) throws IllegalArgumentException {
-
         try {
             User user = userDAO.getUser(email);
 
@@ -70,8 +91,4 @@ public class UserService {
             throw new RuntimeException(e);
         }
     }
-
-    // Private Methods
-
-
 }

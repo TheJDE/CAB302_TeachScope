@@ -16,33 +16,57 @@ import com.cab302.teachscope.models.dao.DbUserDao;
 import com.cab302.teachscope.models.services.UserService;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class SignupController {
+
 
     @FXML
     private TextField fullNameField;
 
+    /**
+     * Email address text box.
+     */
     @FXML
     private TextField emailField;
 
+    /**
+     * Password text box.
+     */
     @FXML
     private PasswordField passwordField;
 
+    /**
+     * Confirmed password text box.
+     */
     @FXML
     private PasswordField confirmPasswordField;
 
+    /**
+     * Sign up button.
+     */
     @FXML
     private Button signUpButton;
 
+    /**
+     * Log in page button.
+     */
     @FXML
     private Hyperlink loginLink;
 
+    /**
+     * Error label.
+     */
     @FXML
     private Label errorLabel;
 
+    /**
+     * Selected user service and DAO.
+     */
     private final UserService userService = new UserService(new DbUserDao());
 
+    /**
+     * Method to sign the user up. Sets error label to relevant values on exceptions.
+     */
     @FXML
     protected void onSignUpClick() {
         String email = emailField.getText();
@@ -55,7 +79,6 @@ public class SignupController {
             errorLabel.setText("Passwords do not match");
             return;
         }
-
 
         try {
             userService.registerUser(email, password);
@@ -76,6 +99,10 @@ public class SignupController {
         }
     }
 
+    /**
+     * Redirects to log in page.
+     * @throws IOException On failed redirect.
+     */
     @FXML
     protected void onLoginLinkClick() throws IOException {
         // Switch back to login.fxml

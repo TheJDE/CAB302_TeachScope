@@ -30,14 +30,14 @@ public interface UserDao {
 
     /**
      * Retrieves a specific user from the database
-     * @param userName - the user to retrieve
-     * @return - the user with the given userName, or null if not found.
+     * @param email - the user to retrieve
+     * @return - the user with the given email, or null if not found.
      */
-    public User getUser(String userName) throws SQLException;
+    public User getUser(String email) throws SQLException;
 
     /**
      * Retrieves all users from the database
-     * @return - the user with the given userName, or null if not found.
+     * @return - List of user objects.
      */
     public List<User> getAllUsers() throws SQLException;
 }
