@@ -1,6 +1,7 @@
 package com.cab302.teachscope.controllers;
 
 import com.cab302.teachscope.Main;
+import com.cab302.teachscope.util.NavigationUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -67,13 +68,8 @@ public class LoginController {
             userService.login(email, password);
 
             Stage stage = (Stage) loginButton.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/dashboard.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-            scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-            stage.setScene(scene);
-            stage.setMaximized(true);
-            stage.setTitle("Dashboard");
-            stage.show();
+
+            NavigationUtils.navigateTo(stage, "dashboard", "Dashboard");
 
         } catch (IllegalArgumentException e) {
             errorLabel.setText(e.getMessage());
@@ -87,12 +83,7 @@ public class LoginController {
     @FXML
     protected void onSignUpClick() throws IOException {
         Stage stage = (Stage) signUpLink.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/signup.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-        stage.setScene(scene);
-        stage.setMaximized(true);
-        stage.setTitle("Sign Up");
-        stage.show();
+
+        NavigationUtils.navigateTo(stage, "signup", "Sign Up");
     }
 }
