@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.event.ActionEvent;
@@ -19,6 +20,9 @@ public class StudentController {
 
     @FXML
     private Button newStudentButton;
+
+    @FXML
+    private Hyperlink deleteLink;
 
     @FXML
     protected void onLogoutClick() throws IOException {
@@ -44,6 +48,11 @@ public class StudentController {
         stage.setMaximized(true);
         stage.setTitle("Add New Student");
         stage.show();
+    }
+    @FXML
+    protected void onDeleteLinkClick() throws IOException {
+       //delete student
+        // hide and show this link based on edit page
     }
 
 }

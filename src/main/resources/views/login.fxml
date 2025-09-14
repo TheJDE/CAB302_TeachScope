@@ -7,7 +7,8 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.text.Text?>
 
-
+<!--current test email is kayla@gmail.com-->
+<!--current test password is Password1!-->
 
 <HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="0"
       fx:controller="com.cab302.teachscope.controllers.LoginController" stylesheets="@../css/styles.css">

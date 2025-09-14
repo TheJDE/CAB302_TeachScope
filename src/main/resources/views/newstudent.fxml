@@ -117,8 +117,9 @@
                 </VBox>
             </HBox>
 
-            <HBox alignment="CENTER_LEFT">
+            <HBox alignment="CENTER_LEFT" spacing="30">
                 <Button text="Add student" fx:id="addStudentButton"/>
+                <Hyperlink fx:id="deleteLink" text="Delete Student" onAction="#onDeleteLinkClick"/>
             </HBox>
         </VBox>
     </VBox>
