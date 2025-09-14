@@ -89,7 +89,7 @@ public class SignupController {
             NavigationUtils.navigateTo(stage, "login", "Login");
 
         } catch (IllegalArgumentException e) {
-            throw e;
+            errorLabel.setText(e.getMessage());
         } catch (IOException e) {
             throw new RuntimeException("Failed to load login.fxml", e);
         }
