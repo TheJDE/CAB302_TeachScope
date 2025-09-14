@@ -16,7 +16,6 @@ import com.cab302.teachscope.models.dao.DbUserDao;
 import com.cab302.teachscope.models.services.UserService;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class SignupController {
 
