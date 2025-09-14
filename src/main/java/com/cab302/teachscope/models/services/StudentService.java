@@ -1,32 +1,37 @@
 package com.cab302.teachscope.models.services;
-
 import com.cab302.teachscope.models.dao.StudentDao;
 import com.cab302.teachscope.models.entities.Student;
 
 import java.security.SecureRandom;
-import java.util.UUID;
-import java.util.regex.Pattern;
 
 public class StudentService {
 
-    private final StudentDao studentDao;
+    private final StudentDao studentDAO;
 
-    public StudentService(StudentDao studentDao) {
-        this.studentDao = studentDao;
-    }
+    public StudentService(StudentDao studentDao) { this.studentDAO = studentDao; }
 
     // Fields for id generation
     private static final String NumbSet = "0123456789";
     private static final SecureRandom random = new SecureRandom();
     private static final int idLength = 4;
+
     // Generate id using a StringBuilder
-    public static String generateId(int idLength) {
-        StringBuilder id = new StringBuilder(idLength);
-        for (int i = 0; i < idLength; i++) {
-            id.append(NumbSet.charAt(random.nextInt(NumbSet.length())));
-        }
-        return id.toString();
+    // Need to make sure that the id we've just generated, doesn't already exist for another student, so we'll do this in a DO WHILE loop
+    public String generateId(int idLength) {
+        String id;
+        do {
+            StringBuilder id_stringBuilder = new StringBuilder(idLength);
+            for (int i = 0; i < idLength; i++) {
+                id_stringBuilder.append(NumbSet.charAt(random.nextInt(NumbSet.length())));
+            }
+            id = id_stringBuilder.toString();
+
+        } while (studentDAO.getStudent(id) != null);
+
+        return id;
     }
+
+
 
 
     // Register Student
@@ -60,10 +65,11 @@ public class StudentService {
 
         // Create and add user
         Student student = new Student(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
-        studentDao.addStudent(student);
+        studentDAO.addStudent(student);
 
         // Generate Student ID after creating the student object.
         student.setId(generateId(idLength));
+
 
     }
 
