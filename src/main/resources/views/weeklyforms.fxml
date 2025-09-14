@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="0"
+      fx:controller="com.cab302.teachscope.controllers.FormController" stylesheets="@../css/styles.css">
+
+    <!-- sidebar menu -->
+    <VBox spacing="20" style="-fx-background-color: #E5E5E5;" prefWidth="220">
+        <padding>
+            <Insets top="20" right="10" bottom="20" left="10"/>
+        </padding>
+
+        <!-- logo -->
+        <VBox alignment="CENTER" spacing="10">
+            <ImageView pickOnBounds="true" preserveRatio="true" fitWidth="250">
+                <image>
+                    <Image url="@../images/logo_teachscope.png"/>
+                </image>
+            </ImageView>
+        </VBox>
+
+        <!-- nav -->
+        <VBox spacing="10">
+            <Button text="Students" styleClass="active" maxWidth="Infinity"/>
+            <Button text="Timeline" styleClass="" maxWidth="Infinity"/>
+        </VBox>
+
+        <VBox VBox.vgrow="ALWAYS"/>
+
+        <!-- logout button -->
+        <Button fx:id="logoutButton" text="Logout" styleClass="" maxWidth="Infinity" onAction="#onLogoutClick"/>
+    </VBox>
+
+    <VBox spacing="20" HBox.hgrow="ALWAYS">
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" spacing="20">
+            <Label text="Student Name's Weekly Forms" styleClass="h2">
+                <padding>
+                    <Insets top="10" left="15"/>
+                </padding>
+            </Label>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="Generate PDF" styleClass="">
+                <HBox.margin>
+                    <Insets top="10" right="15"/>
+                </HBox.margin>
+            </Button>
+            <Button fx:id="newFormButton" text="Add New Form" styleClass="" onAction="#newFormClick">
+                <HBox.margin>
+                    <Insets top="10" right="15"/>
+                </HBox.margin>
+            </Button>
+        </HBox>
+
+        <!-- table of students -->
+        <TableView fx:id="FormsTable" prefHeight="500" styleClass="table-striped">
+            <columns>
+                <TableColumn text="Week" prefWidth="200"/>
+                <TableColumn text="Term" prefWidth="200"/>
+                <TableColumn text="Date Created" prefWidth="350"/>
+                <TableColumn text="Status" prefWidth="300"/>
+                <TableColumn text="View Form" prefWidth="300"/>
+            </columns>
+        </TableView>
+    </VBox>
+</HBox>

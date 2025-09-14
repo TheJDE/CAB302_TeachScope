@@ -26,6 +26,8 @@ public class FormController {
     @FXML private RadioButton withdrawnRadio;
     @FXML private RadioButton anxiousRadio;
 
+    @FXML private Button newFormButton;
+
     @FXML
     protected void onLogoutClick() throws IOException {
         // go back to login.fxml
@@ -36,6 +38,19 @@ public class FormController {
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.setTitle("Login");
+        stage.show();
+    }
+
+    @FXML
+    protected void newFormClick() throws IOException {
+        // go to addnewform.fxml
+        Stage stage = (Stage) newFormButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/addnewform.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+        stage.setScene(scene);
+        stage.setMaximized(true);
+        stage.setTitle("Add New Form");
         stage.show();
     }
 

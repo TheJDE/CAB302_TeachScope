@@ -52,9 +52,9 @@ public class StudentController {
 
     @FXML
     protected void viewFormsClick() throws IOException {
-        // go to addnewforms.fxml
+        // go to weeklyforms.fxml
         Stage stage = (Stage) viewFormsButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/addnewform.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/weeklyforms.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.setScene(scene);
