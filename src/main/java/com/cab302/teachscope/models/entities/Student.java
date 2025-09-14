@@ -42,8 +42,6 @@ public class Student {
     }
 
 
-
-
     //Constructors
     public Student(String firstName, String lastName, Gender gender, GradeLevel gradeLevel, String classCode, EnrolmentStatus enrolmentStatus){
         this.firstName = firstName;
