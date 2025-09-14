@@ -1,7 +1,6 @@
 package com.cab302.teachscope.models.dao;
 import com.cab302.teachscope.DatabaseConnection;
 import com.cab302.teachscope.models.entities.Student;
-import com.cab302.teachscope.models.entities.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class DbStudentDao implements StudentDao{
     private Connection connection;
@@ -23,33 +21,28 @@ public class DbStudentDao implements StudentDao{
     private void createTable() {
         try {
             Statement statement = connection.createStatement();
-
             String query = "CREATE TABLE IF NOT EXISTS students ("
-                    + "id STRING PRIMARY KEY,"
-                    + "fistName STRING NOT NULL,"
-                    + "lastName STRING NOT NULL,"
-                    + "classCode STRING NOT NULL,"
-                    + "gender STRING NOT NULL,"
-                    + "enrolmentStatus STRING NOT NULL,"
-                    + "gradeLevel STRING NOT NULL,"
+                    + "id TEXT PRIMARY KEY,"
+                    + "fistName TEXT NOT NULL,"
+                    + "lastName TEXT NOT NULL,"
+                    + "classCode TEXT NOT NULL,"
+                    + "gender TEXT NOT NULL,"
+                    + "enrolmentStatus TEXT NOT NULL,"
+                    + "gradeLevel TEXT NOT NULL,"
                     + ")";
-
             statement.executeQuery(query);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-
     @Override
     public void addStudent(Student student) {
         try {
             String query = "INSERT INTO students (id, firstName, lastName, classCode, gender, enrolmentStatus, gradeLevel)"
                     + "VALUES (?, ?, ?, ?, ?, ?, ?)";
-
             PreparedStatement Statement = connection.prepareStatement(query);
             Statement.executeQuery(query);
-
             //Set String Fields
             Statement.setString(1, student.getId());
             Statement.setString(2, student.getFirstName());
@@ -59,25 +52,21 @@ public class DbStudentDao implements StudentDao{
             Statement.setString(5, student.getGender().name());
             Statement.setString(6, student.getEnrolmentStatus().name());
             Statement.setString(7, student.getGradeLevel().name());
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
+
     @Override
     public void updateStudentEnrolment(Student student) {
         try{
             PreparedStatement Statement = connection.prepareStatement("UPDATE students SET enrolmentStatus = ? WHERE id = ?");
-
             Statement.setString(1, student.getEnrolmentStatus().name());
             Statement.setString(2, student.getId());
-
             Statement.executeUpdate();
         } catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -86,7 +75,6 @@ public class DbStudentDao implements StudentDao{
             PreparedStatement statement = connection.prepareStatement("DELETE FROM students WHERE id = ?");
             statement.setString(1,student.getId());
             statement.executeUpdate();
-
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -95,10 +83,9 @@ public class DbStudentDao implements StudentDao{
     @Override
     public Student getStudent(String id) {
         try{
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM students WHERE id = ?");
             statement.setString(1, id);
             ResultSet resultSet = statement.executeQuery();
-
             if (resultSet.next()) {
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
@@ -110,7 +97,6 @@ public class DbStudentDao implements StudentDao{
                 Student.Gender genderEnum = Student.Gender.valueOf(gender);
                 Student.EnrolmentStatus enrolmentStatusEnum = Student.EnrolmentStatus.valueOf(enrolmentStatus);
                 Student.GradeLevel gradeLevelEnum = Student.GradeLevel.valueOf(gradeLevel);
-
                 return new Student(firstName, lastName, genderEnum, gradeLevelEnum, classCode, enrolmentStatusEnum);
             }
         } catch (Exception e){
@@ -124,7 +110,7 @@ public class DbStudentDao implements StudentDao{
         List<Student> students = new ArrayList<>();
         try {
             Statement statement = connection.createStatement();
-            String query = "SELECT * FROM users";
+            String query = "SELECT * FROM students";
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
                 String firstName = resultSet.getString("firstName");
@@ -137,7 +123,6 @@ public class DbStudentDao implements StudentDao{
                 Student.Gender genderEnum = Student.Gender.valueOf(gender);
                 Student.EnrolmentStatus enrolmentStatusEnum = Student.EnrolmentStatus.valueOf(enrolmentStatus);
                 Student.GradeLevel gradeLevelEnum = Student.GradeLevel.valueOf(gradeLevel);
-
                 Student student = new Student(firstName, lastName, genderEnum, gradeLevelEnum, classCode, enrolmentStatusEnum);
                 students.add(student);
             }

@@ -1,7 +1,6 @@
 package com.cab302.teachscope.models.dao;
 
 import com.cab302.teachscope.models.entities.Student;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
