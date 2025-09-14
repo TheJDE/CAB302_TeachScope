@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.text.Text?>
+
+
+
+<HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="0"
+      fx:controller="com.cab302.teachscope.controllers.SignupController" stylesheets="@../css/styles.css">
+
+    <!-- login form -->
+    <VBox alignment="CENTER" spacing="15.0" prefWidth="400" style="-fx-background-color: white;">
+        <padding>
+            <Insets top="70" right="70" bottom="70" left="320"/>
+        </padding>
+
+        <!-- logo -->
+        <ImageView pickOnBounds="true" preserveRatio="true" fitWidth="500">
+            <image>
+                <Image url="@../images/logo_teachscope.png"/>
+            </image>
+        </ImageView>
+
+        <!-- welcome text -->
+        <Label text="Sign up" style="-fx-font-size: 25px; -fx-font-weight: bold;"/>
+
+        <!-- full name -->
+        <TextField promptText="Full Name" fx:id="fullNameField" styleClass="form-control"/>
+
+        <!-- email -->
+        <TextField promptText="Email" fx:id="emailField" styleClass="form-control"/>
+
+        <!-- password -->
+        <PasswordField promptText="Password" fx:id="passwordField" styleClass="form-control"/>
+
+        <!-- confirm password -->
+        <PasswordField promptText="Confirm Password" fx:id="confirmPasswordField" styleClass="form-control"/>
+
+        <!-- login button -->
+        <Button text="Sign up" fx:id="signUpButton" styleClass="" maxWidth="Infinity" onAction="#onSignUpClick"/>
+
+        <!-- sign up link -->
+        <HBox alignment="CENTER" spacing="5">
+            <Label text="Already have an account?"/>
+            <Hyperlink fx:id="loginLink" text="Login" onAction="#onLoginLinkClick"/>
+
+        </HBox>
+        <Label fx:id="errorLabel" textFill="red" wrapText="true"/>
+    </VBox>
+
+    <!-- image -->
+    <ImageView pickOnBounds="true" preserveRatio="true">
+        <image>
+            <Image url="@../images/login_picture.png"/>
+        </image>
+    </ImageView>
+
+</HBox>
