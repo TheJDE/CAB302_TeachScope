@@ -55,11 +55,11 @@
         <!-- table of students -->
         <TableView fx:id="studentsTable" prefHeight="500" styleClass="table-striped">
             <columns>
-                <TableColumn text="Name" prefWidth="350"/>
-                <TableColumn text="Grade Level" prefWidth="250"/>
-                <TableColumn text="Class" prefWidth="200"/>
-                <TableColumn text="Enrolment Status" prefWidth="280"/>
-                <TableColumn text="Gender" prefWidth="220"/>
+                <TableColumn fx:id="nameColumn" text="Name" prefWidth="350"/>
+                <TableColumn fx:id="gradeColumn" text="Grade Level" prefWidth="250"/>
+                <TableColumn fx:id="classColumn" text="Class" prefWidth="200"/>
+                <TableColumn fx:id="statusColumn" text="Enrolment Status" prefWidth="280"/>
+                <TableColumn fx:id="genderColumn" text="Gender" prefWidth="220"/>
             </columns>
         </TableView>
     </VBox>

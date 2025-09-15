@@ -29,7 +29,7 @@
 
         <!-- nav -->
         <VBox spacing="10">
-            <Button text="Students" styleClass="active" maxWidth="Infinity"/>
+            <Button fx:id="studentNav" text="Students" styleClass="active" maxWidth="Infinity" onAction="#onStudentClick"/>
             <Button text="Timeline" styleClass="" maxWidth="Infinity"/>
         </VBox>
 
@@ -42,7 +42,7 @@
     <VBox spacing="20" HBox.hgrow="ALWAYS">
         <!-- Header -->
         <HBox alignment="CENTER_LEFT" spacing="20">
-        <Label text="Add New Student" styleClass="h1">
+            <Label fx:id="formTitle" text="Add New Student" styleClass="h1">
             <padding>
                 <Insets top="20" left="30"/>
             </padding>
