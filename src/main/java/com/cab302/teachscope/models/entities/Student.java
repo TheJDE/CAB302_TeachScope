@@ -1,23 +1,71 @@
 package com.cab302.teachscope.models.entities;
 
+import com.cab302.teachscope.util.IdUtil;
+
+import java.util.Optional;
+
+/**
+ * Class representing a student.
+ */
 public class Student {
     //Fields
+    /**
+     * Student's ID.
+     */
     private String id;
+
+    /**
+     * Student's first Name.
+     */
     private String firstName;
+
+    /**
+     * Student's last Name.
+     */
     private String lastName;
+
+    /**
+     * Student's class code.
+     */
     private String classCode;
-    //Custom type Fields used for ENUMS:
+
+    /**
+     * Student's gender.
+     */
     private Gender gender;
+
+    /**
+     * Student's grade level.
+     */
     private GradeLevel gradeLevel;
+
+    /**
+     * Student's enrolment status
+     */
     private EnrolmentStatus enrolmentStatus;
-    //ENUM fields
+
+    //ENUMs
+    /**
+     * Enum of gender values.
+     */
     public enum Gender {
         Female,
-        Male }
+        Male,
+        Other
+    }
+
+    /**
+     * Enum of enrolment values.
+     */
     public enum EnrolmentStatus {
         Active,
-        Withdrawn}
-    public enum GradeLevel {
+        Withdrawn
+    }
+
+    /**
+     * Enum of grade level values.
+     */
+    public enum GradeLevel {  // We cant have an ENUM option with a SPACE, so we need to have an equivalent string tied to each option
         Prep("Prep"),
         Grade_1("Grade 1"),
         Grade_2("Grade 2"),
@@ -25,79 +73,159 @@ public class Student {
         Grade_4("Grade 4"),
         Grade_5("Grade 5"),
         Grade_6("Grade 6");
-        // We cant have an ENUM option with a SPACE, so we need to have an equivalent string tied to each option
+
         // Need to initialise this gradeDisplayName variable
         private final String gradeDisplayName;
+
         // Setter method to equate the gradeLevel choice to the associated string
         GradeLevel(String gradeDisplayName) {
             this.gradeDisplayName = gradeDisplayName;
         }
+
         // Getter method to return this gradeDisplayName string.
         public String gradeDisplayName() {
             return gradeDisplayName;
         }
     }
 
-    //Constructors
-    public Student(String firstName, String lastName, Gender gender, GradeLevel gradeLevel, String classCode, EnrolmentStatus enrolmentStatus){
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.gradeLevel = gradeLevel;
-        this.classCode = classCode;
-        this.enrolmentStatus = enrolmentStatus;
+    /**
+     * Constructor
+     * @param Id Optional student ID. Creates one if not provided.
+     * @param firstName Student first name.
+     * @param lastName Student last name.
+     * @param gender Student gender.
+     * @param gradeLevel Student grade level.
+     * @param classCode Student class code.
+     * @param enrolmentStatus Student enrolment status.
+     */
+    public Student(Optional<String> Id, String firstName, String lastName, Gender gender, GradeLevel gradeLevel, String classCode, EnrolmentStatus enrolmentStatus){
+        // If an ID is provided, use that, otherwise generate a new ID
+        if (Id.isPresent()) {
+             setId(Id.get());
+         } else {
+             setId(IdUtil.generateIdString());
+         }
+        setFirstName(firstName);
+        setLastName(lastName);
+        setGender(gender);
+        setGradeLevel(gradeLevel);
+        setClassCode(classCode);
+        setEnrolmentStatus(enrolmentStatus);
     }
 
     //Getters and Setters
-    public void setId(String id) {
-        this.id = id;
+
+    /**
+     * Id setter.
+     * @param Id Student Id
+     */
+    public void setId(String Id) {
+        this.id = IdUtil.generateIdString();
     }
+
+    /**
+     * Id getter.
+     * @return Student Id
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * First name setter.
+     * @param firstName Student first name.
+     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
+    /**
+     * First name getter.
+     * @return Student first name.
+     */
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     * Last name setter.
+     * @param lastName Student last name.
+     */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    /**
+     * last name getter.
+     * @return Student last name.
+     */
     public String getLastName() {
         return lastName;
     }
 
+    /**
+     * Gender setter.
+     * @param gender Student gender.
+     */
     public void setGender(Gender gender) {
         this.gender = gender;
     }
+
+    /**
+     * Gender getter.
+     * @return Student gender.
+     */
     public Gender getGender() {
         return gender;
     }
 
+    /**
+     * Grade level setter.
+     * @param gradeLevel Student grade level.
+     */
     public void setGradeLevel(GradeLevel gradeLevel) {
         this.gradeLevel = gradeLevel;
     }
+
+    /**
+     * Grade level getter.
+     * @return Student grade level.
+     */
     public GradeLevel getGradeLevel() {
         return gradeLevel;
     }
 
+    /**
+     * Class code setter.
+     * @param classCode Student class code.
+     */
     public void setClassCode(String classCode) {
         this.classCode = classCode;
     }
+
+    /**
+     * Class code getter.
+     * @return Student class code.
+     */
     public String getClassCode() {
         return classCode;
     }
 
+    /**
+     * Enrolment status setter.
+     * @param enrolmentStatus Student enrolment status.
+     */
     public void setEnrolmentStatus(EnrolmentStatus enrolmentStatus) {
         this.enrolmentStatus = enrolmentStatus;
     }
+
+    /**
+     * Enrolment status getter.
+     * @return Student enrolment status.
+     */
     public EnrolmentStatus getEnrolmentStatus() {
         return enrolmentStatus;
     }
-
 }
 
 
