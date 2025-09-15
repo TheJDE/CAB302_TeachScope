@@ -40,26 +40,9 @@ public class StudentController {
     @FXML private Button addStudentButton;
     @FXML private Hyperlink deleteLink;
 
-    private final StudentService studentService;
+    private final StudentService studentService = new StudentService(new DbStudentDao());
     private Optional<Student> editingStudent = Optional.empty(); //tracks if we're editing
 
-    public StudentController() {
-        StudentDao studentDao = new DbStudentDao();
-        this.studentService = new StudentService(studentDao);
-    }
-
-    @FXML
-    protected void initialize() {
-        if (studentsTable != null) {
-            // if this is the students list page
-            setupTable();
-        }
-
-        if (addStudentButton != null) {
-            // if this is the add/edit form page
-            setupForm();
-        }
-    }
 
     @FXML
     protected void newStudentClick() {
@@ -212,7 +195,6 @@ public class StudentController {
 
             StudentController formController = loader.getController();
             formController.setEditingStudent(student); // populate form
-            formController.initialize();
 
             stage.getScene().setRoot(root);
             stage.setTitle("Edit Student");
