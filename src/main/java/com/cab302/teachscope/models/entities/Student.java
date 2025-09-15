@@ -1,23 +1,66 @@
 package com.cab302.teachscope.models.entities;
 
+import com.cab302.teachscope.util.IdUtil;
+
 public class Student {
     //Fields
+    /**
+     * Student's ID.
+     */
     private String id;
+
+    /**
+     * Student's first Name.
+     */
     private String firstName;
+
+    /**
+     * Student's last Name.
+     */
     private String lastName;
+
+    /**
+     * Student's class code.
+     */
     private String classCode;
-    //Custom type Fields used for ENUMS:
+
+    /**
+     * Student's gender.
+     */
     private Gender gender;
+
+    /**
+     * Student's grade level.
+     */
     private GradeLevel gradeLevel;
+
+    /**
+     * Student's enrolment status
+     */
     private EnrolmentStatus enrolmentStatus;
-    //ENUM fields
+
+    //ENUMs
+    /**
+     * Enum of gender values.
+     */
     public enum Gender {
         Female,
-        Male }
+        Male,
+        Other
+    }
+
+    /**
+     * Enum of enrolment values.
+     */
     public enum EnrolmentStatus {
         Active,
-        Withdrawn}
-    public enum GradeLevel {
+        Withdrawn
+    }
+
+    /**
+     * Enum of grade level values.
+     */
+    public enum GradeLevel {  // We cant have an ENUM option with a SPACE, so we need to have an equivalent string tied to each option
         Prep("Prep"),
         Grade_1("Grade 1"),
         Grade_2("Grade 2"),
@@ -25,13 +68,15 @@ public class Student {
         Grade_4("Grade 4"),
         Grade_5("Grade 5"),
         Grade_6("Grade 6");
-        // We cant have an ENUM option with a SPACE, so we need to have an equivalent string tied to each option
+
         // Need to initialise this gradeDisplayName variable
         private final String gradeDisplayName;
+
         // Setter method to equate the gradeLevel choice to the associated string
         GradeLevel(String gradeDisplayName) {
             this.gradeDisplayName = gradeDisplayName;
         }
+
         // Getter method to return this gradeDisplayName string.
         public String gradeDisplayName() {
             return gradeDisplayName;
@@ -40,6 +85,7 @@ public class Student {
 
     //Constructors
     public Student(String firstName, String lastName, Gender gender, GradeLevel gradeLevel, String classCode, EnrolmentStatus enrolmentStatus){
+        setId();
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -49,8 +95,8 @@ public class Student {
     }
 
     //Getters and Setters
-    public void setId(String id) {
-        this.id = id;
+    public void setId() {
+        this.id = IdUtil.generateIdString();
     }
     public String getId() {
         return id;

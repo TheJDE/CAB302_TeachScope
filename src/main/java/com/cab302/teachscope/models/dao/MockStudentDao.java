@@ -1,6 +1,8 @@
 package com.cab302.teachscope.models.dao;
 
 import com.cab302.teachscope.models.entities.Student;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +30,8 @@ public class MockStudentDao implements StudentDao {
     }
 
     @Override
-    public List<Student> getAllStudents() {
-        return List.of();
+    public ArrayList<Student> getAllStudents() {
+        return new ArrayList<>(students.values());
     }
 }
 
