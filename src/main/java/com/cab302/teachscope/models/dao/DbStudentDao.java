@@ -21,14 +21,14 @@ public class DbStudentDao implements StudentDao{
             Statement statement = connection.createStatement();
             String query = "CREATE TABLE IF NOT EXISTS students ("
                     + "id TEXT PRIMARY KEY,"
-                    + "fistName TEXT NOT NULL,"
+                    + "firstName TEXT NOT NULL,"
                     + "lastName TEXT NOT NULL,"
                     + "classCode TEXT NOT NULL,"
                     + "gender TEXT NOT NULL,"
                     + "enrolmentStatus TEXT NOT NULL,"
-                    + "gradeLevel TEXT NOT NULL,"
+                    + "gradeLevel TEXT NOT NULL"
                     + ")";
-        statement.executeQuery(query);
+        statement.executeUpdate(query);
         } catch (Exception ex) {
             System.err.println(ex);
         }
@@ -38,17 +38,18 @@ public class DbStudentDao implements StudentDao{
     public void addStudent(Student student) throws SQLException {
         String query = "INSERT INTO students (id, firstName, lastName, classCode, gender, enrolmentStatus, gradeLevel)"
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        PreparedStatement Statement = connection.prepareStatement(query);
-        Statement.executeQuery(query);
+        PreparedStatement statement = connection.prepareStatement(query);
+
         //Set String Fields
-        Statement.setString(1, student.getId());
-        Statement.setString(2, student.getFirstName());
-        Statement.setString(3, student.getLastName());
-        Statement.setString(4, student.getClassCode());
-        //We cant store ENUM in the database, so we have to convert these ENUM fields to Strings before we then Set them
-        Statement.setString(5, student.getGender().name());
-        Statement.setString(6, student.getEnrolmentStatus().name());
-        Statement.setString(7, student.getGradeLevel().name());
+        statement.setString(1, student.getId());
+        statement.setString(2, student.getFirstName());
+        statement.setString(3, student.getLastName());
+        statement.setString(4, student.getClassCode());
+        statement.setString(5, student.getGender().name());
+        statement.setString(6, student.getEnrolmentStatus().name());
+        statement.setString(7, student.getGradeLevel().name());
+
+        statement.executeUpdate();
     }
 
     @Override
@@ -107,6 +108,7 @@ public class DbStudentDao implements StudentDao{
 
         Statement statement = connection.createStatement();
         String query = "SELECT * FROM students";
+
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             String id = resultSet.getString("id");

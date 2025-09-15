@@ -43,6 +43,17 @@ public class StudentController {
     private final StudentService studentService = new StudentService(new DbStudentDao());
     private Optional<Student> editingStudent = Optional.empty(); //tracks if we're editing
 
+    @FXML protected void initialize() {
+        if (studentsTable != null) {
+            // If this is the students list page
+            setupTable();
+        }
+
+        if (addStudentButton != null) {
+            // If this is the add/edit form page
+            setupForm();
+        }
+    }
 
     @FXML
     protected void newStudentClick() {
@@ -123,6 +134,7 @@ public class StudentController {
         studentStatus.setValue(student.getEnrolmentStatus().name());
     }
 
+    @FXML
     private void handleSave() {
         try {
             String fName = firstName.getText();
@@ -195,6 +207,7 @@ public class StudentController {
 
             StudentController formController = loader.getController();
             formController.setEditingStudent(student); // populate form
+            formController.initialize();
 
             stage.getScene().setRoot(root);
             stage.setTitle("Edit Student");
