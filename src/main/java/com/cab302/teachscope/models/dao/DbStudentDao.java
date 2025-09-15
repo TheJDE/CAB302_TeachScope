@@ -21,14 +21,14 @@ public class DbStudentDao implements StudentDao{
             Statement statement = connection.createStatement();
             String query = "CREATE TABLE IF NOT EXISTS students ("
                     + "id TEXT PRIMARY KEY,"
-                    + "fistName TEXT NOT NULL,"
+                    + "firstName TEXT NOT NULL,"
                     + "lastName TEXT NOT NULL,"
                     + "classCode TEXT NOT NULL,"
                     + "gender TEXT NOT NULL,"
                     + "enrolmentStatus TEXT NOT NULL,"
-                    + "gradeLevel TEXT NOT NULL,"
+                    + "gradeLevel TEXT NOT NULL"
                     + ")";
-        statement.executeQuery(query);
+        statement.executeUpdate(query);
         } catch (Exception ex) {
             System.err.println(ex);
         }
