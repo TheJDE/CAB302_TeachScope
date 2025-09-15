@@ -1,13 +1,11 @@
 package com.cab302.teachscope.models.services;
+
 import com.cab302.teachscope.models.dao.StudentDao;
 import com.cab302.teachscope.models.entities.Student;
-
 import java.security.SecureRandom;
 
 public class StudentService {
-
     private final StudentDao studentDAO;
-
     public StudentService(StudentDao studentDao) { this.studentDAO = studentDao; }
 
     // Fields for id generation
@@ -27,12 +25,8 @@ public class StudentService {
             id = id_stringBuilder.toString();
 
         } while (studentDAO.getStudent(id) != null);
-
         return id;
     }
-
-
-
 
     // Register Student
     public void registerStudent(String firstName, String lastName, Student.Gender gender, Student.GradeLevel gradeLevel, String classCode, Student.EnrolmentStatus enrolmentStatus) {
@@ -69,9 +63,5 @@ public class StudentService {
 
         // Generate Student ID after creating the student object.
         student.setId(generateId(idLength));
-
-
     }
-
-
 }

@@ -1,25 +1,22 @@
 package com.cab302.teachscope.models.entities;
 
-import java.util.UUID;
-
 public class Student {
     //Fields
     private String id;
     private String firstName;
     private String lastName;
     private String classCode;
-    // Field for Gender ENUM type, and then ENUM
+    //Custom type Fields used for ENUMS:
     private Gender gender;
+    private GradeLevel gradeLevel;
+    private EnrolmentStatus enrolmentStatus;
+    //ENUM fields
     public enum Gender {
         Female,
         Male }
-    // Field for EnrolmentStatus ENUM type, and then ENUM
-    private EnrolmentStatus enrolmentStatus;
     public enum EnrolmentStatus {
         Active,
         Withdrawn}
-    // Field for GradeLevel ENUM type, and then ENUM
-    private GradeLevel gradeLevel;
     public enum GradeLevel {
         Prep("Prep"),
         Grade_1("Grade 1"),
@@ -40,7 +37,6 @@ public class Student {
             return gradeDisplayName;
         }
     }
-
 
     //Constructors
     public Student(String firstName, String lastName, Gender gender, GradeLevel gradeLevel, String classCode, EnrolmentStatus enrolmentStatus){
