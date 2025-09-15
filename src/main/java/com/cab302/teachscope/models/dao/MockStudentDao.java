@@ -4,7 +4,6 @@ import com.cab302.teachscope.models.entities.Student;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MockStudentDao implements StudentDao {
@@ -16,12 +15,13 @@ public class MockStudentDao implements StudentDao {
     }
 
     @Override
-    public void updateStudentEnrolment(Student student) {
+    public void updateStudent(Student student) {
+        students.replace(student.getId(), student);
     }
 
     @Override
-    public void deleteStudent(Student student) {
-        students.remove(student.getId(), student);
+    public void deleteStudent(String Id) {
+        students.remove(Id);
     }
 
     @Override

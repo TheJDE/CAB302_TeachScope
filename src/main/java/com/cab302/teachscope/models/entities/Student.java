@@ -2,6 +2,8 @@ package com.cab302.teachscope.models.entities;
 
 import com.cab302.teachscope.util.IdUtil;
 
+import java.util.Optional;
+
 public class Student {
     //Fields
     /**
@@ -83,21 +85,36 @@ public class Student {
         }
     }
 
-    //Constructors
-    public Student(String firstName, String lastName, Gender gender, GradeLevel gradeLevel, String classCode, EnrolmentStatus enrolmentStatus){
-        setId();
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.gradeLevel = gradeLevel;
-        this.classCode = classCode;
-        this.enrolmentStatus = enrolmentStatus;
+    /**
+     * Constructor
+     * @param Id Optional student ID. Creates one if not provided.
+     * @param firstName Student first name.
+     * @param lastName Student last name.
+     * @param gender Student gender.
+     * @param gradeLevel Student grade level.
+     * @param classCode Student class code.
+     * @param enrolmentStatus Student enrolment status.
+     */
+    public Student(Optional<String> Id, String firstName, String lastName, Gender gender, GradeLevel gradeLevel, String classCode, EnrolmentStatus enrolmentStatus){
+        // If an ID is provided, use that, otherwise generate a new ID
+        if (Id.isPresent()) {
+             setId(Id.get());
+         } else {
+             setId(IdUtil.generateIdString());
+         }
+        setFirstName(firstName);
+        setLastName(lastName);
+        setGender(gender);
+        setGradeLevel(gradeLevel);
+        setClassCode(classCode);
+        setEnrolmentStatus(enrolmentStatus);
     }
 
     //Getters and Setters
-    public void setId() {
+    public void setId(String Id) {
         this.id = IdUtil.generateIdString();
     }
+
     public String getId() {
         return id;
     }
@@ -112,6 +129,7 @@ public class Student {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
     public String getLastName() {
         return lastName;
     }
@@ -119,6 +137,7 @@ public class Student {
     public void setGender(Gender gender) {
         this.gender = gender;
     }
+
     public Gender getGender() {
         return gender;
     }
@@ -126,6 +145,7 @@ public class Student {
     public void setGradeLevel(GradeLevel gradeLevel) {
         this.gradeLevel = gradeLevel;
     }
+
     public GradeLevel getGradeLevel() {
         return gradeLevel;
     }
@@ -133,6 +153,7 @@ public class Student {
     public void setClassCode(String classCode) {
         this.classCode = classCode;
     }
+
     public String getClassCode() {
         return classCode;
     }
@@ -140,6 +161,7 @@ public class Student {
     public void setEnrolmentStatus(EnrolmentStatus enrolmentStatus) {
         this.enrolmentStatus = enrolmentStatus;
     }
+
     public EnrolmentStatus getEnrolmentStatus() {
         return enrolmentStatus;
     }
