@@ -4,6 +4,9 @@ import com.cab302.teachscope.util.IdUtil;
 
 import java.util.Optional;
 
+/**
+ * Class representing a student.
+ */
 public class Student {
     //Fields
     /**
@@ -111,61 +114,118 @@ public class Student {
     }
 
     //Getters and Setters
+
+    /**
+     * Id setter.
+     * @param Id Student Id
+     */
     public void setId(String Id) {
         this.id = IdUtil.generateIdString();
     }
 
+    /**
+     * Id getter.
+     * @return Student Id
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * First name setter.
+     * @param firstName Student first name.
+     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
+    /**
+     * First name getter.
+     * @return Student first name.
+     */
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     * Last name setter.
+     * @param lastName Student last name.
+     */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+    /**
+     * last name getter.
+     * @return Student last name.
+     */
     public String getLastName() {
         return lastName;
     }
 
+    /**
+     * Gender setter.
+     * @param gender Student gender.
+     */
     public void setGender(Gender gender) {
         this.gender = gender;
     }
 
+    /**
+     * Gender getter.
+     * @return Student gender.
+     */
     public Gender getGender() {
         return gender;
     }
 
+    /**
+     * Grade level setter.
+     * @param gradeLevel Student grade level.
+     */
     public void setGradeLevel(GradeLevel gradeLevel) {
         this.gradeLevel = gradeLevel;
     }
 
+    /**
+     * Grade level getter.
+     * @return Student grade level.
+     */
     public GradeLevel getGradeLevel() {
         return gradeLevel;
     }
 
+    /**
+     * Class code setter.
+     * @param classCode Student class code.
+     */
     public void setClassCode(String classCode) {
         this.classCode = classCode;
     }
 
+    /**
+     * Class code getter.
+     * @return Student class code.
+     */
     public String getClassCode() {
         return classCode;
     }
 
+    /**
+     * Enrolment status setter.
+     * @param enrolmentStatus Student enrolment status.
+     */
     public void setEnrolmentStatus(EnrolmentStatus enrolmentStatus) {
         this.enrolmentStatus = enrolmentStatus;
     }
 
+    /**
+     * Enrolment status getter.
+     * @return Student enrolment status.
+     */
     public EnrolmentStatus getEnrolmentStatus() {
         return enrolmentStatus;
     }
-
 }
 
 

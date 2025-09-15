@@ -2,36 +2,27 @@ package com.cab302.teachscope.models.services;
 
 import com.cab302.teachscope.models.dao.StudentDao;
 import com.cab302.teachscope.models.entities.Student;
-import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service class for student management.
+ */
 public class StudentService {
     private final StudentDao studentDAO;
     public StudentService(StudentDao studentDao) { this.studentDAO = studentDao; }
 
-//    // Fields for id generation
-//    private static final String NumbSet = "0123456789";
-//    private static final SecureRandom random = new SecureRandom();
-//    private static final int idLength = 4;
-//
-//    // Generate id using a StringBuilder
-//    // Need to make sure that the id we've just generated, doesn't already exist for another student, so we'll do this in a DO WHILE loop
-//    public String generateId(int idLength) {
-//        String id;
-//        do {
-//            StringBuilder id_stringBuilder = new StringBuilder(idLength);
-//            for (int i = 0; i < idLength; i++) {
-//                id_stringBuilder.append(NumbSet.charAt(random.nextInt(NumbSet.length())));
-//            }
-//            id = id_stringBuilder.toString();
-//
-//        } while (studentDAO.getStudent(id) != null);
-//        return id;
-//    }
-
-    // Register Student
+    /**
+     * Register a new student.
+     * @param firstName Student first name.
+     * @param lastName Student last name.
+     * @param gender Student gender.
+     * @param gradeLevel Student grade level.
+     * @param classCode Student class code.
+     * @param enrolmentStatus Student enrolment status.
+     * @throws IllegalArgumentException If values are not in valid format.
+     */
     public void registerStudent (
             String firstName,
             String lastName,
@@ -77,6 +68,17 @@ public class StudentService {
         }
     }
 
+    /**
+     * Updates existing student
+     * @param Id Student Id
+     * @param firstName Student first name.
+     * @param lastName Student last name.
+     * @param gender Student gender.
+     * @param gradeLevel Student grade level.
+     * @param classCode Student class code.
+     * @param enrolmentStatus Student enrolment status.
+     * @throws IllegalArgumentException If values are not in valid format.
+     */
     public void updateStudent (
             String Id,
             String firstName,
@@ -136,7 +138,12 @@ public class StudentService {
         }
     }
 
-    public Student getStudentById(String Id) {
+    /**
+     * Retrieves a single student
+     * @param Id Student Id
+     * @return Student object
+     */
+    public Student getStudentById(String Id) throws IllegalArgumentException {
         if (Id == null || !Id.matches("^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$")) {
             throw new IllegalArgumentException("Invalid Id");
         }
@@ -148,6 +155,10 @@ public class StudentService {
         }
     }
 
+    /**
+     * Gets all students.
+     * @return A list of all student objects.
+     */
     public List<Student> getAllStudents() {
         try {
             return studentDAO.getAllStudents();
@@ -156,6 +167,11 @@ public class StudentService {
         }
     }
 
+    /**
+     * Deletes a single student.
+     * @param Id Student Id
+     * @throws IllegalArgumentException
+     */
     public void deleteStudent (String Id) throws IllegalArgumentException {
         if (Id == null || !Id.matches("^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$")) {
             throw new IllegalArgumentException("Invalid Id");
