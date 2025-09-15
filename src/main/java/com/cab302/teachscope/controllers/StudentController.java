@@ -11,6 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
+import com.cab302.teachscope.util.NavigationUtils;
 
 import java.io.IOException;
 
@@ -22,37 +23,36 @@ public class StudentController {
     private Button newStudentButton;
 
     @FXML
+    private Button studentNav;
+
+    @FXML
     private Hyperlink deleteLink;
 
     @FXML
     protected void onLogoutClick() throws IOException {
         // go back to login.fxml
         Stage stage = (Stage) logoutButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-        stage.setScene(scene);
-        stage.setMaximized(true);
-        stage.setTitle("Login");
-        stage.show();
+
+        NavigationUtils.navigateTo(stage, "login", "Login");
     }
 
     @FXML
     protected void newStudentClick() throws IOException {
         // go to newstudent.fxml
         Stage stage = (Stage) logoutButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/newstudent.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-        stage.setScene(scene);
-        stage.setMaximized(true);
-        stage.setTitle("Add New Student");
-        stage.show();
+        NavigationUtils.navigateTo(stage, "newstudent", "Add New Student");
     }
     @FXML
     protected void onDeleteLinkClick() throws IOException {
        //delete student
         // hide and show this link based on edit page
+    }
+
+    @FXML
+    protected void onStudentClick() throws IOException {
+        // go to dashboard.fxml
+        Stage stage = (Stage) studentNav.getScene().getWindow();
+        NavigationUtils.navigateTo(stage, "dashboard", "Dashboard");
     }
 
 }
