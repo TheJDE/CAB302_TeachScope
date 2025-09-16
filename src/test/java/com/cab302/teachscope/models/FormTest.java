@@ -100,4 +100,48 @@ public class FormTest {
             );
         });
     }
+
+    @Test
+    void createFormInvalidWeekTooLow() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    new WeeklyForm(
+                            id,
+                            StudentId,
+                            term,
+                            0,
+                            attenanceDays,
+                            wasLate,
+                            homeworkDone,
+                            attentionScore,
+                            literacyScore,
+                            numeracyScore,
+                            understandingScore,
+                            behaviourScore,
+                            createdAt)
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidWeekTooHigh() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    new WeeklyForm(
+                            id,
+                            StudentId,
+                            term,
+                            12,
+                            attenanceDays,
+                            wasLate,
+                            homeworkDone,
+                            attentionScore,
+                            literacyScore,
+                            numeracyScore,
+                            understandingScore,
+                            behaviourScore,
+                            createdAt)
+            );
+        });
+    }
 }
