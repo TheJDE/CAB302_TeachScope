@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.UUID;
 
 public class WeeklyForm {
-    private UUID id;
-    private UUID studentId;
+    private String id;
+    private String studentId;
     private int term;
     private int week;
     private int attendanceDays;
@@ -17,12 +17,12 @@ public class WeeklyForm {
     private int numeracyScore;
     private int understandingScore;
     private int behaviourScore;
-    private Date createdAt;
+    private String createdAt;
 
-    public WeeklyForm(UUID id, UUID studentId, int term, int week, int attendanceDays,
+    public WeeklyForm(String id, String studentId, int term, int week, int attendanceDays,
                       boolean wasLate, boolean homeworkDone, int attentionScore,
                       int literacyScore, int numeracyScore, int understandingScore,
-                      int behaviourScore, Date createdAt) {
+                      int behaviourScore, String createdAt) {
         this.id = id;
         this.studentId = studentId;
         this.term = term;
@@ -42,11 +42,11 @@ public class WeeklyForm {
     public WeeklyForm() {}
 
     // Getters and Setters
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public UUID getStudentId() { return studentId; }
-    public void setStudentId(UUID studentId) { this.studentId = studentId; }
+    public String getStudentId() { return studentId; }
+    public void setStudentId(String studentId) { this.studentId = studentId; }
 
     public int getTerm() { return term; }
     public void setTerm(int term) { this.term = term; }
@@ -78,6 +78,6 @@ public class WeeklyForm {
     public int getBehaviourScore() { return behaviourScore; }
     public void setBehaviourScore(int behaviourScore) { this.behaviourScore = behaviourScore; }
 
-    public Date getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
+    public String getCreatedAt() { return createdAt; }
+    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
 }

@@ -16,7 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FormTest {
     private FormDao formdao;
     private FormService formService;
-    private int StudentId;
+
+    private String id;
+    private String StudentId;
     private int term;
     private int week;
     private int attenanceDays;
@@ -29,12 +31,13 @@ public class FormTest {
     private int behaviourScore;
     private String createdAt;
 
-    private
     @BeforeEach
-    void setup() {
+    public void setup() {
         formdao = new MockFormDao();
         formService = new FormService(formdao);
-        StudentId = 1;
+
+        id = "1";
+        StudentId = "1";
         term = 1;
         week = 1;
         attenanceDays = 1;
@@ -47,8 +50,6 @@ public class FormTest {
         behaviourScore = 1;
         createdAt = "Week 1, Term 1";
 
-
-
     }
 
     @Test
@@ -57,21 +58,46 @@ public class FormTest {
     }
 
     @Test
-    void createFormInvalidTerm() {
+    void createFormInvalidTermTooLow() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    new WeeklyForm(StudentId, term, week, attenanceDays, wasLate, homeworkDone, attentionScore, literacyScore, numeracyScore, understandingScore, behaviourScore, createdAt)
-
+                    new WeeklyForm(
+                            id,
+                            StudentId,
+                            0,
+                            week,
+                            attenanceDays,
+                            wasLate,
+                            homeworkDone,
+                            attentionScore,
+                            literacyScore,
+                            numeracyScore,
+                            understandingScore,
+                            behaviourScore,
+                            createdAt)
             );
         });
     }
 
     @Test
-    void createFormNullTerm() {
-
-    }
-
-    @Test
-    void createFormInvalid_field2() {
+    void createFormInvalidTermTooHigh() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    new WeeklyForm(
+                            id,
+                            StudentId,
+                            5,
+                            week,
+                            attenanceDays,
+                            wasLate,
+                            homeworkDone,
+                            attentionScore,
+                            literacyScore,
+                            numeracyScore,
+                            understandingScore,
+                            behaviourScore,
+                            createdAt)
+            );
+        });
     }
 }

@@ -11,11 +11,11 @@ import java.util.List;
 public class FormService {
 
     private final FormDao formDao;
-    private final StudentDao studentDao;
+//    private final StudentDao studentDao;
 
-    public FormService(FormDao formDao, StudentDao studentDao) {
+    public FormService(FormDao formDao) {
         this.formDao = formDao;
-        this.studentDao = studentDao;
+//        this.studentDao = studentDao;
     }
 
     public WeeklyForm createForm(WeeklyForm form) throws SQLException {
