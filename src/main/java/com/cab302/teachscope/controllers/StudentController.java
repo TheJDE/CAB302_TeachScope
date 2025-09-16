@@ -5,6 +5,7 @@ import com.cab302.teachscope.models.dao.StudentDao;
 import com.cab302.teachscope.models.entities.Student;
 import com.cab302.teachscope.models.services.StudentService;
 import com.cab302.teachscope.util.NavigationUtils;
+import javafx.scene.Parent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,33 +18,55 @@ import java.util.Optional;
 
 public class StudentController {
 
-    @FXML private Button logoutButton;
-    @FXML private Button newStudentButton;
-    @FXML private Button studentNav;
+    @FXML
+    private Button logoutButton;
+    @FXML
+    private Button newStudentButton;
+    @FXML
+    private Button studentNav;
+    @FXML
+    private Button knowledgeBaseButton;
 
-    @FXML private TableView<Student> studentsTable;
-    @FXML private TableColumn<Student, String> nameColumn;
-    @FXML private TableColumn<Student, String> gradeColumn;
-    @FXML private TableColumn<Student, String> classColumn;
-    @FXML private TableColumn<Student, String> statusColumn;
-    @FXML private TableColumn<Student, String> genderColumn;
+    @FXML
+    private TableView<Student> studentsTable;
+    @FXML
+    private TableColumn<Student, String> nameColumn;
+    @FXML
+    private TableColumn<Student, String> gradeColumn;
+    @FXML
+    private TableColumn<Student, String> classColumn;
+    @FXML
+    private TableColumn<Student, String> statusColumn;
+    @FXML
+    private TableColumn<Student, String> genderColumn;
 
-    @FXML private TextField firstName;
-    @FXML private TextField lastName;
-    @FXML private TextField classField;
+    @FXML
+    private TextField firstName;
+    @FXML
+    private TextField lastName;
+    @FXML
+    private TextField classField;
 
-    @FXML private ComboBox<String> gender;
-    @FXML private ComboBox<String> gradeLevel;
-    @FXML private ComboBox<String> studentStatus;
+    @FXML
+    private ComboBox<String> gender;
+    @FXML
+    private ComboBox<String> gradeLevel;
+    @FXML
+    private ComboBox<String> studentStatus;
 
-    @FXML private Label formTitle;
-    @FXML private Button addStudentButton;
-    @FXML private Hyperlink deleteLink;
+    @FXML
+    private Label formTitle;
+    @FXML
+    private Button addStudentButton;
+    @FXML
+    private Hyperlink deleteLink;
 
     private final StudentService studentService = new StudentService(new DbStudentDao());
     private Optional<Student> editingStudent = Optional.empty(); //tracks if we're editing
 
-    @FXML protected void initialize() {
+
+    @FXML
+    protected void initialize() {
         if (studentsTable != null) {
             // If this is the students list page
             setupTable();
@@ -54,6 +77,12 @@ public class StudentController {
             setupForm();
         }
     }
+
+    @FXML
+    protected void onKnowledgeBaseClick() {
+
+    }
+
 
     @FXML
     protected void newStudentClick() {
@@ -85,18 +114,27 @@ public class StudentController {
         }
     }
 
+    /**
+     * Sets up the table so that the student's name is displayed as a clickable hyperlink.
+     * When clicked, the hyperlink will open the edit page for that student.
+     */
     private void setupTable() {
+        // Configure the name column to display custom cells
         nameColumn.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
+                //if the cell is empty (no data), clear its content
                 if (empty || getTableRow() == null) {
                     setGraphic(null);
                 } else {
+                    //get the student object for the current row
                     Student student = getTableView().getItems().get(getIndex());
+                    //create a clickable hyperlink with the students full name
                     Hyperlink link = new Hyperlink(student.getFirstName() + " " + student.getLastName());
+                    //set the action for when the hyperlink is clicked then open the edit page
                     link.setOnAction(e -> openEditPage(student));
-                    setGraphic(link);
+                    setGraphic(link); // add the hyperlink to the table cell
                 }
             }
         });
@@ -117,8 +155,6 @@ public class StudentController {
     private void setupForm() {
         deleteLink.setVisible(false);
         addStudentButton.setOnAction(e -> handleSave());
-
-        editingStudent.ifPresent(this::populateForm);
     }
 
     private void populateForm(Student student) {
@@ -147,11 +183,22 @@ public class StudentController {
             Student.EnrolmentStatus status = getEnumFromComboBox(studentStatus, Student.EnrolmentStatus.class);
 
             if (editingStudent.isPresent()) {
-                studentService.updateStudent(
-                        editingStudent.get().getId(),
-                        fName, lName, g, gl, cls, status
-                );
+                //editing an existing student
+                Student student = editingStudent.get();
+                student.setFirstName(fName);
+                student.setLastName(lName);
+                student.setClassCode(cls);
+                student.setGender(g);
+                student.setGradeLevel(gl);
+                student.setEnrolmentStatus(status);
+
+                System.out.println("Editing student: " + student);
+                System.out.println("Student ID: " + student.getId());
+                System.out.println("Exists in DB: " + studentService.getStudentById(student.getId()));
+
+                studentService.updateStudent(student.getId(), fName, lName, g, gl, cls, status);
             } else {
+                //adding a new student
                 studentService.registerStudent(fName, lName, g, gl, cls, status);
             }
 
@@ -202,12 +249,12 @@ public class StudentController {
     private void openEditPage(Student student) {
         try {
             Stage stage = (Stage) studentsTable.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cab302/teachscope/views/newstudent.fxml"));
-            VBox root = loader.load();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/newstudent.fxml"));
+            Parent root = loader.load();
 
             StudentController formController = loader.getController();
             formController.setEditingStudent(student); // populate form
-            formController.initialize();
 
             stage.getScene().setRoot(root);
             stage.setTitle("Edit Student");
@@ -225,6 +272,8 @@ public class StudentController {
     }
 
     public void setEditingStudent(Student student) {
+
         this.editingStudent = Optional.ofNullable(student);
+        editingStudent.ifPresent(this::populateForm);
     }
 }
