@@ -37,6 +37,9 @@ public class LoginController {
      * Sign up page button.
      */
     @FXML
+    private Button resetPasswordButton;
+
+    @FXML
     private Hyperlink signUpLink;
 
     /**
@@ -54,6 +57,9 @@ public class LoginController {
      * Method to log the user in. Sets error label to relevant values on exceptions.
      * @throws IOException On failed redirect.
      */
+    @FXML
+    private Hyperlink forgotPasswordLink;
+
     @FXML
     protected void onLoginClick() throws IOException {
         errorLabel.setText("");
@@ -81,5 +87,29 @@ public class LoginController {
         Stage stage = (Stage) signUpLink.getScene().getWindow();
 
         NavigationUtils.navigateTo(stage, "signup", "Sign Up");
+    }
+
+    @FXML
+    protected void forgotPasswordClick() throws IOException {
+        Stage stage = (Stage) forgotPasswordLink.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/forgotpassword.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+        stage.setScene(scene);
+        stage.setMaximized(true);
+        stage.setTitle("Forgot Password");
+        stage.show();
+    }
+
+    @FXML
+    protected void onResetPasswordClick() throws IOException {
+        Stage stage = (Stage) resetPasswordButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/login.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+        stage.setScene(scene);
+        stage.setMaximized(true);
+        stage.setTitle("Login");
+        stage.show();
     }
 }

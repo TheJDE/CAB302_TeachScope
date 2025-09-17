@@ -12,20 +12,25 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
 import java.util.Optional;
 
 public class StudentController {
-
     @FXML
     private Button logoutButton;
+
     @FXML
     private Button newStudentButton;
     @FXML
     private Button studentNav;
     @FXML
     private Button knowledgeBaseButton;
+
+    @FXML
+    private Button viewFormsButton;
+
 
     @FXML
     private TableView<Student> studentsTable;
@@ -280,6 +285,19 @@ public class StudentController {
                 showAlert("Error", e.getMessage());
             }
         });
+    }
+
+    @FXML
+    protected void viewFormsClick() throws IOException {
+        // go to weeklyforms.fxml
+        Stage stage = (Stage) viewFormsButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/weeklyforms.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+        stage.setScene(scene);
+        stage.setMaximized(true);
+        stage.setTitle("View Weekly Forms");
+        stage.show();
     }
 
     /**
