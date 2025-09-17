@@ -20,7 +20,8 @@ public class WeeklyForm {
     private int behaviourScore;
     private int peerInteractionScore;
     private int respectForRulesScore;
-    private String createdAt;
+    private String emotionalState;
+    private String teacherConcerns;
 
     public WeeklyForm(String id,
                       String studentId,
@@ -37,7 +38,8 @@ public class WeeklyForm {
                       int behaviourScore,
                       int peerInteractionScore,
                       int respectForRulesScore,
-                      String createdAt
+                      String emotionalState,
+                      String teacherConcerns
     ) {
         setId(id);
         setStudentId(studentId);
@@ -54,7 +56,8 @@ public class WeeklyForm {
         setBehaviourScore(behaviourScore);
         setPeerInteractionScore(peerInteractionScore);
         setRespectForRulesScore(respectForRulesScore);
-        setCreatedAt(createdAt);
+        setEmotionalState(emotionalState);
+        setTeacherConcerns(teacherConcerns);
     }
 
     // Empty constructor for frameworks
@@ -106,6 +109,9 @@ public class WeeklyForm {
     public int getRespectForRulesScore() { return respectForRulesScore; }
     public void setRespectForRulesScore(int respectForRulesScore) { this.respectForRulesScore = respectForRulesScore; }
 
-    public String getCreatedAt() { return createdAt; }
-    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+    public String getEmotionalState() { return emotionalState; }
+    public void setEmotionalState(String emotionalState) { this.emotionalState = emotionalState; }
+
+    public String getTeacherConcerns() { return teacherConcerns; }
+    public void setTeacherConcerns(String teacherConcerns) { this.teacherConcerns = teacherConcerns; }
 }

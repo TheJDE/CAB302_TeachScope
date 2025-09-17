@@ -27,7 +27,8 @@ public class FormTest {
     private int behaviourScore;
     private int peerInteractionScore;
     private int respectForRulesScore;
-    private String createdAt;
+    private String emotionalState;
+    private String teacherConcerns;
 
     @BeforeEach
     public void setup() {
@@ -49,7 +50,8 @@ public class FormTest {
         behaviourScore = 1;
         peerInteractionScore = 1;
         respectForRulesScore = 2;
-        createdAt = "20/06/2025";
+        emotionalState = "Happy";
+        teacherConcerns = "No extra comments";
     }
 
     @Test
@@ -76,7 +78,8 @@ public class FormTest {
                             behaviourScore,
                             peerInteractionScore,
                             respectForRulesScore,
-                            createdAt
+                            emotionalState,
+                            teacherConcerns
             );
         });
     }
@@ -100,7 +103,8 @@ public class FormTest {
                     behaviourScore,
                     peerInteractionScore,
                     respectForRulesScore,
-                    createdAt
+                    emotionalState,
+                    teacherConcerns
             );
         });
     }
@@ -124,7 +128,8 @@ public class FormTest {
                     behaviourScore,
                     peerInteractionScore,
                     respectForRulesScore,
-                    createdAt
+                    emotionalState,
+                    teacherConcerns
             );
         });
     }
@@ -148,7 +153,8 @@ public class FormTest {
                     behaviourScore,
                     peerInteractionScore,
                     respectForRulesScore,
-                    createdAt
+                    emotionalState,
+                    teacherConcerns
             );
         });
     }

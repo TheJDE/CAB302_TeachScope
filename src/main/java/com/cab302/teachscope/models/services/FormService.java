@@ -34,7 +34,8 @@ public class FormService {
                                  int behaviourScore,
                                  int peerInteractionScore,
                                  int respectForRulesScore,
-                                 String createdAt
+                                 String emotionalState,
+                                 String teacherConcerns
     ) {
         WeeklyForm form = new WeeklyForm(
                 id,
@@ -51,8 +52,9 @@ public class FormService {
                 understandingScore,
                 behaviourScore,
                 peerInteractionScore,
-                respectForRulesScore
-                ,createdAt
+                respectForRulesScore,
+                emotionalState,
+                teacherConcerns
         );
 
         validateForm(form);
@@ -170,9 +172,20 @@ public class FormService {
             throw new IllegalArgumentException("All scores must be between 0-2");
         }
 
-        // Created at
-        if (form.getCreatedAt() == null) {
-            throw new IllegalArgumentException("Form created at must not be null");
+        // Emotional State
+        if (
+            form.getEmotionalState() == null ||
+            form.getEmotionalState() != "Happy" ||
+            form.getEmotionalState() != "Neutral" ||
+            form.getEmotionalState() != "Withdrawn" ||
+            form.getEmotionalState() != "Anxious"
+        ) {
+            throw new IllegalArgumentException("Invalid emotional state");
+        }
+
+        // Teacher Concerns
+        if (form.getTeacherConcerns() == null) {
+            throw new IllegalArgumentException("Invalid teacher concerns");
         }
     }
 }
