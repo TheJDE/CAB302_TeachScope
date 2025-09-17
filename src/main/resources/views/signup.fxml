@@ -7,8 +7,6 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.text.Text?>
 
-
-
 <HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="0"
       fx:controller="com.cab302.teachscope.controllers.SignupController" stylesheets="@../css/styles.css">
 

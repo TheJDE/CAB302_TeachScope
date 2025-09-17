@@ -42,6 +42,7 @@ public class DbUserDao implements UserDao{
     /**
      * Adds a new user to the database
      * @param user - the user to add
+     * @throws SQLException On misformed query.
      */
     @Override
     public void addUser(User user) throws SQLException {

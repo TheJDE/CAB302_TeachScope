@@ -134,6 +134,18 @@ public class UserTest {
     }
 
     @Test
+    void TestSignUpPasswordTooLong() {
+        // Create valid user
+        String userEmail = "test@email.com";
+        String userPassword = "Testingtolongpassword3";
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            userService.registerUser(userEmail, userPassword);
+        });
+    }
+
+    @Test
     void TestSignUpPasswordNoChar() {
         // Create valid user
         String userEmail = "user@email.com";
