@@ -11,6 +11,11 @@ import java.util.Optional;
  */
 public class StudentService {
     private final StudentDao studentDAO;
+
+    /**
+     * Constructor
+     * @param studentDao Student Data Access Object
+     */
     public StudentService(StudentDao studentDao) { this.studentDAO = studentDao; }
 
     /**

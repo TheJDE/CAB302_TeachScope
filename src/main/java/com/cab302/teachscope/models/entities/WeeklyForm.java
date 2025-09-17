@@ -10,32 +10,51 @@ public class WeeklyForm {
     private int term;
     private int week;
     private int attendanceDays;
-    private boolean wasLate;
-    private boolean homeworkDone;
+    private int daysLate;
     private int attentionScore;
+    private boolean homeworkDone;
+    private int participationScore;
     private int literacyScore;
     private int numeracyScore;
     private int understandingScore;
     private int behaviourScore;
+    private int peerInteractionScore;
+    private int respectForRulesScore;
     private String createdAt;
 
-    public WeeklyForm(String id, String studentId, int term, int week, int attendanceDays,
-                      boolean wasLate, boolean homeworkDone, int attentionScore,
-                      int literacyScore, int numeracyScore, int understandingScore,
-                      int behaviourScore, String createdAt) {
-        this.id = id;
-        this.studentId = studentId;
-        this.term = term;
-        this.week = week;
-        this.attendanceDays = attendanceDays;
-        this.wasLate = wasLate;
-        this.homeworkDone = homeworkDone;
-        this.attentionScore = attentionScore;
-        this.literacyScore = literacyScore;
-        this.numeracyScore = numeracyScore;
-        this.understandingScore = understandingScore;
-        this.behaviourScore = behaviourScore;
-        this.createdAt = createdAt;
+    public WeeklyForm(String id,
+                      String studentId,
+                      int term,
+                      int week,
+                      int attendanceDays,
+                      int daysLate,
+                      int attentionScore,
+                      boolean homeworkDone,
+                      int participationScore,
+                      int literacyScore,
+                      int numeracyScore,
+                      int understandingScore,
+                      int behaviourScore,
+                      int peerInteractionScore,
+                      int respectForRulesScore,
+                      String createdAt
+    ) {
+        setId(id);
+        setStudentId(studentId);
+        setTerm(term);
+        setWeek(week);
+        setAttendanceDays(attendanceDays);
+        setDaysLate(daysLate);
+        setAttentionScore(attentionScore);
+        setHomeworkDone(homeworkDone);
+        setParticipationScore(participationScore);
+        setLiteracyScore(literacyScore);
+        setNumeracyScore(numeracyScore);
+        setUnderstandingScore(understandingScore);
+        setBehaviourScore(behaviourScore);
+        setPeerInteractionScore(peerInteractionScore);
+        setRespectForRulesScore(respectForRulesScore);
+        setCreatedAt(createdAt);
     }
 
     // Empty constructor for frameworks
@@ -57,14 +76,17 @@ public class WeeklyForm {
     public int getAttendanceDays() { return attendanceDays; }
     public void setAttendanceDays(int attendanceDays) { this.attendanceDays = attendanceDays; }
 
-    public boolean isWasLate() { return wasLate; }
-    public void setWasLate(boolean wasLate) { this.wasLate = wasLate; }
+    public int getDaysLate() { return daysLate; }
+    public void setDaysLate(int daysLate) { this.daysLate = daysLate; }
+
+    public int getAttentionScore() { return attentionScore; }
+    public void setAttentionScore(int attentionScore) { this.attentionScore = attentionScore; }
 
     public boolean isHomeworkDone() { return homeworkDone; }
     public void setHomeworkDone(boolean homeworkDone) { this.homeworkDone = homeworkDone; }
 
-    public int getAttentionScore() { return attentionScore; }
-    public void setAttentionScore(int attentionScore) { this.attentionScore = attentionScore; }
+    public int getParticipationScore() { return participationScore; }
+    public void setParticipationScore(int participationScore) { this.participationScore = participationScore; }
 
     public int getLiteracyScore() { return literacyScore; }
     public void setLiteracyScore(int literacyScore) { this.literacyScore = literacyScore; }
@@ -77,6 +99,12 @@ public class WeeklyForm {
 
     public int getBehaviourScore() { return behaviourScore; }
     public void setBehaviourScore(int behaviourScore) { this.behaviourScore = behaviourScore; }
+
+    public int getPeerInteractionScore() { return peerInteractionScore; }
+    public void setPeerInteractionScore(int peerInteractionScore) { this.peerInteractionScore = peerInteractionScore; }
+
+    public int getRespectForRulesScore() { return respectForRulesScore; }
+    public void setRespectForRulesScore(int respectForRulesScore) { this.respectForRulesScore = respectForRulesScore; }
 
     public String getCreatedAt() { return createdAt; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }

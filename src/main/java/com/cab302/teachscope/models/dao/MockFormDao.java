@@ -1,10 +1,15 @@
 package com.cab302.teachscope.models.dao;
 
+import com.cab302.teachscope.models.entities.Student;
 import com.cab302.teachscope.models.entities.WeeklyForm;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class MockFormDao implements FormDao{
+public class MockFormDao implements FormDao {
+
+    private final Map<String, Student> forms = new HashMap<>();
 
     @Override
     public WeeklyForm create(WeeklyForm form) {
