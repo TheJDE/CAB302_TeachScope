@@ -64,7 +64,10 @@ public class StudentController {
     private final StudentService studentService = new StudentService(new DbStudentDao());
     private Optional<Student> editingStudent = Optional.empty(); //tracks if we're editing
 
-
+    /**
+     * Initializes the controller after the FXML is loaded
+     * Sets up the student table on the dashboard or the form when on the add/edit student page.
+     */
     @FXML
     protected void initialize() {
         if (studentsTable != null) {
@@ -78,12 +81,19 @@ public class StudentController {
         }
     }
 
+    /**
+     * Handles the click event for the Knowledge Base button
+     * (currently unimplemented)
+     */
+
     @FXML
     protected void onKnowledgeBaseClick() {
 
     }
 
-
+    /**
+     * Navigates to the new student form page
+     */
     @FXML
     protected void newStudentClick() {
         Stage stage = (Stage) newStudentButton.getScene().getWindow();
@@ -94,6 +104,9 @@ public class StudentController {
         }
     }
 
+    /**
+     * Logs the user out of the system and takes them to the login page
+     */
     @FXML
     protected void onLogoutClick() {
         Stage stage = (Stage) logoutButton.getScene().getWindow();
@@ -104,6 +117,9 @@ public class StudentController {
         }
     }
 
+    /**
+     * Navigates to the dashboard page
+     */
     @FXML
     protected void onStudentClick() {
         Stage stage = (Stage) studentNav.getScene().getWindow();
@@ -115,8 +131,8 @@ public class StudentController {
     }
 
     /**
-     * Sets up the table so that the student's name is displayed as a clickable hyperlink.
-     * When clicked, the hyperlink will open the edit page for that student.
+     * Sets up the table so that the student's name is displayed as a clickable hyperlink
+     * When clicked the hyperlink will open the edit page for that student
      */
     private void setupTable() {
         // Configure the name column to display custom cells
@@ -148,15 +164,26 @@ public class StudentController {
         refreshStudentTable();
     }
 
+    /**
+     * Refreshes the student table by reloading all students from the database
+     */
     private void refreshStudentTable() {
         studentsTable.getItems().setAll(studentService.getAllStudents());
     }
 
+    /**
+     * Configures the student form for adding or updating students
+     */
     private void setupForm() {
         deleteLink.setVisible(false);
         addStudentButton.setOnAction(e -> handleSave());
     }
 
+    /**
+     * Populates the student form fields when editing a student
+     *
+     * @param student the student to populate the form with
+     */
     private void populateForm(Student student) {
         formTitle.setText("Edit Student");
         addStudentButton.setText("Update Student");
@@ -170,6 +197,9 @@ public class StudentController {
         studentStatus.setValue(student.getEnrolmentStatus().name());
     }
 
+    /**
+     * Handles saving a new or updated student when the save button is clicked
+     */
     @FXML
     private void handleSave() {
         try {
@@ -210,7 +240,14 @@ public class StudentController {
         }
     }
 
-
+    /**
+     * Converts the selected ComboBox value into an enum constant.
+     *
+     * @param comboBox  the ComboBox containing the value
+     * @param enumClass the enum type to convert too
+     * @param <T>       the enum type
+     * @return the matching enum constant
+     */
     private <T extends Enum<T>> T getEnumFromComboBox(ComboBox<String> comboBox, Class<T> enumClass) {
         if (comboBox.getValue() == null) return null;
         String selected = comboBox.getValue().trim();
@@ -225,6 +262,9 @@ public class StudentController {
         return null;
     }
 
+    /**
+     * Deletes the currently selected student if editing mode is active
+     */
     @FXML
     protected void onDeleteLinkClick() {
         editingStudent.ifPresent(student -> {
@@ -242,6 +282,11 @@ public class StudentController {
         });
     }
 
+    /**
+     * Opens the student edit form for the given student.
+     *
+     * @param student the student to edit
+     */
     private void openEditPage(Student student) {
         try {
             Stage stage = (Stage) studentsTable.getScene().getWindow();
@@ -259,6 +304,12 @@ public class StudentController {
         }
     }
 
+    /**
+     * Displays an alert with the given title and message
+     *
+     * @param title   the alert title
+     * @param message the alert message
+     */
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -267,6 +318,11 @@ public class StudentController {
         alert.showAndWait();
     }
 
+    /**
+     * Sets the current editing student and updates the form
+     *
+     * @param student the student being edited
+     */
     public void setEditingStudent(Student student) {
 
         this.editingStudent = Optional.ofNullable(student);
