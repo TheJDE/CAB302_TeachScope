@@ -11,18 +11,12 @@ import java.util.List;
 public class FormService {
 
     private final FormDao formDao;
-//    private final StudentDao studentDao;
 
     public FormService(FormDao formDao) {
         this.formDao = formDao;
-//        this.studentDao = studentDao;
     }
 
     public WeeklyForm createForm(WeeklyForm form) throws SQLException {
-        Student student = studentDao.getStudent(form.getStudentId());
-        if (student == null) {
-            throw new IllegalArgumentException("No student found with ID: " + form.getStudentId());
-        }
         validateForm(form);
         return formDao.create(form);
     }

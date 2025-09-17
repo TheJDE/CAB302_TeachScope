@@ -92,24 +92,14 @@ public class LoginController {
     @FXML
     protected void forgotPasswordClick() throws IOException {
         Stage stage = (Stage) forgotPasswordLink.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/forgotpassword.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-        stage.setScene(scene);
-        stage.setMaximized(true);
-        stage.setTitle("Forgot Password");
-        stage.show();
+
+        NavigationUtils.navigateTo(stage, "forgotpassword", "Forgot Password");
     }
 
     @FXML
     protected void onResetPasswordClick() throws IOException {
         Stage stage = (Stage) resetPasswordButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-        stage.setScene(scene);
-        stage.setMaximized(true);
-        stage.setTitle("Login");
-        stage.show();
+
+        NavigationUtils.navigateTo(stage, "login", "Login");
     }
 }
