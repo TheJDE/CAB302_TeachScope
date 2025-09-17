@@ -19,7 +19,7 @@ public class FormService {
      */
     public FormService(FormDao formDao) { this.formDao = formDao;}
 
-    public WeeklyForm createForm(String id,
+    public void createForm(String id,
                                  String studentId,
                                  int term,
                                  int week,
@@ -60,7 +60,7 @@ public class FormService {
         validateForm(form);
 
         try {
-            return formDao.create(form);
+            formDao.create(form);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

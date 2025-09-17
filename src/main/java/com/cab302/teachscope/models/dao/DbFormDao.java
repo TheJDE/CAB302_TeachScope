@@ -35,7 +35,8 @@ public class DbFormDao implements FormDao {
                     "behaviourScore INTEGER NOT NULL," +
                     "peerInteractionScore INTEGER NOT NULL," +
                     "respectForRulesScore INTEGER NOT NULL," +
-                    "createdAt TEXT NOT NULL," +
+                    "emotionalState TEXT NOT NULL," +
+                    "teacherConcerns TEXT NOT NULL, " +
                     "FOREIGN KEY(studentId) REFERENCES students(id)" +
                     ")";
             stmt.executeUpdate(sql);
@@ -45,7 +46,7 @@ public class DbFormDao implements FormDao {
     }
 
     @Override
-    public WeeklyForm create(WeeklyForm form) throws SQLException {
+    public void create(WeeklyForm form) throws SQLException {
         String sql = "INSERT INTO weekly_forms (" +
                 "id, " +
                 "studentId, " +
@@ -62,9 +63,10 @@ public class DbFormDao implements FormDao {
                 "behaviourScore, " +
                 "peerInteractionScore, " +
                 "respectForRulesScore, " +
-                "createdAt" +
+                "emotionalState, " +
+                "teacherConcerns " +
                 ")" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt = connection.prepareStatement(sql);
 
         stmt.setString(1, form.getId());
@@ -82,10 +84,10 @@ public class DbFormDao implements FormDao {
         stmt.setInt(13, form.getBehaviourScore());
         stmt.setInt(14, form.getPeerInteractionScore());
         stmt.setInt(15, form.getRespectForRulesScore());
-        stmt.setString(16, form.getCreatedAt());
+        stmt.setString(16, form.getEmotionalState());
+        stmt.setString(17, form.getTeacherConcerns());
         stmt.executeUpdate();
 
-        return form;
     }
 
     @Override

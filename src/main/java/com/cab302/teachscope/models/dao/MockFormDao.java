@@ -12,8 +12,7 @@ public class MockFormDao implements FormDao {
     private final Map<String, Student> forms = new HashMap<>();
 
     @Override
-    public WeeklyForm create(WeeklyForm form) {
-        return null;
+    public void create(WeeklyForm form) {
     }
 
     @Override

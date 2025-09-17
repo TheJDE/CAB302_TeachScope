@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface FormDao {
-    WeeklyForm create(WeeklyForm form) throws SQLException;
+    void create(WeeklyForm form) throws SQLException;
 
     WeeklyForm findById(String id) throws SQLException;
 
