@@ -291,13 +291,12 @@ public class StudentController {
     protected void viewFormsClick() throws IOException {
         // go to weeklyforms.fxml
         Stage stage = (Stage) viewFormsButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/weeklyforms.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-        stage.setScene(scene);
-        stage.setMaximized(true);
-        stage.setTitle("View Weekly Forms");
-        stage.show();
+
+        try {
+            NavigationUtils.navigateTo(stage, "weeklyforms", "View Weekly Forms");
+        } catch (IllegalArgumentException e) {
+            showAlert("Error", e.getMessage());
+        }
     }
 
     /**
@@ -306,17 +305,9 @@ public class StudentController {
      * @param student the student to edit
      */
     private void openEditPage(Student student) {
+        Stage stage = (Stage) studentsTable.getScene().getWindow();
         try {
-            Stage stage = (Stage) studentsTable.getScene().getWindow();
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/newstudent.fxml"));
-            Parent root = loader.load();
-
-            StudentController formController = loader.getController();
-            formController.setEditingStudent(student); // populate form
-
-            stage.getScene().setRoot(root);
-            stage.setTitle("Edit Student");
+            NavigationUtils.navigateTo(stage, "newstudent", "Edit Student");
         } catch (IOException e) {
             e.printStackTrace();
         }
