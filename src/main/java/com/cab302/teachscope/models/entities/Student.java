@@ -120,7 +120,7 @@ public class Student {
      * @param Id Student Id
      */
     public void setId(String Id) {
-        this.id = IdUtil.generateIdString();
+        this.id = Id;
     }
 
     /**

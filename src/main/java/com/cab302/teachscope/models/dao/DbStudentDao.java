@@ -7,15 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Database implementation of the student data access object.
+ */
 public class DbStudentDao implements StudentDao{
     private Connection connection;
 
+    /**
+     * Constructor
+     */
     public DbStudentDao() {
         connection = DatabaseConnection.getInstance();
         createTable();
     }
 
-    // Creates Users table
+    /**
+     * Creates a new students table in an SQL database if it doesn't exist.
+     */
     private void createTable() {
         try {
             Statement statement = connection.createStatement();
@@ -34,6 +42,11 @@ public class DbStudentDao implements StudentDao{
         }
     }
 
+    /**
+     * Adds a new student to the database.
+     * @param student - the student to add
+     * @throws SQLException On misformed query.
+     */
     @Override
     public void addStudent(Student student) throws SQLException {
         String query = "INSERT INTO students (id, firstName, lastName, classCode, gender, enrolmentStatus, gradeLevel)"
@@ -52,6 +65,11 @@ public class DbStudentDao implements StudentDao{
         statement.executeUpdate();
     }
 
+    /**
+     * Updates existing student in the database.
+     * @param student - the student to update
+     * @throws SQLException On misformed query.
+     */
     @Override
     public void updateStudent(Student student) throws SQLException {
         PreparedStatement Statement = connection.prepareStatement("UPDATE students SET " +
@@ -72,6 +90,11 @@ public class DbStudentDao implements StudentDao{
         Statement.executeUpdate();
     }
 
+    /**
+     * Deletes a student from the database.
+     * @param Id - the students Id
+     * @throws SQLException On misformed query.
+     */
     @Override
     public void deleteStudent(String Id) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("DELETE FROM students WHERE id = ?");
@@ -79,6 +102,12 @@ public class DbStudentDao implements StudentDao{
         statement.executeUpdate();
     }
 
+    /**
+     * Gets a single student from the database.
+     * @param id - the student to retrieve
+     * @return Student entity object.
+     * @throws SQLException On invalid ID.
+     */
     @Override
     public Student getStudent(String id) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM students WHERE id = ?");
@@ -102,6 +131,11 @@ public class DbStudentDao implements StudentDao{
         return null;
     }
 
+    /**
+     * Gets all students.
+     * @return List of student entities.
+     * @throws SQLException On misformed query.
+     */
     @Override
     public List<Student> getAllStudents() throws SQLException {
         List<Student> students = new ArrayList<>();

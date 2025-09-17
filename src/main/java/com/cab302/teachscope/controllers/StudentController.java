@@ -192,10 +192,6 @@ public class StudentController {
                 student.setGradeLevel(gl);
                 student.setEnrolmentStatus(status);
 
-                System.out.println("Editing student: " + student);
-                System.out.println("Student ID: " + student.getId());
-                System.out.println("Exists in DB: " + studentService.getStudentById(student.getId()));
-
                 studentService.updateStudent(student.getId(), fName, lName, g, gl, cls, status);
             } else {
                 //adding a new student
