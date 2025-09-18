@@ -17,6 +17,7 @@ public class FormTest {
     private int term;
     private int week;
     private int attenanceDays;
+    private boolean wasLate;
     private int daysLate;
     private int attentionScore;
     private boolean homeworkDone;
@@ -40,6 +41,7 @@ public class FormTest {
         term = 1;
         week = 1;
         attenanceDays = 5;
+        wasLate = true;
         daysLate = 2;
         homeworkDone = true;
         participationScore = 2;
@@ -68,6 +70,7 @@ public class FormTest {
                             0,
                             week,
                             attenanceDays,
+                            wasLate,
                             daysLate,
                             attentionScore,
                             homeworkDone,
@@ -93,6 +96,7 @@ public class FormTest {
                     5,
                     week,
                     attenanceDays,
+                    wasLate,
                     daysLate,
                     attentionScore,
                     homeworkDone,
@@ -118,6 +122,7 @@ public class FormTest {
                     term,
                     0,
                     attenanceDays,
+                    wasLate,
                     daysLate,
                     attentionScore,
                     homeworkDone,
@@ -143,6 +148,7 @@ public class FormTest {
                     term,
                     13,
                     attenanceDays,
+                    wasLate,
                     daysLate,
                     attentionScore,
                     homeworkDone,
@@ -158,4 +164,91 @@ public class FormTest {
             );
         });
     }
+
+    @Test
+    void createFormInvalidTrueWasLateConflictingWithLateCount() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attenanceDays,
+                    true,
+                    0,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidFalseWasLateConflictingWithLateCount() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attenanceDays,
+                    false,
+                    1,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidLateCountExceedsAttendanceDays() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    3,
+                    wasLate,
+                    5,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+
+
+
+
+
+
+
+
 }

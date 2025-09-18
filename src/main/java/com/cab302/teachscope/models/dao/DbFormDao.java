@@ -25,6 +25,7 @@ public class DbFormDao implements FormDao {
                     "term INTEGER NOT NULL," +
                     "week INTEGER NOT NULL," +
                     "attendanceDays INTEGER NOT NULL," +
+                    "wasLate BOOLEAN NOT NULL," +
                     "daysLate INTEGER NOT NULL," +
                     "attentionScore INTEGER NOT NULL," +
                     "homeworkDone BOOLEAN NOT NULL," +
@@ -53,6 +54,7 @@ public class DbFormDao implements FormDao {
                 "term, " +
                 "week, " +
                 "attendanceDays," +
+                "wasLate," +
                 "daysLate, " +
                 "attentionScore, " +
                 "homeworkDone," +
@@ -66,7 +68,7 @@ public class DbFormDao implements FormDao {
                 "emotionalState, " +
                 "teacherConcerns " +
                 ")" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt = connection.prepareStatement(sql);
 
         stmt.setString(1, form.getId());
@@ -74,6 +76,7 @@ public class DbFormDao implements FormDao {
         stmt.setInt(3, form.getTerm());
         stmt.setInt(4, form.getWeek());
         stmt.setInt(5, form.getAttendanceDays());
+        stmt.setBoolean(8, form.wasLate());
         stmt.setInt(6, form.getDaysLate());
         stmt.setInt(7, form.getAttentionScore());
         stmt.setBoolean(8, form.isHomeworkDone());
