@@ -35,18 +35,15 @@ public class NavigationUtils {
             try {
                 // Load the KnowledgeBase PDF, located in the resources folder of the application
                 URL resource = com.cab302.teachscope.util.NavigationUtils.class.getResource("/images/knowledge_base_final.pdf");
-
                 if (resource == null) {
                     System.out.println("PDF not found in resources folder!");
                     return;
                 }
-
                 // Create a temporary file, from the pdf in our resources folder to open
                 File knowledgeBaseTempFile = File.createTempFile("knowledgeBase", ".pdf");
                 try (InputStream in = resource.openStream()) {
                     Files.copy(in, knowledgeBaseTempFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
                 }
-
                 // open this temporary file
                 Desktop.getDesktop().open(knowledgeBaseTempFile);
             } catch (Exception e) {
@@ -55,4 +52,24 @@ public class NavigationUtils {
 
     }
 
-}
+    public static void openIntroductoryTutorial() {
+        try {
+            // Load the Introductory Tutorial PDF, located in the resources folder of the application
+            URL resource = com.cab302.teachscope.util.NavigationUtils.class.getResource("/images/user_introductory_tutorial.pdf");
+            if (resource == null) {
+                System.out.println("PDF not found in resources folder!");
+                return;
+            }
+            // Create a temporary file, from the pdf in our resources folder to open
+            File introductoryTutorialTempFile = File.createTempFile("introductoryTutorial", ".pdf");
+            try (InputStream in = resource.openStream()) {
+                Files.copy(in, introductoryTutorialTempFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            }
+            // open this temporary file
+            Desktop.getDesktop().open(introductoryTutorialTempFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    }

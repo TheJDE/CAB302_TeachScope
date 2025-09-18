@@ -96,6 +96,11 @@ public class StudentController {
         NavigationUtils.openKnowledgeBasePDF();
     }
 
+    @FXML
+    protected void onIntroductoryTutorialClick() {
+        NavigationUtils.openIntroductoryTutorial();
+    }
+
     /**
      * Navigates to the new student form page
      */
