@@ -308,6 +308,15 @@ public class StudentController {
         Stage stage = (Stage) studentsTable.getScene().getWindow();
         try {
             NavigationUtils.navigateTo(stage, "newstudent", "Edit Student");
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/newstudent.fxml"));
+            Parent root = loader.load();
+
+            StudentController formController = loader.getController();
+            formController.setEditingStudent(student); // populate form
+
+            stage.getScene().setRoot(root);
+            stage.setTitle("Edit Student");
         } catch (IOException e) {
             e.printStackTrace();
         }
