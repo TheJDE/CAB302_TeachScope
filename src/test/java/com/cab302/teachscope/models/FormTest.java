@@ -56,8 +56,9 @@ public class FormTest {
 
     @Test
     void createFormValid() {
-
+        
     }
+    
 
     @Test
     void createFormInvalidTermTooLow() {
@@ -257,6 +258,46 @@ public class FormTest {
                     teacherConcerns
             );
         });
+    }
+
+    @Test
+    void createFormNullId() {
+        assertThrows(IllegalArgumentException.class, () ->
+                formService.createForm(
+                        null, StudentId, term, week, attenanceDays, daysLate,
+                        attentionScore, homeworkDone, participationScore,
+                        literacyScore, numeracyScore, understandingScore,
+                        behaviourScore, peerInteractionScore, respectForRulesScore,
+                        emotionalState, teacherConcerns
+                )
+        );
+    }
+
+    @Test
+    void createFormInvalidIdFormat() { 
+        assertThrows(IllegalArgumentException.class, () ->
+                formService.createForm(
+                        "bad-id", StudentId, term, week, attenanceDays, daysLate,
+                        attentionScore, homeworkDone, participationScore,
+                        literacyScore, numeracyScore, understandingScore,
+                        behaviourScore, peerInteractionScore, respectForRulesScore,
+                        emotionalState, teacherConcerns
+                )
+        );
+    }
+    
+
+    @Test
+    void createFormInvalidEmotionalState() { 
+        assertThrows(IllegalArgumentException.class, () ->
+                formService.createForm(
+                        id, StudentId, term, week, attenanceDays, daysLate,
+                        attentionScore, homeworkDone, participationScore,
+                        literacyScore, numeracyScore, understandingScore,
+                        behaviourScore, peerInteractionScore, respectForRulesScore,
+                        "UnknownMood", teacherConcerns
+                )
+        );
     }
 
 }
