@@ -10,7 +10,6 @@ public class WeeklyForm {
     private int term;
     private int week;
     private int attendanceDays;
-    private boolean wasLate;
     private int daysLate;
     private int attentionScore;
     private boolean homeworkDone;
@@ -29,7 +28,6 @@ public class WeeklyForm {
                       int term,
                       int week,
                       int attendanceDays,
-                      boolean wasLate,
                       int daysLate,
                       int attentionScore,
                       boolean homeworkDone,
@@ -48,7 +46,6 @@ public class WeeklyForm {
         setTerm(term);
         setWeek(week);
         setAttendanceDays(attendanceDays);
-        setWasLate(wasLate);
         setDaysLate(daysLate);
         setAttentionScore(attentionScore);
         setHomeworkDone(homeworkDone);
@@ -81,9 +78,6 @@ public class WeeklyForm {
 
     public int getAttendanceDays() { return attendanceDays; }
     public void setAttendanceDays(int attendanceDays) { this.attendanceDays = attendanceDays; }
-
-    public boolean wasLate() { return wasLate; }
-    public void setWasLate(boolean wasLate) {this.wasLate = wasLate; }
 
     public int getDaysLate() { return daysLate; }
     public void setDaysLate(int daysLate) { this.daysLate = daysLate; }

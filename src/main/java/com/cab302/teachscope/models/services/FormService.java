@@ -24,7 +24,6 @@ public class FormService {
                                  int term,
                                  int week,
                                  int attendanceDays,
-                                 boolean wasLate,
                                  int daysLate,
                                  int attentionScore,
                                  boolean homeworkDone,
@@ -44,7 +43,6 @@ public class FormService {
                 term,
                 week,
                 attendanceDays,
-                wasLate,
                 daysLate,
                 attentionScore,
                 homeworkDone,
@@ -156,22 +154,10 @@ public class FormService {
             throw new IllegalArgumentException("Attendance days must be between 0-5");
         }
 
-        // Was Late
-        if (form.wasLate() & form.getDaysLate() == 0) {
-            throw new IllegalArgumentException("Conflicting information about if the student was late, and how many times they were late");
-        }
-        if (!form.wasLate() & form.getDaysLate() >0) {
-            throw new IllegalArgumentException("Conflicting information about if the student was late, and how many times they were late");
-        }
-
         // Days Late
         if (form.getDaysLate() < 0 || form.getDaysLate() > 5) {
             throw new IllegalArgumentException("Days late must be between 0-5");
         }
-        if (form.getDaysLate() < form.getAttendanceDays()) {
-            throw new IllegalArgumentException("Days in which the student was late cannot exceed days in which the student attended");
-        }
-
 
         // Scores
         if (
