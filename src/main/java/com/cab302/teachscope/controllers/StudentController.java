@@ -93,7 +93,7 @@ public class StudentController {
 
     @FXML
     protected void onKnowledgeBaseClick() {
-
+        NavigationUtils.openKnowledgeBasePDF();
     }
 
     /**

@@ -4,6 +4,7 @@ module com.cab302.teachscope {
     requires jdk.jdi;
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
+    requires java.desktop;
 
 
     opens com.cab302.teachscope to javafx.fxml;

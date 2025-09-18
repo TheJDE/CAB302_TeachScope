@@ -6,7 +6,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
 
 public class NavigationUtils {
     /**
@@ -25,4 +30,29 @@ public class NavigationUtils {
         stage.setTitle(title);
         stage.show();
     }
+
+    public static void openKnowledgeBasePDF(){
+            try {
+                // Load the KnowledgeBase PDF, located in the resources folder of the application
+                URL resource = com.cab302.teachscope.util.NavigationUtils.class.getResource("/images/knowledge_base_final.pdf");
+
+                if (resource == null) {
+                    System.out.println("PDF not found in resources folder!");
+                    return;
+                }
+
+                // Create a temporary file, from the pdf in our resources folder to open
+                File knowledgeBaseTempFile = File.createTempFile("knowledgeBase", ".pdf");
+                try (InputStream in = resource.openStream()) {
+                    Files.copy(in, knowledgeBaseTempFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                }
+
+                // open this temporary file
+                Desktop.getDesktop().open(knowledgeBaseTempFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+    }
+
 }
