@@ -31,6 +31,9 @@ public class StudentController {
     @FXML
     private Button viewFormsButton;
 
+    @FXML
+    private Button timelineButton;
+
 
     @FXML
     private TableView<Student> studentsTable;
@@ -137,6 +140,16 @@ public class StudentController {
             NavigationUtils.navigateTo(stage, "dashboard", "Dashboard");
         } catch (IOException e) {
             showAlert("Navigation Error", "Could not open dashboard.");
+        }
+    }
+
+    @FXML
+    protected void onTimelineClick() {
+        Stage stage = (Stage) timelineButton.getScene().getWindow();
+        try {
+            NavigationUtils.navigateTo(stage, "timeline", "Timeline");
+        } catch (IOException e) {
+            showAlert("Navigation Error", "Could not open timeline page.");
         }
     }
 
