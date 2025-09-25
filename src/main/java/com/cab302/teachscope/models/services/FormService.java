@@ -7,6 +7,8 @@ import com.cab302.teachscope.models.entities.Student;
 
 import java.sql.SQLException;
 import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FormService {
@@ -150,7 +152,7 @@ public class FormService {
         }
 
         // Attendance Days
-        if (form.getWeek() < 0 || form.getWeek() > 5) {
+        if (form.getAttendanceDays() < 0 || form.getAttendanceDays() > 5) {
             throw new IllegalArgumentException("Attendance days must be between 0-5");
         }
 
@@ -162,6 +164,7 @@ public class FormService {
         // Scores
         if (
             form.getParticipationScore() < 0 || form.getParticipationScore() > 2 ||
+            form.getAttentionScore() < 0 || form.getAttentionScore() > 2 ||
             form.getLiteracyScore() < 0 || form.getLiteracyScore() > 2 ||
             form.getNumeracyScore() < 0 || form.getNumeracyScore() > 2 ||
             form.getUnderstandingScore() < 0 || form.getUnderstandingScore() > 2 ||
@@ -173,12 +176,10 @@ public class FormService {
         }
 
         // Emotional State
+        List<String> acceptedStates = Arrays.asList("Happy", "Neutral", "Withdrawn", "Anxious");
         if (
             form.getEmotionalState() == null ||
-            form.getEmotionalState() != "Happy" ||
-            form.getEmotionalState() != "Neutral" ||
-            form.getEmotionalState() != "Withdrawn" ||
-            form.getEmotionalState() != "Anxious"
+            !acceptedStates.contains(form.getEmotionalState())
         ) {
             throw new IllegalArgumentException("Invalid emotional state");
         }

@@ -16,7 +16,7 @@ public class FormTest {
     private String StudentId;
     private int term;
     private int week;
-    private int attenanceDays;
+    private int attendanceDays;
     private int daysLate;
     private int attentionScore;
     private boolean homeworkDone;
@@ -39,7 +39,7 @@ public class FormTest {
         StudentId = "e215947f-4d73-4726-baaf-dbec6258968e";
         term = 1;
         week = 1;
-        attenanceDays = 5;
+        attendanceDays = 5;
         daysLate = 2;
         homeworkDone = true;
         participationScore = 2;
@@ -67,7 +67,7 @@ public class FormTest {
                             StudentId,
                             0,
                             week,
-                            attenanceDays,
+                            attendanceDays,
                             daysLate,
                             attentionScore,
                             homeworkDone,
@@ -92,7 +92,7 @@ public class FormTest {
                     StudentId,
                     5,
                     week,
-                    attenanceDays,
+                    attendanceDays,
                     daysLate,
                     attentionScore,
                     homeworkDone,
@@ -117,7 +117,7 @@ public class FormTest {
                     StudentId,
                     term,
                     0,
-                    attenanceDays,
+                    attendanceDays,
                     daysLate,
                     attentionScore,
                     homeworkDone,
@@ -142,32 +142,7 @@ public class FormTest {
                     StudentId,
                     term,
                     13,
-                    attenanceDays,
-                    daysLate,
-                    attentionScore,
-                    homeworkDone,
-                    participationScore,
-                    literacyScore,
-                    numeracyScore,
-                    understandingScore,
-                    behaviourScore,
-                    peerInteractionScore,
-                    respectForRulesScore,
-                    emotionalState,
-                    teacherConcerns
-            );
-        });
-    }
-
-    @Test
-    void createFormInvalidAttendanceTooHigh() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            formService.createForm(
-                    id,
-                    StudentId,
-                    term,
-                    week,
-                    6,
+                    attendanceDays,
                     daysLate,
                     attentionScore,
                     homeworkDone,
@@ -210,15 +185,15 @@ public class FormTest {
     }
 
     @Test
-    void createFormInvalidDaysLateTooHigh() {
+    void createFormInvalidAttendanceTooHigh() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
                     id,
                     StudentId,
                     term,
                     week,
-                    attenanceDays,
                     6,
+                    daysLate,
                     attentionScore,
                     homeworkDone,
                     participationScore,
@@ -242,7 +217,7 @@ public class FormTest {
                     StudentId,
                     term,
                     week,
-                    attenanceDays,
+                    attendanceDays,
                     -1,
                     attentionScore,
                     homeworkDone,
@@ -259,4 +234,544 @@ public class FormTest {
         });
     }
 
+    @Test
+    void createFormInvalidDaysLateTooHigh() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    6,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidAttentionScoreTooLow() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    -1,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidAttentionScoreTooHigh() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    3,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidParticipationScoreTooLow() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    -1,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidParticipationScoreTooHigh() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    3,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidLiteracyScoreTooLow() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    -1,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidLiteracyScoreTooHigh() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    3,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidNumeracyScoreTooLow() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    -1,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidNumeracyScoreTooHigh() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    3,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidUnderstandingScoreTooLow() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    -1,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidUnderstandingScoreTooHigh() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    3,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidBehaviourScoreTooLow() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    -1,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidBehaviourScoreTooHigh() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    3,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidInteractionScoreTooLow() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    -1,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidInteractionScoreTooHigh() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    3,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidRespectScoreTooLow() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    -1,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidRespectScoreTooHigh() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    3,
+                    emotionalState,
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void createFormInvalidEmotionalState() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            formService.createForm(
+                    id,
+                    StudentId,
+                    term,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    "invalid",
+                    teacherConcerns
+            );
+        });
+    }
+
+    @Test
+    void getValidFormId() {
+        formService.createForm(
+                id,
+                StudentId,
+                term,
+                week,
+                attendanceDays,
+                daysLate,
+                attentionScore,
+                homeworkDone,
+                participationScore,
+                literacyScore,
+                numeracyScore,
+                understandingScore,
+                behaviourScore,
+                peerInteractionScore,
+                respectForRulesScore,
+                emotionalState,
+                teacherConcerns
+        );
+
+        assertEquals(id, formService.getForm(id).getId());
+    }
+
+    @Test
+    void getInvalidFormId() {
+        assertNull(formService.getForm(id));
+    }
+
+    @Test
+    void deleteValidFormId() {
+         formService.createForm(
+                id,
+                StudentId,
+                term,
+                week,
+                attendanceDays,
+                daysLate,
+                attentionScore,
+                homeworkDone,
+                participationScore,
+                literacyScore,
+                numeracyScore,
+                understandingScore,
+                behaviourScore,
+                peerInteractionScore,
+                respectForRulesScore,
+                emotionalState,
+                teacherConcerns
+        );
+
+        try {
+            formService.deleteForm(id);
+
+            assertNull(formService.getForm(id));
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void deleteInvalidFormId() {
+        formService.createForm(
+                id,
+                StudentId,
+                term,
+                week,
+                attendanceDays,
+                daysLate,
+                attentionScore,
+                homeworkDone,
+                participationScore,
+                literacyScore,
+                numeracyScore,
+                understandingScore,
+                behaviourScore,
+                peerInteractionScore,
+                respectForRulesScore,
+                emotionalState,
+                teacherConcerns
+        );
+
+        try {
+            formService.deleteForm("invalid");
+            assertEquals(id, formService.getForm(id).getId());
+        } catch (RuntimeException e) {
+            throw new RuntimeException();
+        }
+    }
 }

@@ -9,15 +9,16 @@ import java.util.Map;
 
 public class MockFormDao implements FormDao {
 
-    private final Map<String, Student> forms = new HashMap<>();
+    private final Map<String, WeeklyForm> forms = new HashMap<>();
 
     @Override
     public void create(WeeklyForm form) {
+        forms.put(form.getId(), form);
     }
 
     @Override
     public WeeklyForm findById(String id) {
-        return null;
+        return forms.get(id);
     }
 
     @Override
@@ -32,11 +33,11 @@ public class MockFormDao implements FormDao {
 
     @Override
     public void update(WeeklyForm form) {
-
+        forms.replace(form.getId(), form);
     }
 
     @Override
     public void delete(String id) {
-
+        forms.remove(id);
     }
 }
