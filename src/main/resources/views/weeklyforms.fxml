@@ -45,7 +45,7 @@
                 </padding>
             </Label>
             <Pane HBox.hgrow="ALWAYS"/>
-            <Button text="Generate PDF" styleClass="">
+            <Button fx:id="generatePDF" text="Generate PDF" styleClass="" onAction="#generatePDFClick">
                 <HBox.margin>
                     <Insets top="10" right="15"/>
                 </HBox.margin>

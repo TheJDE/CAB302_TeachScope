@@ -27,6 +27,8 @@ public class FormController {
     @FXML private RadioButton anxiousRadio;
 
     @FXML private Button newFormButton;
+    @FXML private Button generatePDF;
+
 
     @FXML
     protected void onLogoutClick() throws IOException {
@@ -53,6 +55,21 @@ public class FormController {
         stage.setTitle("Add New Form");
         stage.show();
     }
+
+    @FXML
+    protected void generatePDFClick() throws IOException {
+        // go to generatepdf.fxml
+        Stage stage = (Stage) generatePDF.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/generatepdf.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+        stage.setScene(scene);
+        stage.setMaximized(true);
+        stage.setTitle("Generate PDF");
+        stage.show();
+    }
+
+
 
 
 }
