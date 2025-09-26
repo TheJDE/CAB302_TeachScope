@@ -3,6 +3,7 @@ package com.cab302.teachscope.models.dao;
 import com.cab302.teachscope.models.entities.Student;
 import com.cab302.teachscope.models.entities.WeeklyForm;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,11 @@ public class MockFormDao implements FormDao {
 
     @Override
     public List<WeeklyForm> findAll() {
+        return new ArrayList<>(forms.values());
+    }
+
+    @Override
+    public List<WeeklyForm> findAllForStudent(String studentId) {
         return List.of();
     }
 

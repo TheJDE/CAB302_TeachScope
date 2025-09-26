@@ -5,6 +5,7 @@ import com.cab302.teachscope.models.entities.WeeklyForm;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -97,9 +98,113 @@ public class DbFormDao implements FormDao {
     }
 
     @Override
-    public List<WeeklyForm> findByStudentAndRange(String studentId, int term, int fromWeek, int toWeek) throws SQLException {
-        // TODO: implement fetch by student + range
-        return new ArrayList<>();
+    public List<WeeklyForm> findByStudentAndRange(String studentId, int term, int fromWeek, int toWeek) throws SQLException {    List<WeeklyForm> forms = new ArrayList<>();
+        String sql = "SELECT * FROM weekly_forms " +
+                "WHERE studentId = ? AND term = ? AND week BETWEEN ? AND ?";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, studentId);
+        statement.setInt(2, term);
+        statement.setInt(3, fromWeek);
+        statement.setInt(4, toWeek);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            String id = resultSet.getString("id");
+            String ResStudentId = resultSet.getString("studentId");
+            int resTerm = resultSet.getInt("term");
+            int week = resultSet.getInt("week");
+            int attendanceDays = resultSet.getInt("attendanceDays");
+            int daysLate = resultSet.getInt("daysLate");
+            int attentionScore = resultSet.getInt("attentionScore");
+            boolean homeworkDone = resultSet.getBoolean("homeworkDone");
+            int participationScore = resultSet.getInt("participationScore");
+            int literacyScore = resultSet.getInt("literacyScore");
+            int numeracyScore = resultSet.getInt("numeracyScore");
+            int understandingScore = resultSet.getInt("understandingScore");
+            int behaviourScore = resultSet.getInt("behaviourScore");
+            int peerInteractionScore = resultSet.getInt("peerInteractionScore");
+            int respectForRulesScore = resultSet.getInt("respectForRulesScore");
+            String emotionalState = resultSet.getString("emotionalState");
+            String teacherConcerns = resultSet.getString("teacherConcerns");
+
+            WeeklyForm form = new WeeklyForm(
+                    Optional.of(id),
+                    ResStudentId,
+                    resTerm,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+
+            forms.add(form);
+        }
+
+        return forms;
+    }
+
+    @Override
+    public List<WeeklyForm> findAllForStudent(String studentId) throws SQLException {
+        List<WeeklyForm> forms = new ArrayList<>();
+
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM weekly_forms WHERE studentId = ?");
+        statement.setString(1, studentId);
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            String id = resultSet.getString("id");
+            String ResStudentId = resultSet.getString("studentId");
+            int term = resultSet.getInt("term");
+            int week = resultSet.getInt("week");
+            int attendanceDays = resultSet.getInt("attendanceDays");
+            int daysLate = resultSet.getInt("daysLate");
+            int attentionScore = resultSet.getInt("attentionScore");
+            boolean homeworkDone = resultSet.getBoolean("homeworkDone");
+            int participationScore = resultSet.getInt("participationScore");
+            int literacyScore = resultSet.getInt("literacyScore");
+            int numeracyScore = resultSet.getInt("numeracyScore");
+            int understandingScore = resultSet.getInt("understandingScore");
+            int behaviourScore = resultSet.getInt("behaviourScore");
+            int peerInteractionScore = resultSet.getInt("peerInteractionScore");
+            int respectForRulesScore = resultSet.getInt("respectForRulesScore");
+            String emotionalState = resultSet.getString("emotionalState");
+            String teacherConcerns = resultSet.getString("teacherConcerns");
+
+            WeeklyForm form = new WeeklyForm(
+                    Optional.of(id),
+                    ResStudentId,
+                    term, week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
+            );
+
+            forms.add(form);
+        }
+
+        return forms;
     }
 
     @Override

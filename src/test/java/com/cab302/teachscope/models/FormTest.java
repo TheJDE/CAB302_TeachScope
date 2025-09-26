@@ -5,6 +5,7 @@ import com.cab302.teachscope.models.dao.FormDao;
 import com.cab302.teachscope.models.services.FormService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -63,23 +64,22 @@ public class FormTest {
     void createFormInvalidTermTooLow() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                            id,
-                            StudentId,
-                            0,
-                            week,
-                            attendanceDays,
-                            daysLate,
-                            attentionScore,
-                            homeworkDone,
-                            participationScore,
-                            literacyScore,
-                            numeracyScore,
-                            understandingScore,
-                            behaviourScore,
-                            peerInteractionScore,
-                            respectForRulesScore,
-                            emotionalState,
-                            teacherConcerns
+                    StudentId,
+                    0,
+                    week,
+                    attendanceDays,
+                    daysLate,
+                    attentionScore,
+                    homeworkDone,
+                    participationScore,
+                    literacyScore,
+                    numeracyScore,
+                    understandingScore,
+                    behaviourScore,
+                    peerInteractionScore,
+                    respectForRulesScore,
+                    emotionalState,
+                    teacherConcerns
             );
         });
     }
@@ -88,7 +88,6 @@ public class FormTest {
     void createFormInvalidTermTooHigh() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     5,
                     week,
@@ -113,7 +112,6 @@ public class FormTest {
     void createFormInvalidWeekTooLow() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     0,
@@ -138,7 +136,6 @@ public class FormTest {
     void createFormInvalidWeekTooHigh() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     13,
@@ -163,7 +160,6 @@ public class FormTest {
     void createFormInvalidAttendanceTooLow() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -188,7 +184,6 @@ public class FormTest {
     void createFormInvalidAttendanceTooHigh() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -213,7 +208,6 @@ public class FormTest {
     void createFormInvalidDaysLateTooLow() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -238,7 +232,6 @@ public class FormTest {
     void createFormInvalidDaysLateTooHigh() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -263,7 +256,6 @@ public class FormTest {
     void createFormInvalidAttentionScoreTooLow() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -288,7 +280,6 @@ public class FormTest {
     void createFormInvalidAttentionScoreTooHigh() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -313,7 +304,6 @@ public class FormTest {
     void createFormInvalidParticipationScoreTooLow() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -338,7 +328,6 @@ public class FormTest {
     void createFormInvalidParticipationScoreTooHigh() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -363,7 +352,6 @@ public class FormTest {
     void createFormInvalidLiteracyScoreTooLow() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -388,7 +376,6 @@ public class FormTest {
     void createFormInvalidLiteracyScoreTooHigh() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -413,7 +400,6 @@ public class FormTest {
     void createFormInvalidNumeracyScoreTooLow() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -438,7 +424,6 @@ public class FormTest {
     void createFormInvalidNumeracyScoreTooHigh() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -463,7 +448,6 @@ public class FormTest {
     void createFormInvalidUnderstandingScoreTooLow() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -488,7 +472,6 @@ public class FormTest {
     void createFormInvalidUnderstandingScoreTooHigh() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -513,7 +496,6 @@ public class FormTest {
     void createFormInvalidBehaviourScoreTooLow() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -538,7 +520,6 @@ public class FormTest {
     void createFormInvalidBehaviourScoreTooHigh() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -563,7 +544,6 @@ public class FormTest {
     void createFormInvalidInteractionScoreTooLow() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -588,7 +568,6 @@ public class FormTest {
     void createFormInvalidInteractionScoreTooHigh() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -613,7 +592,6 @@ public class FormTest {
     void createFormInvalidRespectScoreTooLow() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -638,7 +616,6 @@ public class FormTest {
     void createFormInvalidRespectScoreTooHigh() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -663,7 +640,6 @@ public class FormTest {
     void createFormInvalidEmotionalState() {
         assertThrows(IllegalArgumentException.class, () -> {
             formService.createForm(
-                    id,
                     StudentId,
                     term,
                     week,
@@ -687,7 +663,6 @@ public class FormTest {
     @Test
     void getValidFormId() {
         formService.createForm(
-                id,
                 StudentId,
                 term,
                 week,
@@ -706,7 +681,9 @@ public class FormTest {
                 teacherConcerns
         );
 
-        assertEquals(id, formService.getForm(id).getId());
+        String formID = formService.getAllForms().getFirst().getId();
+
+        assertEquals(formID, formService.getForm(formID).getId());
     }
 
     @Test
@@ -716,8 +693,7 @@ public class FormTest {
 
     @Test
     void deleteValidFormId() {
-         formService.createForm(
-                id,
+        formService.createForm(
                 StudentId,
                 term,
                 week,
@@ -736,10 +712,12 @@ public class FormTest {
                 teacherConcerns
         );
 
-        try {
-            formService.deleteForm(id);
+        String formID = formService.getAllForms().getFirst().getId();
 
-            assertNull(formService.getForm(id));
+        try {
+            formService.deleteForm(formID);
+
+            assertNull(formService.getForm(formID));
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
@@ -748,7 +726,6 @@ public class FormTest {
     @Test
     void deleteInvalidFormId() {
         formService.createForm(
-                id,
                 StudentId,
                 term,
                 week,
@@ -767,9 +744,11 @@ public class FormTest {
                 teacherConcerns
         );
 
+        String formID = formService.getAllForms().getFirst().getId();
+
         try {
             formService.deleteForm("invalid");
-            assertEquals(id, formService.getForm(id).getId());
+            assertEquals(formID, formService.getForm(formID).getId());
         } catch (RuntimeException e) {
             throw new RuntimeException();
         }

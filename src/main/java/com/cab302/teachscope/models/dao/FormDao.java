@@ -15,6 +15,8 @@ public interface FormDao {
 
     List<WeeklyForm> findAll() throws SQLException;
 
+    List<WeeklyForm> findAllForStudent(String studentId) throws SQLException;
+
     void update(WeeklyForm form) throws SQLException;
 
     void delete(String id) throws SQLException;

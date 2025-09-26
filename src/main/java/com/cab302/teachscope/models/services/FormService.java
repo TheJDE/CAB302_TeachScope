@@ -10,9 +10,16 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * Service class for weekly forms.
+ */
 public class FormService {
 
+    /**
+     * The DAO used by the service.
+     */
     private final FormDao formDao;
 
     /**
@@ -21,7 +28,26 @@ public class FormService {
      */
     public FormService(FormDao formDao) { this.formDao = formDao;}
 
-    public void createForm(String id,
+    /**
+     * Create a new weekly form.
+     * @param studentId Student Id.
+     * @param term Term for the form.
+     * @param week Week for the form.
+     * @param attendanceDays Number of days attended.
+     * @param daysLate Number of days late.
+     * @param attentionScore 0-2 score for attention.
+     * @param homeworkDone Has student done the homework.
+     * @param participationScore 0-2 score for participation.
+     * @param literacyScore 0-2 score for literacy.
+     * @param numeracyScore 0-2 score for numeracy.
+     * @param understandingScore 0-2 score for understanding.
+     * @param behaviourScore 0-2 score for behaviour.
+     * @param peerInteractionScore 0-2 score for peer interaction.
+     * @param respectForRulesScore 0-2 score for respect for rules.
+     * @param emotionalState Student's average emotional state.
+     * @param teacherConcerns Additional notes on the student.
+     */
+    public void createForm(
                                  String studentId,
                                  int term,
                                  int week,
@@ -40,7 +66,7 @@ public class FormService {
                                  String teacherConcerns
     ) {
         WeeklyForm form = new WeeklyForm(
-                id,
+                Optional.empty(),
                 studentId,
                 term,
                 week,
@@ -68,6 +94,11 @@ public class FormService {
         }
     }
 
+    /**
+     * Get a form by Id.
+     * @param id Form Id.
+     * @return Matching form.
+     */
     public WeeklyForm getForm(String id) {
         if (id == null || !id.matches("^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"))
         {
@@ -81,7 +112,27 @@ public class FormService {
         }
     }
 
-    public List<WeeklyForm> getFormsForStudent(String studentId, int term, int fromWeek, int toWeek) {
+    /**
+     * Gets a list of all existing forms.
+     * @return List of all existing forms.
+     */
+    public List<WeeklyForm> getAllForms() {
+        try {
+            return formDao.findAll();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Gets a list of forms matching student Id and a range of term/weeks.
+     * @param studentId Student's Id
+     * @param term Term to match.
+     * @param fromWeek Beginning of week range. Inclusive.
+     * @param toWeek End of week range. Inclusive.
+     * @return List of forms.
+     */
+    public List<WeeklyForm> getFormsForStudentAndRange(String studentId, int term, int fromWeek, int toWeek) {
         if (studentId == null || !studentId.matches("^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"))
         {
             throw new IllegalArgumentException("Invalid id");
@@ -102,14 +153,28 @@ public class FormService {
         }
     }
 
-    public List<WeeklyForm> getAllForms() {
+    /**
+     * Gets all forms for a given student.
+     * @param studentId Student's Id.
+     * @return List of forms for a student.
+     */
+    public List<WeeklyForm> getAllFormsForStudent(String studentId) {
+        if (studentId == null || !studentId.matches("^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"))
+        {
+            throw new IllegalArgumentException("Invalid id");
+        }
+
         try {
-            return formDao.findAll();
+            return formDao.findAllForStudent(studentId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Updates form values.
+     * @param form Values to replace existing form with.
+     */
     public void updateForm(WeeklyForm form) {
         validateForm(form);
 
@@ -120,6 +185,10 @@ public class FormService {
         }
     }
 
+    /**
+     * Delete a specific form.
+     * @param id Id of form to delete.
+     */
     public void deleteForm(String id) {
         try {
             formDao.delete(id);
@@ -128,6 +197,10 @@ public class FormService {
         }
     }
 
+    /**
+     * Validates form data.
+     * @param form The form to validate.
+     */
     private void validateForm(WeeklyForm form) {
         // ID
         if (form.getId() == null || !form.getId().matches("^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"))

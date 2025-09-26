@@ -1,7 +1,10 @@
 package com.cab302.teachscope.models.entities;
 
 
+import com.cab302.teachscope.util.IdUtil;
+
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 public class WeeklyForm {
@@ -23,7 +26,7 @@ public class WeeklyForm {
     private String emotionalState;
     private String teacherConcerns;
 
-    public WeeklyForm(String id,
+    public WeeklyForm(Optional<String> id,
                       String studentId,
                       int term,
                       int week,
@@ -41,7 +44,11 @@ public class WeeklyForm {
                       String emotionalState,
                       String teacherConcerns
     ) {
-        setId(id);
+        if (id.isPresent()) {
+            setId(id.get());
+        } else {
+            setId(IdUtil.generateIdString());
+        }
         setStudentId(studentId);
         setTerm(term);
         setWeek(week);
