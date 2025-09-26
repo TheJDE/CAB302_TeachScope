@@ -32,7 +32,7 @@ public class UserService {
      * @param password The user's password.
      * @throws IllegalArgumentException If arguments are invalid or user exists already.
      */
-    public void registerUser(String email, String password) throws IllegalArgumentException{
+    public void registerUser(String email, String password, String resetCode) throws IllegalArgumentException{
         // Validate user inputs
         // Basic email RE
         if (email == null || !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
@@ -56,8 +56,11 @@ public class UserService {
         // Hash Password
         String passwordHash = PasswordUtils.hashPassword(password);
 
+        // Hash resetCode
+        String resetCodeHash = PasswordUtils.hashResetCode(resetCode);
+
         // Create and add user
-        User user = new User(email, passwordHash);
+        User user = new User(email, passwordHash, resetCodeHash);
 
         try {
             userDAO.addUser(user);
