@@ -296,7 +296,7 @@
                     </VBox>
 
                     <HBox alignment="CENTER_LEFT">
-                        <Button text="Create form" fx:id="createFormButton"/>
+                        <Button text="Create form" fx:id="createFormButton" onAction="#onSubmitFormClick"/>
                     </HBox>
                 </VBox>
             </VBox>
