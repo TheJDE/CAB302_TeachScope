@@ -54,6 +54,10 @@ public class FormController {
     private Label weeklyFormsTitle;
 
     @FXML
+    private Label newFormTitle;
+
+
+    @FXML
     protected void onLogoutClick() {
         Stage stage = (Stage) logoutButton.getScene().getWindow();
         try {
@@ -97,6 +101,7 @@ public class FormController {
 
             FormController controller = loader.getController();
             controller.setStudentId(this.studentId);
+            controller.setStudent(studentId, studentName);
 
             stage.setScene(new Scene(root));
             stage.setTitle("Add New Form");
@@ -128,6 +133,10 @@ public class FormController {
         //update the label if FXML is loaded
         if (weeklyFormsTitle != null) {
             weeklyFormsTitle.setText(studentName + "'s Weekly Forms");
+        }
+
+        if (newFormTitle != null) {
+            newFormTitle.setText("Add New Form (" + studentName + ")");
         }
     }
 

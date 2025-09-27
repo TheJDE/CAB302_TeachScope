@@ -41,8 +41,8 @@
 
     <VBox spacing="20" HBox.hgrow="ALWAYS">
 
-    <HBox alignment="CENTER_LEFT" spacing="20">
-        <Label text="Add New Form (Student Name)" styleClass="h1">
+    <HBox alignment="CENTER_LEFT" spacing="30">
+        <Label fx:id="newFormTitle" text="Add New Form (Student Name)" styleClass="h1" HBox.hgrow="ALWAYS">
             <padding>
                 <Insets top="20" left="30"/>
             </padding>
