@@ -25,6 +25,12 @@ public class FormController {
 
     @FXML private Button logoutButton, newFormButton, generatePDF, createFormButton;
 
+    @FXML
+    private Button studentNav;
+
+    @FXML
+    private Button timelineButton;
+
     @FXML private ComboBox<String> term;
     @FXML private ComboBox<String> week;
     @FXML private ComboBox<String> attendancedays;
@@ -45,12 +51,35 @@ public class FormController {
     @FXML private ToggleGroup homeworkGroup, emotionalGroup;
 
     @FXML
+    private Label weeklyFormsTitle;
+
+    @FXML
     protected void onLogoutClick() {
         Stage stage = (Stage) logoutButton.getScene().getWindow();
         try {
             NavigationUtils.navigateTo(stage, "login", "Login");
         } catch (IOException e) {
             showAlert("Navigation Error", "Could not open the login page.");
+        }
+    }
+
+    @FXML
+    protected void onStudentClick() {
+        Stage stage = (Stage) studentNav.getScene().getWindow();
+        try {
+            NavigationUtils.navigateTo(stage, "dashboard", "Dashboard");
+        } catch (IOException e) {
+            showAlert("Navigation Error", "Could not open dashboard.");
+        }
+    }
+
+    @FXML
+    protected void onTimelineClick() {
+        Stage stage = (Stage) timelineButton.getScene().getWindow();
+        try {
+            NavigationUtils.navigateTo(stage, "timeline", "Timeline");
+        } catch (IOException e) {
+            showAlert("Navigation Error", "Could not open timeline page.");
         }
     }
 
@@ -89,6 +118,19 @@ public class FormController {
             showAlert("Navigation Error", "Could not open the generate PDF page.");
         }
     }
+
+    private String studentName;
+
+    public void setStudent(String studentId, String studentName) {
+        this.studentId = studentId;
+        this.studentName = studentName;
+
+        //update the label if FXML is loaded
+        if (weeklyFormsTitle != null) {
+            weeklyFormsTitle.setText(studentName + "'s Weekly Forms");
+        }
+    }
+
 
     @FXML
     protected void onSubmitFormClick() {

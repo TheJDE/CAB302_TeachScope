@@ -320,6 +320,8 @@ public class StudentController {
 
             FormController controller = loader.getController();
             controller.setStudentId(editingStudent.get().getId());
+            Student student = editingStudent.get();
+            controller.setStudent(student.getId(), student.getFirstName() + " " + student.getLastName());
 
             stage.setScene(new Scene(root));
             stage.setTitle("View Weekly Forms");

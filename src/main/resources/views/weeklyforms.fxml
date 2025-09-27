@@ -39,7 +39,7 @@
     <VBox spacing="20" HBox.hgrow="ALWAYS">
         <!-- Header -->
         <HBox alignment="CENTER_LEFT" spacing="20">
-            <Label text="Student Name's Weekly Forms" styleClass="h2">
+            <Label fx:id="weeklyFormsTitle" text="Student Name's Weekly Forms" styleClass="h2">
                 <padding>
                     <Insets top="10" left="15"/>
                 </padding>
