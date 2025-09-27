@@ -1,5 +1,6 @@
 package com.cab302.teachscope.models.dao;
 
+import com.cab302.teachscope.DatabaseConnection;
 import com.cab302.teachscope.models.entities.WeeklyForm;
 
 import java.sql.*;
@@ -13,8 +14,8 @@ public class DbFormDao implements FormDao {
 
     private final Connection connection;
 
-    public DbFormDao(Connection connection) {
-        this.connection = connection;
+    public DbFormDao() {
+        connection = DatabaseConnection.getInstance();
         createTable();
     }
 
