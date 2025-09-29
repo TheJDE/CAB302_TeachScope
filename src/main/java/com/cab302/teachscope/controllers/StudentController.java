@@ -16,6 +16,9 @@ import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
 import java.util.Optional;
+import javafx.scene.Scene;
+
+import com.cab302.teachscope.controllers.FormController;
 
 public class StudentController {
     @FXML
@@ -71,6 +74,7 @@ public class StudentController {
 
     private final StudentService studentService = new StudentService(new DbStudentDao());
     private Optional<Student> editingStudent = Optional.empty(); //tracks if we're editing
+
 
     /**
      * Initializes the controller after the FXML is loaded
@@ -311,7 +315,17 @@ public class StudentController {
         Stage stage = (Stage) viewFormsButton.getScene().getWindow();
 
         try {
-            NavigationUtils.navigateTo(stage, "weeklyforms", "View Weekly Forms");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/weeklyforms.fxml"));
+            Parent root = loader.load();
+
+            FormController controller = loader.getController();
+            Student student = editingStudent.get();
+            controller.setStudent(student.getId(), student.getFirstName() + " " + student.getLastName());
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("View Weekly Forms");
+            stage.show();
+
         } catch (IllegalArgumentException e) {
             showAlert("Error", e.getMessage());
         }

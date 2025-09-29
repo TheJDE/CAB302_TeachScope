@@ -55,3 +55,61 @@
 .hyperlink:hover {
     -fx-text-fill: #D279B1;
 }
+
+/* table view styling */
+.table-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 10px;
+    -fx-font-size: 16px;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+/* Column header bar (navy background) */
+.table-view .column-header-background {
+    -fx-background-color: #152259;
+    -fx-background-insets: 0;
+    -fx-background-radius: 6 6 0 0;
+    -fx-padding: 5px;
+}
+
+/* Header labels */
+.table-view .column-header,
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* Row striping */
+.table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-row-cell:even {
+    -fx-background-color: #ffffff;
+}
+
+/* Hover effect */
+.table-row-cell:hover {
+    -fx-background-color: #e6e6f5;
+}
+
+/* Selected row highlight */
+.table-row-cell:filled:selected, .table-row-cell:focused:selected {
+    -fx-background-color: #D279B1;  /* pink theme highlight */
+    -fx-text-fill: white;
+}
+
+/* Buttons inside table cells */
+.table-view .button {
+    -fx-font-size: 14px;
+    -fx-padding: 6px 12px;
+    -fx-background-radius: 6;
+}
