@@ -1,9 +1,10 @@
 package com.cab302.teachscope.models;
 
 import com.cab302.teachscope.DatabaseConnection;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DatabaseTest {

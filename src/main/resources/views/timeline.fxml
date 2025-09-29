@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.ComboBox?>
+<?import java.lang.String?>
+
+<HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="0"
+      fx:controller="com.cab302.teachscope.controllers.StudentController" stylesheets="@../css/styles.css">
+
+    <!-- sidebar menu -->
+    <VBox spacing="20" style="-fx-background-color: #E5E5E5;" prefWidth="220">
+        <padding>
+            <Insets top="20" right="10" bottom="20" left="10"/>
+        </padding>
+
+        <!-- logo -->
+        <VBox alignment="CENTER" spacing="10">
+            <ImageView pickOnBounds="true" preserveRatio="true" fitWidth="250">
+                <image>
+                    <Image url="@../images/logo_teachscope.png"/>
+                </image>
+            </ImageView>
+        </VBox>
+
+        <!-- nav -->
+        <VBox spacing="10">
+            <Button fx:id="studentNav" text="Students" maxWidth="Infinity" onAction="#onStudentClick"/>
+            <Button fx:id="timelineButton" text="Timeline" styleClass="active" maxWidth="Infinity" onAction="#onTimelineClick"/>
+            <Button text="Knowledge Base" styleClass="" maxWidth="Infinity" onAction="#onKnowledgeBaseClick"/>
+            <Button text="User Introductory Tutorial" styleClass="" maxWidth="Infinity" onAction="#onIntroductoryTutorialClick"/>
+        </VBox>
+
+        <VBox VBox.vgrow="ALWAYS"/>
+
+        <!-- logout button -->
+        <Button fx:id="logoutButton" text="Logout" styleClass="" maxWidth="Infinity" onAction="#onLogoutClick"/>
+    </VBox>
+
+    <VBox spacing="20" HBox.hgrow="ALWAYS">
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" spacing="20">
+            <Label fx:id="timeline" text="Timeline" styleClass="h1">
+                <padding>
+                    <Insets top="20" left="30"/>
+                </padding>
+            </Label>
+        </HBox>
+
+
+        <!-- form for generate pdf -->
+        <VBox spacing="20" style="-fx-background-color: #f7f7f7;" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="20" right="40" bottom="20" left="40"/>
+            </padding>
+
+
+            <HBox spacing="14">
+                <VBox spacing="7">
+                    <Label text="Term"/>
+                    <ComboBox fx:id="term" promptText="Select an option">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Term 1"/>
+                                <String fx:value="Term 2"/>
+                                <String fx:value="Term 3"/>
+                                <String fx:value="Term 4"/>
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                </VBox>
+                <VBox spacing="7">
+                    <Label text="Week"/>
+                    <ComboBox fx:id="week" promptText="Select an option">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Week 1"/>
+                                <String fx:value="Week 2"/>
+                                <String fx:value="Week 3"/>
+                                <String fx:value="Week 4"/>
+                                <String fx:value="Week 5"/>
+                                <String fx:value="Week 6"/>
+                                <String fx:value="Week 7"/>
+                                <String fx:value="Week 8"/>
+                                <String fx:value="Week 9"/>
+                                <String fx:value="Week 10"/>
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                </VBox>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="30">
+                <Button text="View Students" fx:id="viewStudents"/>
+            </HBox>
+        </VBox>
+        <TableView fx:id="timelineTable" prefHeight="500" styleClass="table-striped">
+            <columns>
+                <TableColumn fx:id="nameColumn" text="Name" prefWidth="450"/>
+                <TableColumn fx:id="statusColumn" text="Form Status" prefWidth="450"/>
+                <TableColumn fx:id="formColumn" text="Forms" prefWidth="450"/>
+            </columns>
+        </TableView>
+    </VBox>
+</HBox>

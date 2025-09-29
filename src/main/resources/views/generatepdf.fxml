@@ -10,7 +10,7 @@
 <?import java.lang.String?>
 
 <HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="0"
-      fx:controller="com.cab302.teachscope.controllers.StudentController" stylesheets="@../css/styles.css">
+      fx:controller="com.cab302.teachscope.controllers.FormController" stylesheets="@../css/styles.css">
 
     <!-- sidebar menu -->
     <VBox spacing="20" style="-fx-background-color: #E5E5E5;" prefWidth="220">
@@ -31,7 +31,7 @@
         <VBox spacing="10">
             <Button fx:id="studentNav" text="Students" maxWidth="Infinity" onAction="#onStudentClick"/>
             <Button fx:id="timelineButton" text="Timeline" styleClass="" maxWidth="Infinity" onAction="#onTimelineClick"/>
-            <Button fx:id="knowledgeBaseButton" text="Knowledge Base" styleClass="" maxWidth="Infinity" onAction="#onKnowledgeBaseClick"/>
+            <Button text="Knowledge Base" styleClass="" maxWidth="Infinity" onAction="#onKnowledgeBaseClick"/>
             <Button text="User Introductory Tutorial" styleClass="" maxWidth="Infinity" onAction="#onIntroductoryTutorialClick"/>
         </VBox>
 
@@ -44,23 +44,15 @@
     <VBox spacing="20" HBox.hgrow="ALWAYS">
         <!-- Header -->
         <HBox alignment="CENTER_LEFT" spacing="20">
-            <Label fx:id="formTitle" text="Add New Student" styleClass="h1">
-            <padding>
-                <Insets top="20" left="30"/>
-            </padding>
-        </Label>
-            <Pane HBox.hgrow="ALWAYS"/>
-            <Button fx:id="viewFormsButton" text="View Weekly Forms" styleClass="" onAction="#viewFormsClick">
-                <HBox.margin>
-                    <Insets top="10" right="15"/>
-                </HBox.margin>
-            </Button>
+            <Label fx:id="PDFTitle" text="Generate PDF for Student Name" styleClass="h1">
+                <padding>
+                    <Insets top="20" left="30"/>
+                </padding>
+            </Label>
         </HBox>
 
 
-
-
-        <!-- form for new student -->
+        <!-- form for generate pdf -->
         <VBox spacing="20" style="-fx-background-color: #f7f7f7;" HBox.hgrow="ALWAYS">
             <padding>
                 <Insets top="20" right="40" bottom="20" left="40"/>
@@ -69,59 +61,52 @@
 
             <HBox spacing="15">
                 <VBox spacing="5">
-                    <Label text="First Name"/>
-                    <TextField fx:id="firstName" promptText="First Name"/>
-                </VBox>
-                <VBox spacing="5">
-                    <Label text="Last Name"/>
-                    <TextField fx:id="lastName" promptText="Last Name"/>
-                </VBox>
-                <VBox spacing="5">
-                    <Label text="Gender"/>
-                    <ComboBox fx:id="gender" promptText="Select an option">
+                    <Label text="Term"/>
+                    <ComboBox fx:id="term" promptText="Select an option">
                         <items>
                             <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="Female"/>
-                                <String fx:value="Male"/>
-                            </FXCollections>
-                        </items>
-                    </ComboBox>
-                </VBox>
-            </HBox>
-
-
-            <HBox spacing="15">
-                <VBox spacing="5">
-                    <Label text="Grade Level"/>
-                    <ComboBox fx:id="gradeLevel">
-                        <items>
-                            <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="Prep"/>
-                                <String fx:value="Grade 1"/>
-                                <String fx:value="Grade 2"/>
-                                <String fx:value="Grade 3"/>
-                                <String fx:value="Grade 4"/>
-                                <String fx:value="Grade 5"/>
-                                <String fx:value="Grade 6"/>
+                                <String fx:value="Term 1"/>
+                                <String fx:value="Term 2"/>
+                                <String fx:value="Term 3"/>
+                                <String fx:value="Term 4"/>
                             </FXCollections>
                         </items>
                     </ComboBox>
                 </VBox>
                 <VBox spacing="5">
-                    <Label text="Class"/>
-                    <TextField fx:id="classField" promptText="Class"/>
-                </VBox>
-            </HBox>
-
-
-            <HBox spacing="15">
-                <VBox spacing="5">
-                    <Label text="Enrolment Status"/>
-                    <ComboBox fx:id="studentStatus">
+                    <Label text="From Week"/>
+                    <ComboBox fx:id="fromWeek" promptText="Select an option">
                         <items>
                             <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="Active"/>
-                                <String fx:value="Withdrawn"/>
+                                <String fx:value="Week 1"/>
+                                <String fx:value="Week 2"/>
+                                <String fx:value="Week 3"/>
+                                <String fx:value="Week 4"/>
+                                <String fx:value="Week 5"/>
+                                <String fx:value="Week 6"/>
+                                <String fx:value="Week 7"/>
+                                <String fx:value="Week 8"/>
+                                <String fx:value="Week 9"/>
+                                <String fx:value="Week 10"/>
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="To Week"/>
+                    <ComboBox fx:id="toWeek" promptText="Select an option">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Week 1"/>
+                                <String fx:value="Week 2"/>
+                                <String fx:value="Week 3"/>
+                                <String fx:value="Week 4"/>
+                                <String fx:value="Week 5"/>
+                                <String fx:value="Week 6"/>
+                                <String fx:value="Week 7"/>
+                                <String fx:value="Week 8"/>
+                                <String fx:value="Week 9"/>
+                                <String fx:value="Week 10"/>
                             </FXCollections>
                         </items>
                     </ComboBox>
@@ -129,8 +114,7 @@
             </HBox>
 
             <HBox alignment="CENTER_LEFT" spacing="30">
-                <Button text="Add student" fx:id="addStudentButton" onAction="#handleSave"/>
-                <Hyperlink fx:id="deleteLink" text="Delete Student" onAction="#onDeleteLinkClick"/>
+                <Button text="Generate Report" fx:id="generateReport"/>
             </HBox>
         </VBox>
     </VBox>

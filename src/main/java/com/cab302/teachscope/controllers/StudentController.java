@@ -12,20 +12,31 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
 import java.util.Optional;
+import javafx.scene.Scene;
+
+import com.cab302.teachscope.controllers.FormController;
 
 public class StudentController {
-
     @FXML
     private Button logoutButton;
+
     @FXML
     private Button newStudentButton;
     @FXML
     private Button studentNav;
     @FXML
     private Button knowledgeBaseButton;
+
+    @FXML
+    private Button viewFormsButton;
+
+    @FXML
+    private Button timelineButton;
+
 
     @FXML
     private TableView<Student> studentsTable;
@@ -64,6 +75,7 @@ public class StudentController {
     private final StudentService studentService = new StudentService(new DbStudentDao());
     private Optional<Student> editingStudent = Optional.empty(); //tracks if we're editing
 
+
     /**
      * Initializes the controller after the FXML is loaded
      * Sets up the student table on the dashboard or the form when on the add/edit student page.
@@ -88,7 +100,12 @@ public class StudentController {
 
     @FXML
     protected void onKnowledgeBaseClick() {
+        NavigationUtils.openKnowledgeBasePDF();
+    }
 
+    @FXML
+    protected void onIntroductoryTutorialClick() {
+        NavigationUtils.openIntroductoryTutorial();
     }
 
     /**
@@ -127,6 +144,16 @@ public class StudentController {
             NavigationUtils.navigateTo(stage, "dashboard", "Dashboard");
         } catch (IOException e) {
             showAlert("Navigation Error", "Could not open dashboard.");
+        }
+    }
+
+    @FXML
+    protected void onTimelineClick() {
+        Stage stage = (Stage) timelineButton.getScene().getWindow();
+        try {
+            NavigationUtils.navigateTo(stage, "timeline", "Timeline");
+        } catch (IOException e) {
+            showAlert("Navigation Error", "Could not open timeline page.");
         }
     }
 
@@ -282,14 +309,37 @@ public class StudentController {
         });
     }
 
+    @FXML
+    protected void viewFormsClick() throws IOException {
+        // go to weeklyforms.fxml
+        Stage stage = (Stage) viewFormsButton.getScene().getWindow();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/weeklyforms.fxml"));
+            Parent root = loader.load();
+
+            FormController controller = loader.getController();
+            Student student = editingStudent.get();
+            controller.setStudent(student.getId(), student.getFirstName() + " " + student.getLastName());
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("View Weekly Forms");
+            stage.show();
+
+        } catch (IllegalArgumentException e) {
+            showAlert("Error", e.getMessage());
+        }
+    }
+
     /**
      * Opens the student edit form for the given student.
      *
      * @param student the student to edit
      */
     private void openEditPage(Student student) {
+        Stage stage = (Stage) studentsTable.getScene().getWindow();
         try {
-            Stage stage = (Stage) studentsTable.getScene().getWindow();
+            NavigationUtils.navigateTo(stage, "newstudent", "Edit Student");
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/newstudent.fxml"));
             Parent root = loader.load();
