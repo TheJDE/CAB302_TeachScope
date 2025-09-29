@@ -319,7 +319,6 @@ public class StudentController {
             Parent root = loader.load();
 
             FormController controller = loader.getController();
-            controller.setStudentId(editingStudent.get().getId());
             Student student = editingStudent.get();
             controller.setStudent(student.getId(), student.getFirstName() + " " + student.getLastName());
 

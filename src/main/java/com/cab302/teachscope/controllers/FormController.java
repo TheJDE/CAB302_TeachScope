@@ -2,153 +2,247 @@ package com.cab302.teachscope.controllers;
 
 import com.cab302.teachscope.models.dao.DbFormDao;
 import com.cab302.teachscope.models.services.FormService;
+import com.cab302.teachscope.models.entities.WeeklyForm;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
-
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import java.util.Optional;
+import javafx.scene.layout.HBox;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.collections.FXCollections;
 import java.io.IOException;
-
 import com.cab302.teachscope.util.NavigationUtils;
 
+/**
+ * Controller for managing weekly forms for a student.
+ * Handles creating, editing, deleting forms and navigation between views.
+ */
 public class FormController {
 
-    private final FormService formService = new FormService(new DbFormDao());
+    @FXML private TableView<WeeklyForm> FormsTable;
+    @FXML private TableColumn<WeeklyForm, Integer> weekCol;
+    @FXML private TableColumn<WeeklyForm, Integer> termCol;
+    @FXML private TableColumn<WeeklyForm, Void> actionsCol;
 
-    private String studentId;
-
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
-    @FXML private Button logoutButton, newFormButton, generatePDF, createFormButton;
-
-    @FXML
-    private Button studentNav;
-
-    @FXML
-    private Button timelineButton;
-
-    @FXML private ComboBox<String> term;
-    @FXML private ComboBox<String> week;
-    @FXML private ComboBox<String> attendancedays;
-    @FXML private ComboBox<String> dayslate;
-    @FXML private ComboBox<String> attention;
-    @FXML private ComboBox<String> participation;
-    @FXML private ComboBox<String> literacy;
-    @FXML private ComboBox<String> numeracy;
-    @FXML private ComboBox<String> understanding;
-    @FXML private ComboBox<String> behaviour;
-    @FXML private ComboBox<String> peerInteraction;
-    @FXML private ComboBox<String> respectRules;
+    @FXML private ComboBox<String> term, week, attendancedays, dayslate, attention,
+            participation, literacy, numeracy, understanding, behaviour,
+            peerInteraction, respectRules;
 
     @FXML private TextArea concernsText;
-
-    @FXML private RadioButton homeworkNo, homeworkYes;
-    @FXML private RadioButton happyRadio, neutralRadio, withdrawnRadio, anxiousRadio;
+    @FXML private RadioButton homeworkNo, homeworkYes, happyRadio, neutralRadio, withdrawnRadio, anxiousRadio;
     @FXML private ToggleGroup homeworkGroup, emotionalGroup;
 
-    @FXML
-    private Label weeklyFormsTitle;
+    @FXML private Button newFormButton, saveFormButton, logoutButton, studentNav, timelineButton, generatePDF, addNewFormButton;
+    @FXML private Label weeklyFormsTitle, formTitle;
 
-    @FXML
-    private Label newFormTitle;
+    @FXML private Hyperlink deleteFormLink;
 
+    private final FormService formService = new FormService(new DbFormDao());
+    private String studentId;
+    private String studentName;
+    private Optional<WeeklyForm> editingForm = Optional.empty();
 
+    //Navigation Bar Functions
     @FXML
     protected void onLogoutClick() {
         Stage stage = (Stage) logoutButton.getScene().getWindow();
-        try {
-            NavigationUtils.navigateTo(stage, "login", "Login");
-        } catch (IOException e) {
-            showAlert("Navigation Error", "Could not open the login page.");
-        }
+        try { NavigationUtils.navigateTo(stage, "login", "Login"); }
+        catch (IOException e) { showAlert("Navigation Error", "Cannot open login page."); }
     }
 
     @FXML
     protected void onStudentClick() {
         Stage stage = (Stage) studentNav.getScene().getWindow();
-        try {
-            NavigationUtils.navigateTo(stage, "dashboard", "Dashboard");
-        } catch (IOException e) {
-            showAlert("Navigation Error", "Could not open dashboard.");
-        }
+        try { NavigationUtils.navigateTo(stage, "dashboard", "Dashboard"); }
+        catch (IOException e) { showAlert("Navigation Error", "Cannot open dashboard."); }
     }
 
     @FXML
     protected void onTimelineClick() {
         Stage stage = (Stage) timelineButton.getScene().getWindow();
-        try {
-            NavigationUtils.navigateTo(stage, "timeline", "Timeline");
-        } catch (IOException e) {
-            showAlert("Navigation Error", "Could not open timeline page.");
-        }
+        try { NavigationUtils.navigateTo(stage, "timeline", "Timeline"); }
+        catch (IOException e) { showAlert("Navigation Error", "Cannot open timeline."); }
+    }
+
+    @FXML
+    protected void generatePDFClick() {
+        Stage stage = (Stage) generatePDF.getScene().getWindow();
+        try { NavigationUtils.navigateTo(stage, "generatepdf", "Generate PDF"); }
+        catch (IOException e) { showAlert("Navigation Error", "Cannot open timeline."); }
     }
 
     @FXML
     protected void newFormClick() {
-        if (studentId == null) {
-            showAlert("Error", "No student selected.");
+        Stage stage = (Stage) addNewFormButton.getScene().getWindow();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addnewform.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller and pass the student info
+            FormController controller = loader.getController();
+            controller.setStudent(studentId, studentName);
+
+            stage.setTitle("Add New Form");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            showAlert("Navigation Error", "Could not open the new form page.");
+        }
+    }
+
+
+    //Initialize
+    @FXML
+    protected void initialize() {
+        setupTable();
+        populateFormIfEditing();
+
+    }
+
+
+    private void setupTable() {
+
+        if (FormsTable == null) {
             return;
         }
+        // Bind columns directly to WeeklyForm getters
+        weekCol.setCellValueFactory(new PropertyValueFactory<>("week"));
+        termCol.setCellValueFactory(new PropertyValueFactory<>("term"));
 
-        Stage stage = (Stage) newFormButton.getScene().getWindow();
+        weekCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper<>(cell.getValue().getWeek()));
+        termCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper<>(cell.getValue().getTerm()));
+
+        addActionButtons();
+    }
+
+
+    private void addActionButtons() {
+        actionsCol.setCellFactory(col -> new TableCell<>() {
+            private final Hyperlink editLink = new Hyperlink("Edit Form");
+            private final HBox container = new HBox(5, editLink);
+
+            {
+                editLink.setOnAction(e -> {
+                    WeeklyForm form = getTableView().getItems().get(getIndex());
+                    openFormEditor(form);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : container);
+            }
+        });
+    }
+
+    private void openFormEditor(WeeklyForm form) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addnewform.fxml"));
             Parent root = loader.load();
 
             FormController controller = loader.getController();
-            controller.setStudentId(this.studentId);
-            controller.setStudent(studentId, studentName);
+            controller.setStudent(studentId, studentName); // pass student context
+            controller.setEditingForm(form);               // pass form to edit
 
+            Stage stage = (Stage) FormsTable.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Add New Form");
+            stage.setTitle("Edit Form");
             stage.show();
 
         } catch (IOException e) {
-            showAlert("Navigation Error", "Could not open the add new form page.");
+            e.printStackTrace();
+            showAlert("Navigation Error", "Could not open form editor.");
         }
+    }
+
+    public void setEditingForm(WeeklyForm form) {
+        this.editingForm = Optional.of(form);
+        populateFormIfEditing(); // safe now, because FXML fields are initialized
     }
 
 
 
-    @FXML
-    protected void generatePDFClick() {
-        Stage stage = (Stage) generatePDF.getScene().getWindow();
+
+
+    private void loadForms() {
+        if (FormsTable == null || studentId == null) return;
         try {
-            NavigationUtils.navigateTo(stage, "generatepdf", "Generate PDF");
-        } catch (IOException e) {
-            showAlert("Navigation Error", "Could not open the generate PDF page.");
+            var forms = formService.getAllFormsForStudent(studentId);
+            FormsTable.setItems(FXCollections.observableArrayList(forms)); // <-- important
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private String studentName;
 
+
+    // -------------------- Student Context -------------------- //
     public void setStudent(String studentId, String studentName) {
         this.studentId = studentId;
         this.studentName = studentName;
 
-        //update the label if FXML is loaded
         if (weeklyFormsTitle != null) {
             weeklyFormsTitle.setText(studentName + "'s Weekly Forms");
         }
+        if (formTitle != null) {
+            formTitle.setText("Add New Form (" + studentName + ")");
+        }
 
-        if (newFormTitle != null) {
-            newFormTitle.setText("Add New Form (" + studentName + ")");
+        loadForms();
+    }
+
+    // -------------------- Form Actions -------------------- //
+    private void populateFormIfEditing() {
+        if (editingForm.isPresent()) {
+            WeeklyForm form = editingForm.get();
+
+            term.getSelectionModel().select(form.getTerm() - 1);
+            week.getSelectionModel().select(form.getWeek() - 1);
+            attendancedays.setValue(String.valueOf(form.getAttendanceDays()));
+            dayslate.setValue(String.valueOf(form.getDaysLate()));
+            attention.getSelectionModel().select(form.getAttentionScore());
+            homeworkYes.setSelected(form.isHomeworkDone());
+            homeworkNo.setSelected(!form.isHomeworkDone());
+            participation.getSelectionModel().select(form.getParticipationScore());
+            literacy.getSelectionModel().select(form.getLiteracyScore());
+            numeracy.getSelectionModel().select(form.getNumeracyScore());
+            understanding.getSelectionModel().select(form.getUnderstandingScore());
+            behaviour.getSelectionModel().select(form.getBehaviourScore());
+            peerInteraction.getSelectionModel().select(form.getPeerInteractionScore());
+            respectRules.getSelectionModel().select(form.getRespectForRulesScore());
+
+            switch (form.getEmotionalState()) {
+                case "Happy" -> happyRadio.setSelected(true);
+                case "Neutral" -> neutralRadio.setSelected(true);
+                case "Withdrawn" -> withdrawnRadio.setSelected(true);
+                default -> anxiousRadio.setSelected(true);
+            }
+
+            concernsText.setText(form.getTeacherConcerns());
+            formTitle.setText("Edit Form (" + studentName + ")");
+            saveFormButton.setText("Update Form");
+
+            if (deleteFormLink != null) {
+                deleteFormLink.setVisible(true); // only show if it exists
+            }
+
+        } else {
+            if (deleteFormLink != null) {
+                deleteFormLink.setVisible(false); // hide when adding new form
+            }
         }
     }
+
 
 
     @FXML
     protected void onSubmitFormClick() {
         try {
-            if (studentId == null) {
-                showAlert("Form Submission Error", "No student selected.");
-                return;
-            }
-
             int termVal = term.getSelectionModel().getSelectedIndex() + 1;
             int weekVal = week.getSelectionModel().getSelectedIndex() + 1;
             int attendance = Integer.parseInt(attendancedays.getValue());
@@ -163,49 +257,123 @@ public class FormController {
             int peerVal = peerInteraction.getSelectionModel().getSelectedIndex();
             int respectVal = respectRules.getSelectionModel().getSelectedIndex();
 
-            String emotionalState;
-            if (happyRadio.isSelected()) emotionalState = "Happy";
-            else if (neutralRadio.isSelected()) emotionalState = "Neutral";
-            else if (withdrawnRadio.isSelected()) emotionalState = "Withdrawn";
-            else emotionalState = "Anxious";
+            String emotionalState = happyRadio.isSelected() ? "Happy" :
+                    neutralRadio.isSelected() ? "Neutral" :
+                            withdrawnRadio.isSelected() ? "Withdrawn" : "Anxious";
 
             String teacherConcerns = concernsText.getText();
 
-            formService.createForm(
-                    studentId,
-                    termVal,
-                    weekVal,
-                    attendance,
-                    late,
-                    attentionVal,
-                    homeworkDone,
-                    participationVal,
-                    literacyVal,
-                    numeracyVal,
-                    understandingVal,
-                    behaviourVal,
-                    peerVal,
-                    respectVal,
-                    emotionalState,
-                    teacherConcerns
-            );
+            if (editingForm.isPresent()) {
+                WeeklyForm form = editingForm.get();
+                formService.updateForm(new WeeklyForm(
+                        Optional.ofNullable(form.getId()),
+                        studentId,
+                        termVal,
+                        weekVal,
+                        attendance,
+                        late,
+                        attentionVal,
+                        homeworkDone,
+                        participationVal,
+                        literacyVal,
+                        numeracyVal,
+                        understandingVal,
+                        behaviourVal,
+                        peerVal,
+                        respectVal,
+                        emotionalState,
+                        teacherConcerns
+                ));
+                editingForm = Optional.empty();
+            } else {
+                formService.createForm(studentId, termVal, weekVal, attendance, late,
+                        attentionVal, homeworkDone, participationVal, literacyVal, numeracyVal,
+                        understandingVal, behaviourVal, peerVal, respectVal, emotionalState, teacherConcerns);
+            }
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText(null);
-            alert.setContentText("Form submitted successfully!");
-            alert.showAndWait();
+            Stage stage = (Stage) saveFormButton.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/weeklyforms.fxml"));
+            Parent root = loader.load();
+
+            FormController controller = loader.getController();
+            controller.setStudent(studentId, studentName);
+
+            stage.setScene(new Scene(root));
+            stage.setTitle(studentName + "'s Weekly Forms");
+            stage.show();
+
 
         } catch (Exception e) {
-            showAlert("Form Submission Error", e.getMessage());
+            showAlert("Form Error", e.getMessage());
         }
     }
 
+    private void clearForm() {
+        if (term != null) term.getSelectionModel().clearSelection();
+        if (week != null) week.getSelectionModel().clearSelection();
+        if (attendancedays != null) attendancedays.setValue(null);
+        if (dayslate != null) dayslate.setValue(null);
+        if (attention != null) attention.getSelectionModel().clearSelection();
+        if (homeworkGroup != null) homeworkGroup.selectToggle(null);
+        if (participation != null) participation.getSelectionModel().clearSelection();
+        if (literacy != null) literacy.getSelectionModel().clearSelection();
+        if (numeracy != null) numeracy.getSelectionModel().clearSelection();
+        if (understanding != null) understanding.getSelectionModel().clearSelection();
+        if (behaviour != null) behaviour.getSelectionModel().clearSelection();
+        if (peerInteraction != null) peerInteraction.getSelectionModel().clearSelection();
+        if (respectRules != null) respectRules.getSelectionModel().clearSelection();
+        if (emotionalGroup != null) emotionalGroup.selectToggle(null);
+        if (concernsText != null) concernsText.clear();
+
+        saveFormButton.setText("Add Form");
+        formTitle.setText("Add New Form (" + studentName + ")");
+    }
+
+
+    @FXML
+    protected void onDeleteForm() {
+        if (editingForm.isEmpty()) {
+            showAlert("Delete Error", "No form selected for deletion.");
+            return;
+        }
+
+        WeeklyForm form = editingForm.get(); // <-- now we actually have the form
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "Delete form for Term " + form.getTerm() + ", Week " + form.getWeek() + "?",
+                ButtonType.YES, ButtonType.NO);
+        confirm.setHeaderText(null);
+
+        confirm.showAndWait().ifPresent(button -> {
+            if (button == ButtonType.YES) {
+                try {
+                    formService.deleteForm(form.getId());
+
+                    Stage stage = (Stage) saveFormButton.getScene().getWindow();
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/weeklyforms.fxml"));
+                    Parent root = loader.load();
+
+                    FormController controller = loader.getController();
+                    controller.setStudent(studentId, studentName);
+
+                    stage.setScene(new Scene(root));
+                    stage.setTitle(studentName + "'s Weekly Forms");
+                    stage.show();
+
+                } catch (Exception e) {
+                    showAlert("Delete Error", "Could not delete form: " + e.getMessage());
+                }
+            }
+        });
+    }
+
     private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        Alert alert = new Alert(Alert.AlertType.ERROR, message);
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(message);
         alert.showAndWait();
     }
+
+
+
 }

@@ -50,7 +50,7 @@
                     <Insets top="10" right="15"/>
                 </HBox.margin>
             </Button>
-            <Button fx:id="newFormButton" text="Add New Form" styleClass="" onAction="#newFormClick">
+            <Button fx:id="addNewFormButton" text="Add New Form" styleClass="" onAction="#newFormClick">
                 <HBox.margin>
                     <Insets top="10" right="15"/>
                 </HBox.margin>
@@ -60,12 +60,14 @@
         <!-- table of students -->
         <TableView fx:id="FormsTable" prefHeight="500" styleClass="table-striped">
             <columns>
-                <TableColumn text="Week" prefWidth="200"/>
-                <TableColumn text="Term" prefWidth="200"/>
-                <TableColumn text="Date Created" prefWidth="350"/>
-                <TableColumn text="Status" prefWidth="300"/>
-                <TableColumn text="View Form" prefWidth="300"/>
+                <TableColumn fx:id="weekCol" text="Week" prefWidth="200"/>
+                <TableColumn fx:id="termCol" text="Term" prefWidth="200"/>
+                <TableColumn fx:id="actionsCol" prefWidth="300"/>
             </columns>
         </TableView>
+
     </VBox>
 </HBox>
+
+
+
