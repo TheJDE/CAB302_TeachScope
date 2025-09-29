@@ -26,8 +26,10 @@
 
         <!-- nav -->
         <VBox spacing="10">
-            <Button fx:id="studentNav" text="Students" styleClass="active" maxWidth="Infinity" onAction="#onStudentClick"/>
+            <Button fx:id="studentNav" text="Students" maxWidth="Infinity" onAction="#onStudentClick"/>
             <Button fx:id="timelineButton" text="Timeline" styleClass="" maxWidth="Infinity" onAction="#onTimelineClick"/>
+            <Button text="Knowledge Base" styleClass="" maxWidth="Infinity" onAction="#onKnowledgeBaseClick"/>
+            <Button text="User Introductory Tutorial" styleClass="" maxWidth="Infinity" onAction="#onIntroductoryTutorialClick"/>
         </VBox>
 
         <VBox VBox.vgrow="ALWAYS"/>
@@ -57,14 +59,54 @@
             </Button>
         </HBox>
 
-        <!-- table of students -->
-        <TableView fx:id="FormsTable" prefHeight="500" styleClass="table-striped">
-            <columns>
-                <TableColumn fx:id="weekCol" text="Week" prefWidth="200"/>
-                <TableColumn fx:id="termCol" text="Term" prefWidth="200"/>
-                <TableColumn fx:id="actionsCol" prefWidth="300"/>
-            </columns>
-        </TableView>
+        <TabPane fx:id="formsTabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+            <tabs>
+                <!-- Term 1 -->
+                <Tab text="Term 1">
+                    <TableView fx:id="formsTableTerm1" prefHeight="500" styleClass="table-striped">
+                        <columns>
+                            <TableColumn fx:id="weekColTerm1" text="Week" prefWidth="350"/>
+                            <TableColumn fx:id="termColTerm1" text="Term" prefWidth="350"/>
+                            <TableColumn fx:id="actionsColTerm1" prefWidth="700"/>
+                        </columns>
+                    </TableView>
+                </Tab>
+
+
+                <!-- Term 2 -->
+                <Tab text="Term 2">
+                    <TableView fx:id="formsTableTerm2" prefHeight="500" styleClass="table-striped">
+                        <columns>
+                            <TableColumn fx:id="weekColTerm2" text="Week" prefWidth="350"/>
+                            <TableColumn fx:id="termColTerm2" text="Term" prefWidth="350"/>
+                            <TableColumn fx:id="actionsColTerm2" prefWidth="700"/>
+                        </columns>
+                    </TableView>
+                </Tab>
+
+                <!-- Term 3 -->
+                <Tab text="Term 3">
+                    <TableView fx:id="formsTableTerm3" prefHeight="500" styleClass="table-striped">
+                        <columns>
+                            <TableColumn fx:id="weekColTerm3" text="Week" prefWidth="350"/>
+                            <TableColumn fx:id="termColTerm3" text="Term" prefWidth="350"/>
+                            <TableColumn fx:id="actionsColTerm3" prefWidth="700"/>
+                        </columns>
+                    </TableView>
+                </Tab>
+
+                <!-- Term 4 -->
+                <Tab text="Term 4">
+                    <TableView fx:id="formsTableTerm4" prefHeight="500" styleClass="table-striped">
+                        <columns>
+                            <TableColumn fx:id="weekColTerm4" text="Week" prefWidth="350"/>
+                            <TableColumn fx:id="termColTerm4" text="Term" prefWidth="350"/>
+                            <TableColumn fx:id="actionsColTerm4" prefWidth="700"/>
+                        </columns>
+                    </TableView>
+                </Tab>
+            </tabs>
+        </TabPane>
 
     </VBox>
 </HBox>

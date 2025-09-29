@@ -16,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
 import java.io.IOException;
 import com.cab302.teachscope.util.NavigationUtils;
+import java.util.stream.Collectors;
 
 /**
  * Controller for managing weekly forms for a student.
@@ -23,10 +24,17 @@ import com.cab302.teachscope.util.NavigationUtils;
  */
 public class FormController {
 
-    @FXML private TableView<WeeklyForm> FormsTable;
-    @FXML private TableColumn<WeeklyForm, Integer> weekCol;
-    @FXML private TableColumn<WeeklyForm, Integer> termCol;
-    @FXML private TableColumn<WeeklyForm, Void> actionsCol;
+    @FXML private TableView<WeeklyForm> formsTableTerm1;
+    @FXML private TableView<WeeklyForm> formsTableTerm2;
+    @FXML private TableView<WeeklyForm> formsTableTerm3;
+    @FXML private TableView<WeeklyForm> formsTableTerm4;
+
+    @FXML private TableColumn<WeeklyForm, Integer> weekColTerm1, termColTerm1;
+    @FXML private TableColumn<WeeklyForm, Integer> weekColTerm2, termColTerm2;
+    @FXML private TableColumn<WeeklyForm, Integer> weekColTerm3, termColTerm3;
+    @FXML private TableColumn<WeeklyForm, Integer> weekColTerm4, termColTerm4;
+
+    @FXML private TableColumn<WeeklyForm, Void> actionsColTerm1, actionsColTerm2, actionsColTerm3, actionsColTerm4;
 
     @FXML private ComboBox<String> term, week, attendancedays, dayslate, attention,
             participation, literacy, numeracy, understanding, behaviour,
@@ -41,21 +49,22 @@ public class FormController {
 
     @FXML private Hyperlink deleteFormLink;
 
-    /** Service used to perform CRUD operations on weekly forms. */
     private final FormService formService = new FormService(new DbFormDao());
-
-    /** The ID of the student whose forms are being managed. */
     private String studentId;
-
-    /** The name of the student whose forms are being managed. */
     private String studentName;
-
-    /** Optional form currently being edited. Empty if adding a new form. */
     private Optional<WeeklyForm> editingForm = Optional.empty();
 
-    /**
-     * Logs out the current user and navigates to the login page.
-     */
+    //Navigation Bar Functions
+    @FXML
+    protected void onKnowledgeBaseClick() {
+        NavigationUtils.openKnowledgeBasePDF();
+    }
+
+    @FXML
+    protected void onIntroductoryTutorialClick() {
+        NavigationUtils.openIntroductoryTutorial();
+    }
+
     @FXML
     protected void onLogoutClick() {
         Stage stage = (Stage) logoutButton.getScene().getWindow();
@@ -63,9 +72,6 @@ public class FormController {
         catch (IOException e) { showAlert("Navigation Error", "Cannot open login page."); }
     }
 
-    /**
-     * Navigates back to the student dashboard.
-     */
     @FXML
     protected void onStudentClick() {
         Stage stage = (Stage) studentNav.getScene().getWindow();
@@ -73,9 +79,6 @@ public class FormController {
         catch (IOException e) { showAlert("Navigation Error", "Cannot open dashboard."); }
     }
 
-    /**
-     * Navigates to the student's timeline page.
-     */
     @FXML
     protected void onTimelineClick() {
         Stage stage = (Stage) timelineButton.getScene().getWindow();
@@ -83,9 +86,7 @@ public class FormController {
         catch (IOException e) { showAlert("Navigation Error", "Cannot open timeline."); }
     }
 
-    /**
-     * Navigates to the PDF generation page.
-     */
+
     @FXML
     protected void generatePDFClick() {
         Stage stage = (Stage) generatePDF.getScene().getWindow();
@@ -122,7 +123,10 @@ public class FormController {
      */
     @FXML
     protected void initialize() {
-        setupTable();
+        setupTable(formsTableTerm1, weekColTerm1, termColTerm1, actionsColTerm1);
+        setupTable(formsTableTerm2, weekColTerm2, termColTerm2, actionsColTerm2);
+        setupTable(formsTableTerm3, weekColTerm3, termColTerm3, actionsColTerm3);
+        setupTable(formsTableTerm4, weekColTerm4, termColTerm4, actionsColTerm4);
         populateFormIfEditing();
 
     }
@@ -130,26 +134,20 @@ public class FormController {
     /**
      * Sets up the weekly forms table with columns and action buttons.
      */
-    private void setupTable() {
+    private void setupTable(TableView<WeeklyForm> table,
+                            TableColumn<WeeklyForm, Integer> weekCol,
+                            TableColumn<WeeklyForm, Integer> termCol,
+                            TableColumn<WeeklyForm, Void> actionsCol) {
 
-        if (FormsTable == null) {
-            return;
-        }
-        // Bind columns directly to WeeklyForm getters
+        if (table == null) return;
+
         weekCol.setCellValueFactory(new PropertyValueFactory<>("week"));
         termCol.setCellValueFactory(new PropertyValueFactory<>("term"));
 
         weekCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper<>(cell.getValue().getWeek()));
         termCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper<>(cell.getValue().getTerm()));
 
-        addActionButtons();
-    }
-
-
-    /**
-     * Adds edit action buttons to each row of the weekly forms table.
-     */
-    private void addActionButtons() {
+        // Reuse action buttons
         actionsCol.setCellFactory(col -> new TableCell<>() {
             private final Hyperlink editLink = new Hyperlink("Edit Form");
             private final HBox container = new HBox(5, editLink);
@@ -169,6 +167,8 @@ public class FormController {
         });
     }
 
+
+
     /**
      * Opens the editor page for the specified form.
      *
@@ -183,7 +183,7 @@ public class FormController {
             controller.setStudent(studentId, studentName); // pass student context
             controller.setEditingForm(form);               // pass form to edit
 
-            Stage stage = (Stage) FormsTable.getScene().getWindow();
+            Stage stage = (Stage) addNewFormButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Edit Form");
             stage.show();
@@ -209,10 +209,23 @@ public class FormController {
      * Loads all weekly forms for the current student into the table.
      */
     private void loadForms() {
-        if (FormsTable == null || studentId == null) return;
+        if (studentId == null) return;
         try {
             var forms = formService.getAllFormsForStudent(studentId);
-            FormsTable.setItems(FXCollections.observableArrayList(forms));
+
+            formsTableTerm1.setItems(FXCollections.observableArrayList(
+                    forms.stream().filter(f -> f.getTerm() == 1).collect(Collectors.toList())
+            ));
+            formsTableTerm2.setItems(FXCollections.observableArrayList(
+                    forms.stream().filter(f -> f.getTerm() == 2).collect(Collectors.toList())
+            ));
+            formsTableTerm3.setItems(FXCollections.observableArrayList(
+                    forms.stream().filter(f -> f.getTerm() == 3).collect(Collectors.toList())
+            ));
+            formsTableTerm4.setItems(FXCollections.observableArrayList(
+                    forms.stream().filter(f -> f.getTerm() == 4).collect(Collectors.toList())
+            ));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -337,6 +350,7 @@ public class FormController {
                         attentionVal, homeworkDone, participationVal, literacyVal, numeracyVal,
                         understandingVal, behaviourVal, peerVal, respectVal, emotionalState, teacherConcerns);
             }
+            loadForms();
 
             Stage stage = (Stage) saveFormButton.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/weeklyforms.fxml"));
@@ -353,30 +367,6 @@ public class FormController {
         } catch (Exception e) {
             showAlert("Form Error", e.getMessage());
         }
-    }
-
-    /**
-     * Clears all form fields and resets buttons to default state.
-     */
-    private void clearForm() {
-        if (term != null) term.getSelectionModel().clearSelection();
-        if (week != null) week.getSelectionModel().clearSelection();
-        if (attendancedays != null) attendancedays.setValue(null);
-        if (dayslate != null) dayslate.setValue(null);
-        if (attention != null) attention.getSelectionModel().clearSelection();
-        if (homeworkGroup != null) homeworkGroup.selectToggle(null);
-        if (participation != null) participation.getSelectionModel().clearSelection();
-        if (literacy != null) literacy.getSelectionModel().clearSelection();
-        if (numeracy != null) numeracy.getSelectionModel().clearSelection();
-        if (understanding != null) understanding.getSelectionModel().clearSelection();
-        if (behaviour != null) behaviour.getSelectionModel().clearSelection();
-        if (peerInteraction != null) peerInteraction.getSelectionModel().clearSelection();
-        if (respectRules != null) respectRules.getSelectionModel().clearSelection();
-        if (emotionalGroup != null) emotionalGroup.selectToggle(null);
-        if (concernsText != null) concernsText.clear();
-
-        saveFormButton.setText("Add Form");
-        formTitle.setText("Add New Form (" + studentName + ")");
     }
 
     /**
