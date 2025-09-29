@@ -216,11 +216,51 @@ public class DbFormDao implements FormDao {
 
     @Override
     public void update(WeeklyForm form) throws SQLException {
-        // TODO: implement update
+        PreparedStatement statement = connection.prepareStatement("UPDATE weekly_forms SET " +
+                "studentId = ?, " +
+                "term = ?, " +
+                "week = ?, " +
+                "attendanceDays = ?," +
+                "daysLate = ?, " +
+                "attentionScore = ?, " +
+                "homeworkDone = ?," +
+                "participationScore = ?, " +
+                "literacyScore = ?, " +
+                "numeracyScore = ?, " +
+                "understandingScore = ?, " +
+                "behaviourScore = ?, " +
+                "peerInteractionScore = ?, " +
+                "respectForRulesScore, " +
+                "emotionalState = ?, " +
+                "teacherConcerns = ? " +
+                "WHERE id = ?"
+        );
+
+        statement.setString(1, form.getStudentId());
+        statement.setInt(2, form.getTerm());
+        statement.setInt(3, form.getWeek());
+        statement.setInt(4, form.getAttendanceDays());
+        statement.setInt(5, form.getDaysLate());
+        statement.setInt(6, form.getAttentionScore());
+        statement.setBoolean(7, form.isHomeworkDone());
+        statement.setInt(8, form.getParticipationScore());
+        statement.setInt(9, form.getLiteracyScore());
+        statement.setInt(10, form.getNumeracyScore());
+        statement.setInt(11, form.getUnderstandingScore());
+        statement.setInt(12, form.getBehaviourScore());
+        statement.setInt(13, form.getPeerInteractionScore());
+        statement.setInt(14, form.getRespectForRulesScore());
+        statement.setString(15, form.getEmotionalState());
+        statement.setString(16, form.getTeacherConcerns());
+        statement.setString(17, form.getId());
+
+        statement.executeUpdate();
     }
 
     @Override
     public void delete(String id) throws SQLException {
-        // TODO: implement delete
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM weekly_forms WHERE id = ?");
+        statement.setString(1, id);
+        statement.executeUpdate();
     }
 }
