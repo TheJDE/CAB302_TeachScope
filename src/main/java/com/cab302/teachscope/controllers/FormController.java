@@ -41,12 +41,21 @@ public class FormController {
 
     @FXML private Hyperlink deleteFormLink;
 
+    /** Service used to perform CRUD operations on weekly forms. */
     private final FormService formService = new FormService(new DbFormDao());
+
+    /** The ID of the student whose forms are being managed. */
     private String studentId;
+
+    /** The name of the student whose forms are being managed. */
     private String studentName;
+
+    /** Optional form currently being edited. Empty if adding a new form. */
     private Optional<WeeklyForm> editingForm = Optional.empty();
 
-    //Navigation Bar Functions
+    /**
+     * Logs out the current user and navigates to the login page.
+     */
     @FXML
     protected void onLogoutClick() {
         Stage stage = (Stage) logoutButton.getScene().getWindow();
@@ -54,6 +63,9 @@ public class FormController {
         catch (IOException e) { showAlert("Navigation Error", "Cannot open login page."); }
     }
 
+    /**
+     * Navigates back to the student dashboard.
+     */
     @FXML
     protected void onStudentClick() {
         Stage stage = (Stage) studentNav.getScene().getWindow();
@@ -61,6 +73,9 @@ public class FormController {
         catch (IOException e) { showAlert("Navigation Error", "Cannot open dashboard."); }
     }
 
+    /**
+     * Navigates to the student's timeline page.
+     */
     @FXML
     protected void onTimelineClick() {
         Stage stage = (Stage) timelineButton.getScene().getWindow();
@@ -68,6 +83,9 @@ public class FormController {
         catch (IOException e) { showAlert("Navigation Error", "Cannot open timeline."); }
     }
 
+    /**
+     * Navigates to the PDF generation page.
+     */
     @FXML
     protected void generatePDFClick() {
         Stage stage = (Stage) generatePDF.getScene().getWindow();
@@ -75,6 +93,9 @@ public class FormController {
         catch (IOException e) { showAlert("Navigation Error", "Cannot open timeline."); }
     }
 
+    /**
+     * Opens the "Add New Form" page for creating a new weekly form.
+     */
     @FXML
     protected void newFormClick() {
         Stage stage = (Stage) addNewFormButton.getScene().getWindow();
@@ -95,7 +116,10 @@ public class FormController {
     }
 
 
-    //Initialize
+    /**
+     * Initializes the controller after the FXML has been loaded.
+     * Sets up the table and populates the form if editing an existing one.
+     */
     @FXML
     protected void initialize() {
         setupTable();
@@ -103,7 +127,9 @@ public class FormController {
 
     }
 
-
+    /**
+     * Sets up the weekly forms table with columns and action buttons.
+     */
     private void setupTable() {
 
         if (FormsTable == null) {
@@ -120,6 +146,9 @@ public class FormController {
     }
 
 
+    /**
+     * Adds edit action buttons to each row of the weekly forms table.
+     */
     private void addActionButtons() {
         actionsCol.setCellFactory(col -> new TableCell<>() {
             private final Hyperlink editLink = new Hyperlink("Edit Form");
@@ -140,6 +169,11 @@ public class FormController {
         });
     }
 
+    /**
+     * Opens the editor page for the specified form.
+     *
+     * @param form The weekly form to edit.
+     */
     private void openFormEditor(WeeklyForm form) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addnewform.fxml"));
@@ -160,28 +194,36 @@ public class FormController {
         }
     }
 
+    /**
+     * Sets the form currently being edited.
+     *
+     * @param form The form to edit.
+     */
     public void setEditingForm(WeeklyForm form) {
         this.editingForm = Optional.of(form);
-        populateFormIfEditing(); // safe now, because FXML fields are initialized
+        populateFormIfEditing();
     }
 
 
-
-
-
+    /**
+     * Loads all weekly forms for the current student into the table.
+     */
     private void loadForms() {
         if (FormsTable == null || studentId == null) return;
         try {
             var forms = formService.getAllFormsForStudent(studentId);
-            FormsTable.setItems(FXCollections.observableArrayList(forms)); // <-- important
+            FormsTable.setItems(FXCollections.observableArrayList(forms));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-
-
-    // -------------------- Student Context -------------------- //
+    /**
+     * Sets the student context for this controller.
+     *
+     * @param studentId   ID of the student.
+     * @param studentName Name of the student.
+     */
     public void setStudent(String studentId, String studentName) {
         this.studentId = studentId;
         this.studentName = studentName;
@@ -196,7 +238,10 @@ public class FormController {
         loadForms();
     }
 
-    // -------------------- Form Actions -------------------- //
+    /**
+     * Populates form fields if editing an existing form.
+     * Also handles visibility of the delete hyperlink.
+     */
     private void populateFormIfEditing() {
         if (editingForm.isPresent()) {
             WeeklyForm form = editingForm.get();
@@ -228,7 +273,7 @@ public class FormController {
             saveFormButton.setText("Update Form");
 
             if (deleteFormLink != null) {
-                deleteFormLink.setVisible(true); // only show if it exists
+                deleteFormLink.setVisible(true);
             }
 
         } else {
@@ -239,7 +284,9 @@ public class FormController {
     }
 
 
-
+    /**
+     * Handles the submission of the form (creating or updating).
+     */
     @FXML
     protected void onSubmitFormClick() {
         try {
@@ -308,6 +355,9 @@ public class FormController {
         }
     }
 
+    /**
+     * Clears all form fields and resets buttons to default state.
+     */
     private void clearForm() {
         if (term != null) term.getSelectionModel().clearSelection();
         if (week != null) week.getSelectionModel().clearSelection();
@@ -329,7 +379,9 @@ public class FormController {
         formTitle.setText("Add New Form (" + studentName + ")");
     }
 
-
+    /**
+     * Deletes the currently edited form after user confirmation.
+     */
     @FXML
     protected void onDeleteForm() {
         if (editingForm.isEmpty()) {
@@ -337,7 +389,7 @@ public class FormController {
             return;
         }
 
-        WeeklyForm form = editingForm.get(); // <-- now we actually have the form
+        WeeklyForm form = editingForm.get();
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
                 "Delete form for Term " + form.getTerm() + ", Week " + form.getWeek() + "?",
@@ -367,13 +419,16 @@ public class FormController {
         });
     }
 
+    /**
+     * Displays an error alert with the given title and message.
+     *
+     * @param title   The alert title.
+     * @param message The alert message.
+     */
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR, message);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.showAndWait();
     }
-
-
-
 }
