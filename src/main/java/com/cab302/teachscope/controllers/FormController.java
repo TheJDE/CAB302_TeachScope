@@ -248,7 +248,10 @@ public class FormController {
             formTitle.setText("Add New Form (" + studentName + ")");
         }
 
-        loadForms();
+        if (formsTableTerm1 != null && formsTableTerm2 != null &&
+                formsTableTerm3 != null && formsTableTerm4 != null) {
+            loadForms();
+        }
     }
 
     /**
@@ -350,7 +353,10 @@ public class FormController {
                         attentionVal, homeworkDone, participationVal, literacyVal, numeracyVal,
                         understandingVal, behaviourVal, peerVal, respectVal, emotionalState, teacherConcerns);
             }
-            loadForms();
+            if (formsTableTerm1 != null && formsTableTerm2 != null &&
+                    formsTableTerm3 != null && formsTableTerm4 != null) {
+                loadForms();
+            }
 
             Stage stage = (Stage) saveFormButton.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/weeklyforms.fxml"));

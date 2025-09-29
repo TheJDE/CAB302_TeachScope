@@ -230,7 +230,7 @@ public class DbFormDao implements FormDao {
                 "understandingScore = ?, " +
                 "behaviourScore = ?, " +
                 "peerInteractionScore = ?, " +
-                "respectForRulesScore, " +
+                "respectForRulesScore = ?, " +
                 "emotionalState = ?, " +
                 "teacherConcerns = ? " +
                 "WHERE id = ?"
