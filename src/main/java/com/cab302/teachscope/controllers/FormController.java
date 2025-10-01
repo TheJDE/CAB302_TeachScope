@@ -1,6 +1,7 @@
 package com.cab302.teachscope.controllers;
 
 import com.cab302.teachscope.models.dao.DbFormDao;
+import com.cab302.teachscope.models.entities.Student;
 import com.cab302.teachscope.models.services.FormService;
 import com.cab302.teachscope.models.entities.WeeklyForm;
 import javafx.fxml.FXML;
@@ -44,8 +45,8 @@ public class FormController {
     @FXML private RadioButton homeworkNo, homeworkYes, happyRadio, neutralRadio, withdrawnRadio, anxiousRadio;
     @FXML private ToggleGroup homeworkGroup, emotionalGroup;
 
-    @FXML private Button newFormButton, saveFormButton, logoutButton, studentNav, timelineButton, generatePDF, addNewFormButton;
-    @FXML private Label weeklyFormsTitle, formTitle;
+    @FXML private Button newFormButton, saveFormButton, logoutButton, studentNav, timelineButton, generatePDF, addNewFormButton, weeklyformsButton;
+    @FXML private Label weeklyFormsTitle, formTitle, PDFTitle;
 
     @FXML private Hyperlink deleteFormLink;
 
@@ -88,10 +89,24 @@ public class FormController {
 
 
     @FXML
-    protected void generatePDFClick() {
-        Stage stage = (Stage) generatePDF.getScene().getWindow();
-        try { NavigationUtils.navigateTo(stage, "generatepdf", "Generate PDF"); }
-        catch (IOException e) { showAlert("Navigation Error", "Cannot open timeline."); }
+    protected void weeklyFormsClick() throws IOException {
+        // go to weeklyforms.fxml
+        Stage stage = (Stage) weeklyformsButton.getScene().getWindow();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/weeklyforms.fxml"));
+            Parent root = loader.load();
+
+            FormController controller = loader.getController();
+            controller.setStudent(studentId, studentName);
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("View Weekly Forms");
+            stage.show();
+
+        } catch (IllegalArgumentException e) {
+            showAlert("Error", e.getMessage());
+        }
     }
 
     /**
@@ -109,6 +124,25 @@ public class FormController {
             controller.setStudent(studentId, studentName);
 
             stage.setTitle("Add New Form");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            showAlert("Navigation Error", "Could not open the new form page.");
+        }
+    }
+
+    @FXML
+    protected void generatePDFClick() {
+        Stage stage = (Stage) generatePDF.getScene().getWindow();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/generatepdf.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller and pass the student info
+            FormController controller = loader.getController();
+            controller.setStudent(studentId, studentName);
+
+            stage.setTitle("Generate PDF");
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
@@ -246,6 +280,10 @@ public class FormController {
         }
         if (formTitle != null) {
             formTitle.setText("Add New Form (" + studentName + ")");
+        }
+
+        if(PDFTitle != null) {
+            PDFTitle.setText("Generate PDF for " + studentName);
         }
 
         if (formsTableTerm1 != null && formsTableTerm2 != null &&
