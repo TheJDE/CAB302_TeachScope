@@ -203,6 +203,7 @@ public class StudentController {
      */
     private void setupForm() {
         deleteLink.setVisible(false);
+        viewFormsButton.setVisible(false);
         addStudentButton.setOnAction(e -> handleSave());
     }
 
@@ -215,6 +216,7 @@ public class StudentController {
         formTitle.setText("Edit Student");
         addStudentButton.setText("Update Student");
         deleteLink.setVisible(true);
+        viewFormsButton.setVisible(true);
 
         firstName.setText(student.getFirstName());
         lastName.setText(student.getLastName());
