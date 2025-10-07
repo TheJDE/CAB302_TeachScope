@@ -4,10 +4,7 @@ import com.cab302.teachscope.DatabaseConnection;
 import com.cab302.teachscope.models.entities.WeeklyForm;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 
 public class DbFormDao implements FormDao {
@@ -212,6 +209,27 @@ public class DbFormDao implements FormDao {
     public List<WeeklyForm> findAll() throws SQLException {
         // TODO: implement fetch all
         return new ArrayList<>();
+    }
+
+    @Override
+    public List<Map<String, String>> findAllForGivenWeek(int term, int week) throws SQLException {
+        List<Map<String, String>> forms = new ArrayList<>();
+
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM weekly_forms WHERE term = ? AND week = ?");
+        statement.setInt(1, term);
+        statement.setInt(2, week);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            Map<String, String> res = new HashMap<>();
+            res.put("id", resultSet.getString("id"));
+            res.put("studentID", resultSet.getString("studentId"));
+
+            forms.add(res);
+        }
+
+        return forms;
     }
 
     @Override

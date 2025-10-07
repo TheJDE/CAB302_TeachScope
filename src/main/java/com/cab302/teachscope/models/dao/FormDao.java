@@ -5,6 +5,7 @@ import com.cab302.teachscope.models.entities.WeeklyForm;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public interface FormDao {
     void create(WeeklyForm form) throws SQLException;
@@ -16,6 +17,8 @@ public interface FormDao {
     List<WeeklyForm> findAll() throws SQLException;
 
     List<WeeklyForm> findAllForStudent(String studentId) throws SQLException;
+
+    List<Map<String, String>> findAllForGivenWeek(int term, int week) throws SQLException;
 
     void update(WeeklyForm form) throws SQLException;
 

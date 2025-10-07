@@ -7,10 +7,7 @@ import com.cab302.teachscope.models.entities.Student;
 
 import java.sql.SQLException;
 import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Service class for weekly forms.
@@ -172,6 +169,30 @@ public class FormService {
     }
 
     /**
+     * Gets all forms for a given week and term
+     * @param term The term to query
+     * @param week The week to query
+     * @return A list of maps containing a form ID and a student ID
+     */
+    public List<Map<String, String>> getAllFormsForGivenWeek(int term, int week) {
+        // Term
+        if (term < 1 || term > 4) {
+            throw new IllegalArgumentException("Term must be between 1-4");
+        }
+
+        // Week
+        if (week < 1 || week > 10) {
+            throw new IllegalArgumentException("Week must be between 1-10");
+        }
+
+        try {
+            return formDao.findAllForGivenWeek(term, week);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Updates form values.
      * @param form Values to replace existing form with.
      */
@@ -220,8 +241,8 @@ public class FormService {
         }
 
         // Week
-        if (form.getWeek() < 1 || form.getWeek() > 12) {
-            throw new IllegalArgumentException("Week must be between 1-12");
+        if (form.getWeek() < 1 || form.getWeek() > 10) {
+            throw new IllegalArgumentException("Week must be between 1-10");
         }
 
         // Attendance Days

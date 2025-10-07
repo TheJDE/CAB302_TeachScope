@@ -38,6 +38,9 @@ public class MockFormDao implements FormDao {
     }
 
     @Override
+    public List<Map<String, String>> findAllForGivenWeek(int term, int week) { return null; } // CHANGE
+
+    @Override
     public void update(WeeklyForm form) {
         forms.replace(form.getId(), form);
     }
