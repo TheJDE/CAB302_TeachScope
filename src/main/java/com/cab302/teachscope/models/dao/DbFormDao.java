@@ -91,7 +91,34 @@ public class DbFormDao implements FormDao {
 
     @Override
     public WeeklyForm findById(String id) throws SQLException {
-        // TODO: implement fetch by id
+        String sql = "SELECT * FROM weekly_forms WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, id);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                return new WeeklyForm(
+                        Optional.ofNullable(rs.getString("id")),
+                        rs.getString("studentID"),
+                        rs.getInt("term"),
+                        rs.getInt("week"),
+                        rs.getInt("attendanceDays"),
+                        rs.getInt("daysLate"),
+                        rs.getInt("attentionScore"),
+                        rs.getBoolean("homeworkDone"),
+                        rs.getInt("participationScore"),
+                        rs.getInt("literacyScore"),
+                        rs.getInt("numeracyScore"),
+                        rs.getInt("understandingScore"),
+                        rs.getInt("behaviourScore"),
+                        rs.getInt("peerInteractionScore"),
+                        rs.getInt("respectForRulesScore"),
+                        rs.getString("emotionalState"),
+                        rs.getString("teacherConcerns")
+                );
+            }
+        }
         return null;
     }
 

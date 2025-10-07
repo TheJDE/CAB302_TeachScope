@@ -10,7 +10,7 @@
 <?import java.lang.String?>
 
 <HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="0"
-      fx:controller="com.cab302.teachscope.controllers.StudentController" stylesheets="@../css/styles.css">
+      fx:controller="com.cab302.teachscope.controllers.FormController" stylesheets="@../css/styles.css">
 
     <!-- sidebar menu -->
     <VBox spacing="20" style="-fx-background-color: #E5E5E5;" prefWidth="220">
@@ -52,7 +52,6 @@
         </HBox>
 
 
-        <!-- form for generate pdf -->
         <VBox spacing="20" style="-fx-background-color: #f7f7f7;" HBox.hgrow="ALWAYS">
             <padding>
                 <Insets top="20" right="40" bottom="20" left="40"/>
@@ -62,7 +61,7 @@
             <HBox spacing="14">
                 <VBox spacing="7">
                     <Label text="Term"/>
-                    <ComboBox fx:id="term" promptText="Select an option">
+                    <ComboBox fx:id="timelineTerm" promptText="Select an option">
                         <items>
                             <FXCollections fx:factory="observableArrayList">
                                 <String fx:value="Term 1"/>
@@ -75,7 +74,7 @@
                 </VBox>
                 <VBox spacing="7">
                     <Label text="Week"/>
-                    <ComboBox fx:id="week" promptText="Select an option">
+                    <ComboBox fx:id="timelineWeek" promptText="Select an option">
                         <items>
                             <FXCollections fx:factory="observableArrayList">
                                 <String fx:value="Week 1"/>
@@ -95,7 +94,7 @@
             </HBox>
 
             <HBox alignment="CENTER_LEFT" spacing="30">
-                <Button text="View Students" fx:id="viewStudents"/>
+                <Button text="View Students" fx:id="viewStudents" onAction="#viewTimelineStudents"/>
             </HBox>
         </VBox>
         <TableView fx:id="timelineTable" prefHeight="500" styleClass="table-striped">
