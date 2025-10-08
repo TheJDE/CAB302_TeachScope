@@ -6,6 +6,9 @@ import com.cab302.teachscope.models.services.FormService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -689,6 +692,41 @@ public class FormTest {
     @Test
     void getInvalidFormId() {
         assertNull(formService.getForm(id));
+    }
+
+    @Test
+    void findGivenWeekValid() {
+        formService.createForm(
+                StudentId,
+                term,
+                week,
+                attendanceDays,
+                daysLate,
+                attentionScore,
+                homeworkDone,
+                participationScore,
+                literacyScore,
+                numeracyScore,
+                understandingScore,
+                behaviourScore,
+                peerInteractionScore,
+                respectForRulesScore,
+                emotionalState,
+                teacherConcerns
+        );
+
+        String formID = formService.getAllForms().getFirst().getId();
+
+        List<Map<String, String>> correctValue = List.of(
+                Map.of("id", formID, "studentID", StudentId)
+        );
+
+        assertEquals(correctValue, formService.getAllFormsForGivenWeek(1, 1));
+    }
+
+    @Test
+    void findGivenWeekEmpty() {
+        assertTrue(formService.getAllFormsForGivenWeek(1, 1).isEmpty());
     }
 
     @Test

@@ -38,7 +38,18 @@ public class MockFormDao implements FormDao {
     }
 
     @Override
-    public List<Map<String, String>> findAllForGivenWeek(int term, int week) { return null; } // CHANGE
+    public List<Map<String, String>> findAllForGivenWeek(int term, int week) {
+        List<Map<String, String>> values = new ArrayList<>();
+
+        for (Map.Entry<String, WeeklyForm> item : forms.entrySet()) {
+            Map<String, String> res = new HashMap<>();
+            res.put("id", item.getValue().getId());
+            res.put("studentID", item.getValue().getStudentId());
+            values.add(res);
+        }
+
+        return values;
+    }
 
     @Override
     public void update(WeeklyForm form) {
