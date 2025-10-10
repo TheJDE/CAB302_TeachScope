@@ -250,17 +250,16 @@ public class FormController {
                     String formId = rowData.get("formId");
                     String status = rowData.getOrDefault("status", "Incomplete");
 
-                    link.setText("Term " + term + " - Week " + week);
 
-                    //only make it clickable if form exists
+
                     if ("Completed".equals(status) && formId != null && !formId.isEmpty()) {
+                        // completed means open existing form
+                        link.setText("View form for Term " + term + " - Week " + week);
                         link.setOnAction(e -> openFormFromTimeline(rowData));
-                        link.setDisable(false);
-                        link.setStyle("-fx-opacity: 1.0;");
                     } else {
-                        link.setOnAction(null);
-                        link.setDisable(true);
-                        link.setStyle("-fx-opacity: 0.4;");
+                        // incomplete means open new form
+                        link.setText("Create form for Term " + term + " - Week " + week);
+                        link.setOnAction(e -> openNewFormFromTimeline(rowData));
                     }
 
                     setGraphic(link);
@@ -270,6 +269,29 @@ public class FormController {
 
         //initially empty
         timelineTable.setItems(FXCollections.observableArrayList());
+    }
+
+    private void openNewFormFromTimeline(Map<String, String> formData) {
+        try {
+            String studentIdFromTimeline = formData.get("studentId");
+            String studentNameFromTimeline = formData.getOrDefault("studentName", "Student");
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addnewform.fxml"));
+            Parent root = loader.load();
+
+            FormController controller = loader.getController();
+            controller.setStudent(studentIdFromTimeline, studentNameFromTimeline);
+            controller.setEditingForm(null);
+
+            Stage stage = (Stage) timelineTable.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Add New Form - " + studentNameFromTimeline);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Navigation Error", "Could not open new form page: " + e.getMessage());
+        }
     }
 
     /**
@@ -343,9 +365,10 @@ public class FormController {
      * @param form The form to edit.
      */
     public void setEditingForm(WeeklyForm form) {
-        this.editingForm = Optional.of(form);
+        this.editingForm = Optional.ofNullable(form); // allow null
         populateFormIfEditing();
     }
+
 
 
     /**
