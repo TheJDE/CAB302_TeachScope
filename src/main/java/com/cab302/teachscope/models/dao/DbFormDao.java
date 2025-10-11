@@ -4,21 +4,29 @@ import com.cab302.teachscope.DatabaseConnection;
 import com.cab302.teachscope.models.entities.WeeklyForm;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
-
+/**
+ * Database implementation of the Forms data access object
+ */
 public class DbFormDao implements FormDao {
 
+    /**
+     * Database connection
+     */
     private final Connection connection;
 
+    /**
+     * Constructor
+     */
     public DbFormDao() {
         connection = DatabaseConnection.getInstance();
         createTable();
     }
 
+    /**
+     * Creates a new weekly_forms table in the database if it doesn't exist.
+     */
     private void createTable() {
         try (Statement stmt = connection.createStatement()) {
             String sql = "CREATE TABLE IF NOT EXISTS weekly_forms (" +
@@ -47,6 +55,11 @@ public class DbFormDao implements FormDao {
         }
     }
 
+    /**
+     * Adds a new form to the database
+     * @param form The form to add
+     * @throws SQLException On misformed query
+     */
     @Override
     public void create(WeeklyForm form) throws SQLException {
         String sql = "INSERT INTO weekly_forms (" +
@@ -92,12 +105,54 @@ public class DbFormDao implements FormDao {
 
     }
 
+    /**
+     * Finds a single form from the database
+     * @param id ID of the form to find
+     * @return The form matching the ID
+     * @throws SQLException On misformed query
+     */
     @Override
     public WeeklyForm findById(String id) throws SQLException {
-        // TODO: implement fetch by id
+        String sql = "SELECT * FROM weekly_forms WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, id);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                return new WeeklyForm(
+                        Optional.ofNullable(rs.getString("id")),
+                        rs.getString("studentID"),
+                        rs.getInt("term"),
+                        rs.getInt("week"),
+                        rs.getInt("attendanceDays"),
+                        rs.getInt("daysLate"),
+                        rs.getInt("attentionScore"),
+                        rs.getBoolean("homeworkDone"),
+                        rs.getInt("participationScore"),
+                        rs.getInt("literacyScore"),
+                        rs.getInt("numeracyScore"),
+                        rs.getInt("understandingScore"),
+                        rs.getInt("behaviourScore"),
+                        rs.getInt("peerInteractionScore"),
+                        rs.getInt("respectForRulesScore"),
+                        rs.getString("emotionalState"),
+                        rs.getString("teacherConcerns")
+                );
+            }
+        }
         return null;
     }
 
+    /**
+     * Finds a list of forms matching a given student and week range
+     * @param studentId Student ID to match
+     * @param term Term to search
+     * @param fromWeek Week to search from, inclusive
+     * @param toWeek Week to search to, inclusive
+     * @return List of forms
+     * @throws SQLException On misformed query
+     */
     @Override
     public List<WeeklyForm> findByStudentAndRange(String studentId, int term, int fromWeek, int toWeek) throws SQLException {    List<WeeklyForm> forms = new ArrayList<>();
         String sql = "SELECT * FROM weekly_forms " +
@@ -156,6 +211,12 @@ public class DbFormDao implements FormDao {
         return forms;
     }
 
+    /**
+     * Finds all forms for given student
+     * @param studentId Student ID to match
+     * @return List of all forms for student
+     * @throws SQLException On misformed query
+     */
     @Override
     public List<WeeklyForm> findAllForStudent(String studentId) throws SQLException {
         List<WeeklyForm> forms = new ArrayList<>();
@@ -208,12 +269,50 @@ public class DbFormDao implements FormDao {
         return forms;
     }
 
+    /**
+     * Gets all forms in the database
+     * @return List of all forms
+     * @throws SQLException On misformed query
+     */
     @Override
     public List<WeeklyForm> findAll() throws SQLException {
         // TODO: implement fetch all
         return new ArrayList<>();
     }
 
+    /**
+     * Gets all forms in database for given term/week
+     * @param term Term to search
+     * @param week Week to search
+     * @return List of forms matching week
+     * @throws SQLException On misformed query
+     */
+    @Override
+    public List<Map<String, String>> findAllForGivenWeek(int term, int week) throws SQLException {
+        List<Map<String, String>> forms = new ArrayList<>();
+
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM weekly_forms WHERE term = ? AND week = ?");
+        statement.setInt(1, term);
+        statement.setInt(2, week);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            Map<String, String> res = new HashMap<>();
+            res.put("id", resultSet.getString("id"));
+            res.put("studentID", resultSet.getString("studentId"));
+
+            forms.add(res);
+        }
+
+        return forms;
+    }
+
+    /**
+     * Updated a specific form in the database
+     * @param form Form to update
+     * @throws SQLException On misformed query
+     */
     @Override
     public void update(WeeklyForm form) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("UPDATE weekly_forms SET " +
@@ -257,6 +356,11 @@ public class DbFormDao implements FormDao {
         statement.executeUpdate();
     }
 
+    /**
+     * Delete a form from the database
+     * @param id ID of form to delete
+     * @throws SQLException On misformed query
+     */
     @Override
     public void delete(String id) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("DELETE FROM weekly_forms WHERE id = ?");

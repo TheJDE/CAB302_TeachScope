@@ -1,8 +1,11 @@
 package com.cab302.teachscope.controllers;
 
 import com.cab302.teachscope.models.dao.DbFormDao;
+import com.cab302.teachscope.models.entities.Student;
 import com.cab302.teachscope.models.services.FormService;
 import com.cab302.teachscope.models.entities.WeeklyForm;
+import com.cab302.teachscope.models.dao.DbStudentDao;
+import com.cab302.teachscope.models.services.StudentService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -17,6 +20,9 @@ import javafx.collections.FXCollections;
 import java.io.IOException;
 import com.cab302.teachscope.util.NavigationUtils;
 import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.HashMap;
+
 
 /**
  * Controller for managing weekly forms for a student.
@@ -36,20 +42,30 @@ public class FormController {
 
     @FXML private TableColumn<WeeklyForm, Void> actionsColTerm1, actionsColTerm2, actionsColTerm3, actionsColTerm4;
 
+    @FXML
+    private TableView<Map<String, String>> timelineTable;
+    @FXML
+    private TableColumn<Map<String, String>, String> nameColumn;
+    @FXML
+    private TableColumn<Map<String, String>, String> statusColumn;
+    @FXML
+    private TableColumn<Map<String, String>, String> formColumn;
+
     @FXML private ComboBox<String> term, week, attendancedays, dayslate, attention,
             participation, literacy, numeracy, understanding, behaviour,
-            peerInteraction, respectRules;
+            peerInteraction, respectRules, timelineTerm, timelineWeek;
 
     @FXML private TextArea concernsText;
     @FXML private RadioButton homeworkNo, homeworkYes, happyRadio, neutralRadio, withdrawnRadio, anxiousRadio;
     @FXML private ToggleGroup homeworkGroup, emotionalGroup;
 
-    @FXML private Button newFormButton, saveFormButton, logoutButton, studentNav, timelineButton, generatePDF, addNewFormButton;
-    @FXML private Label weeklyFormsTitle, formTitle;
+    @FXML private Button newFormButton, saveFormButton, logoutButton, studentNav, timelineButton, generatePDF, addNewFormButton, weeklyformsButton, viewStudents;
+    @FXML private Label weeklyFormsTitle, formTitle, PDFTitle;
 
     @FXML private Hyperlink deleteFormLink;
 
     private final FormService formService = new FormService(new DbFormDao());
+    private final StudentService studentService = new StudentService(new DbStudentDao());
     private String studentId;
     private String studentName;
     private Optional<WeeklyForm> editingForm = Optional.empty();
@@ -88,10 +104,24 @@ public class FormController {
 
 
     @FXML
-    protected void generatePDFClick() {
-        Stage stage = (Stage) generatePDF.getScene().getWindow();
-        try { NavigationUtils.navigateTo(stage, "generatepdf", "Generate PDF"); }
-        catch (IOException e) { showAlert("Navigation Error", "Cannot open timeline."); }
+    protected void weeklyFormsClick() throws IOException {
+        // go to weeklyforms.fxml
+        Stage stage = (Stage) weeklyformsButton.getScene().getWindow();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/weeklyforms.fxml"));
+            Parent root = loader.load();
+
+            FormController controller = loader.getController();
+            controller.setStudent(studentId, studentName);
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("View Weekly Forms");
+            stage.show();
+
+        } catch (IllegalArgumentException e) {
+            showAlert("Error", e.getMessage());
+        }
     }
 
     /**
@@ -116,6 +146,25 @@ public class FormController {
         }
     }
 
+    @FXML
+    protected void generatePDFClick() {
+        Stage stage = (Stage) generatePDF.getScene().getWindow();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/generatepdf.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller and pass the student info
+            FormController controller = loader.getController();
+            controller.setStudent(studentId, studentName);
+
+            stage.setTitle("Generate PDF");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            showAlert("Navigation Error", "Could not open the new form page.");
+        }
+    }
+
 
     /**
      * Initializes the controller after the FXML has been loaded.
@@ -127,6 +176,8 @@ public class FormController {
         setupTable(formsTableTerm2, weekColTerm2, termColTerm2, actionsColTerm2);
         setupTable(formsTableTerm3, weekColTerm3, termColTerm3, actionsColTerm3);
         setupTable(formsTableTerm4, weekColTerm4, termColTerm4, actionsColTerm4);
+        setupTimelineTable(timelineTable, nameColumn, statusColumn, formColumn);
+
         populateFormIfEditing();
 
     }
@@ -168,6 +219,120 @@ public class FormController {
     }
 
 
+    private void setupTimelineTable(TableView<Map<String, String>> timelineTable,
+                                    TableColumn<Map<String, String>, String> nameColumn,
+                                    TableColumn<Map<String, String>, String> statusColumn,
+                                    TableColumn<Map<String, String>, String> formColumn) {
+        if (timelineTable == null) return;
+
+        //display student name
+        nameColumn.setCellValueFactory(cell ->
+                new ReadOnlyObjectWrapper<>(cell.getValue().getOrDefault("studentName", "Unknown")));
+
+        //display completion status
+        statusColumn.setCellValueFactory(cell ->
+                new ReadOnlyObjectWrapper<>(cell.getValue().getOrDefault("status", "Incomplete")));
+
+        //create clickable hyperlink for form column
+        formColumn.setCellFactory(col -> new TableCell<Map<String, String>, String>() {
+            private final Hyperlink link = new Hyperlink();
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                } else {
+                    Map<String, String> rowData = getTableView().getItems().get(getIndex());
+                    String term = rowData.getOrDefault("term", "?");
+                    String week = rowData.getOrDefault("week", "?");
+                    String formId = rowData.get("formId");
+                    String status = rowData.getOrDefault("status", "Incomplete");
+
+
+
+                    if ("Completed".equals(status) && formId != null && !formId.isEmpty()) {
+                        // completed means open existing form
+                        link.setText("View form for Term " + term + " - Week " + week);
+                        link.setOnAction(e -> openFormFromTimeline(rowData));
+                    } else {
+                        // incomplete means open new form
+                        link.setText("Create form for Term " + term + " - Week " + week);
+                        link.setOnAction(e -> openNewFormFromTimeline(rowData));
+                    }
+
+                    setGraphic(link);
+                }
+            }
+        });
+
+        //initially empty
+        timelineTable.setItems(FXCollections.observableArrayList());
+    }
+
+    private void openNewFormFromTimeline(Map<String, String> formData) {
+        try {
+            String studentIdFromTimeline = formData.get("studentId");
+            String studentNameFromTimeline = formData.getOrDefault("studentName", "Student");
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addnewform.fxml"));
+            Parent root = loader.load();
+
+            FormController controller = loader.getController();
+            controller.setStudent(studentIdFromTimeline, studentNameFromTimeline);
+            controller.setEditingForm(null);
+
+            Stage stage = (Stage) timelineTable.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Add New Form - " + studentNameFromTimeline);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Navigation Error", "Could not open new form page: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Opens the form editor from the timeline view
+     */
+    private void openFormFromTimeline(Map<String, String> formData) {
+        try {
+            String formId = formData.get("formId");
+            String studentIdFromTimeline = formData.get("studentId");
+            String studentNameFromTimeline = formData.getOrDefault("studentName", "Student");
+
+            if (formId == null || formId.isEmpty()) {
+                showAlert("Error", "Form ID not found");
+                return;
+            }
+
+            //fetch the actual form using the ID
+            WeeklyForm form = formService.getForm(formId);
+
+            if (form == null) {
+                showAlert("Error", "Form not found");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addnewform.fxml"));
+            Parent root = loader.load();
+
+            FormController controller = loader.getController();
+            controller.setStudent(studentIdFromTimeline, studentNameFromTimeline);
+            controller.setEditingForm(form);
+
+            Stage stage = (Stage) timelineTable.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Edit Form - " + studentNameFromTimeline);
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Navigation Error", "Could not open form: " + e.getMessage());
+        }
+    }
 
     /**
      * Opens the editor page for the specified form.
@@ -200,9 +365,10 @@ public class FormController {
      * @param form The form to edit.
      */
     public void setEditingForm(WeeklyForm form) {
-        this.editingForm = Optional.of(form);
+        this.editingForm = Optional.ofNullable(form); // allow null
         populateFormIfEditing();
     }
+
 
 
     /**
@@ -246,6 +412,10 @@ public class FormController {
         }
         if (formTitle != null) {
             formTitle.setText("Add New Form (" + studentName + ")");
+        }
+
+        if(PDFTitle != null) {
+            PDFTitle.setText("Generate PDF for " + studentName);
         }
 
         if (formsTableTerm1 != null && formsTableTerm2 != null &&
@@ -296,6 +466,62 @@ public class FormController {
             if (deleteFormLink != null) {
                 deleteFormLink.setVisible(false); // hide when adding new form
             }
+        }
+    }
+
+    /**
+     * Timeline Page
+     */
+
+    @FXML
+    protected void viewTimelineStudents() {
+        try {
+            if (timelineTerm.getSelectionModel().getSelectedIndex() < 0 ||
+                    timelineWeek.getSelectionModel().getSelectedIndex() < 0) {
+                showAlert("Selection Error", "Please select both term and week");
+                return;
+            }
+
+            int termTimeline = timelineTerm.getSelectionModel().getSelectedIndex() + 1;
+            int weekTimeline = timelineWeek.getSelectionModel().getSelectedIndex() + 1;
+
+            //this gets the forms that exist for this week
+            var formsForWeek = formService.getAllFormsForGivenWeek(termTimeline, weekTimeline);
+
+            //create a map of studentId to formId for quick lookup
+            Map<String, String> formIdMap = new HashMap<>();
+            for (Map<String, String> form : formsForWeek) {
+                formIdMap.put(form.get("studentID"), form.get("id"));
+            }
+
+            //get all students using StudentService
+            var allStudents = studentService.getAllStudents();
+
+            //build the timeline data
+            var timelineData = allStudents.stream().map(student -> {
+                Map<String, String> row = new HashMap<>();
+                row.put("studentId", student.getId());
+                row.put("studentName", student.getFirstName() + " " + student.getLastName());
+                row.put("term", String.valueOf(termTimeline));
+                row.put("week", String.valueOf(weekTimeline));
+
+                String formId = formIdMap.get(student.getId());
+                if (formId != null && !formId.isEmpty()) {
+                    row.put("status", "Completed");
+                    row.put("formId", formId);
+                } else {
+                    row.put("status", "Incomplete");
+                    row.put("formId", "");
+                }
+
+                return row;
+            }).collect(Collectors.toList());
+
+            timelineTable.setItems(FXCollections.observableArrayList(timelineData));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Timeline Error", "Error loading timeline: " + e.getMessage());
         }
     }
 

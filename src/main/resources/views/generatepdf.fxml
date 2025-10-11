@@ -49,6 +49,12 @@
                     <Insets top="20" left="30"/>
                 </padding>
             </Label>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button fx:id="weeklyformsButton" text="Return to Weekly Forms" styleClass="" onAction="#weeklyFormsClick">
+                <HBox.margin>
+                    <Insets top="10" right="15"/>
+                </HBox.margin>
+            </Button>
         </HBox>
 
 
