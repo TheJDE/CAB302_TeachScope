@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 import jakarta.mail.*;
+import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
@@ -16,8 +17,8 @@ import java.util.Properties;
  */
 public class PasswordUtils {
 
-    private final String tsEmailAddress = "teachscope.serviceteam@gmail.com";
-    private final String tsEmailPass = "lafs rwgq pcjt weyt";
+    private static final String tsEmailAddress = "teachscope.serviceteam@gmail.com";
+    private static final String tsEmailPass = "lafs rwgq pcjt weyt";
 
     private static final SecureRandom random = new SecureRandom();
 
@@ -67,42 +68,48 @@ public class PasswordUtils {
         }
     }
 
-    public void sendResetCode(String userEmail, String resetCode) {
-        // 1. Setup mail server properties
+    public static void sendResetCode(String userEmail, String resetCode) throws MessagingException {
+        if (userEmail == null || userEmail.isEmpty()) {
+            throw new IllegalArgumentException("Email address cannot be null or empty.");
+        }
+
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
 
-        // 2. Create session
         Session session = Session.getInstance(props, new Authenticator() {
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(tsEmailAddress, tsEmailPass);
             }
         });
-        try {
-            // 3. Build message
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(tsEmailAddress));
-            message.setRecipients(
-                    Message.RecipientType.TO,
-                    InternetAddress.parse(userEmail)
-            );
-            message.setSubject("Your Password Reset Code");
-            message.setText("Your reset code is: " + resetCode );
 
-            // 4. Send
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(tsEmailAddress));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(userEmail));
+            message.setSubject("Your Password Reset Code");
+            message.setText("Your password reset code is: " + resetCode);
+
             Transport.send(message);
 
-            System.out.println("resetCode sent successfully to " + tsEmailAddress);
+            System.out.println("Reset code sent successfully to " + userEmail);
 
-        } catch (MessagingException e) {
-            e.printStackTrace();
+        } catch (AddressException ae) {
+            System.err.println("Invalid email address: " + userEmail);
+            throw ae;
+        } catch (AuthenticationFailedException afe) {
+            System.err.println("SMTP authentication failed. Check your Gmail App Password.");
+            throw afe;
+        } catch (MessagingException me) {
+            System.err.println("Failed to send email to " + userEmail);
+            me.printStackTrace();
+            throw me;
         }
-
     }
-
+ 
 
 
 }

@@ -2,6 +2,7 @@ package com.cab302.teachscope.models.dao;
 
 import com.cab302.teachscope.models.entities.User;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,11 @@ public class MockUserDao implements UserDao {
      */
     @Override
     public void updateUserPassword(User user) {
+
+    }
+
+    @Override
+    public void updateUserResetCode(User user) throws SQLException {
 
     }
 

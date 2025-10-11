@@ -10,7 +10,7 @@
 
 
 <HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="0"
-      fx:controller="com.cab302.teachscope.controllers.LoginController" stylesheets="@../css/styles.css">
+      fx:controller="com.cab302.teachscope.controllers.ResetCodeController" stylesheets="@../css/styles.css">
 
     <!-- login form -->
     <VBox alignment="CENTER" spacing="15.0" prefWidth="400" style="-fx-background-color: white;">
@@ -25,17 +25,29 @@
             </image>
         </ImageView>
 
+
+
+
         <!-- welcome text -->
-        <Label text="Please Enter New Password" style="-fx-font-size: 25px; -fx-font-weight: bold;"/>
+        <Label text="Send Reset Code" style="-fx-font-size: 25px; -fx-font-weight: bold;"/>
 
         <!-- email -->
-        <TextField promptText="New Password" styleClass="form-control"/>
+        <TextField fx:id="emailField"  promptText="Email" styleClass="form-control"/>
+
+        <!-- send reset code button -->
+        <Button fx:id="sendResetCodeButton" text="Send Reset Code" styleClass="" maxWidth="Infinity" onAction="#onSendResetCodeClick"/>
+
+        <!-- errorLabel -->
+        <Label fx:id="errorLabel" text="text" style="-fx-font-size: 10px; -fx-font-weight: bold;"/>
 
         <!-- password -->
-        <PasswordField promptText="Please Confirm New Password" styleClass="form-control"/>
+        <PasswordField promptText="Enter reset code" styleClass="form-control"/>
 
         <!-- reset password button -->
         <Button fx:id="resetPasswordButton" text="Reset Password" styleClass="" maxWidth="Infinity" onAction="#onResetPasswordClick"/>
+
+
+
 
     </VBox>
 

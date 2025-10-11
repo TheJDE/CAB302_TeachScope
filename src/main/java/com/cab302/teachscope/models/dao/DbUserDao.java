@@ -68,6 +68,18 @@ public class DbUserDao implements UserDao{
     }
 
     /**
+     * Updates existing user password in the database
+     * @param user - the user to update
+     */
+    @Override
+    public void updateUserResetCode(User user) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("UPDATE users SET resetCode = ? WHERE email = ?");
+        statement.setString(1, user.getResetCodeHash());
+        statement.setString(2, user.getEmail());
+        statement.executeUpdate();
+    }
+
+    /**
      * Deletes a user from the database
      * @param user - the user to delete
      */
