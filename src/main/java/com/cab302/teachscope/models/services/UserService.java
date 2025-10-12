@@ -95,4 +95,26 @@ public class UserService {
         }
     }
 
+    /**
+     * Method to log in to the system, successful if no exceptions thrown.
+     * @param email The user's email.
+     * @param resetCode The user's resetCode.
+     * @throws IllegalArgumentException If arguments are invalid or if user doesn't exist.
+     */
+    public void validateResetCode(String email, String resetCode) throws IllegalArgumentException {
+        try {
+            User user = userDAO.getUser(email);
+
+            if (resetCode == null) {
+                throw new IllegalArgumentException("No resetCode entered");
+            }
+
+            if (!user.checkResetCodeMatches(resetCode)) {
+                throw new IllegalArgumentException("Incorrect resetCode");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

@@ -34,6 +34,12 @@ public class ResetCodeController {
     private Button resetPasswordButton;
 
     /**
+     * Reset Code text box.
+     */
+    @FXML
+    private TextField resetCodeField;
+
+    /**
      * Error label.
      */
     @FXML
@@ -93,12 +99,28 @@ public class ResetCodeController {
         }
     }
 
-
     @FXML
     protected void onResetPasswordClick() throws IOException {
-        Stage stage = (Stage) resetPasswordButton.getScene().getWindow();
+        String email = emailField.getText().trim();
+        String resetCodeEntered = resetCodeField.getText().trim();
 
-        NavigationUtils.navigateTo(stage, "forgotpassword", "Forgot Password");
+        if (email.isEmpty() || resetCodeEntered.isEmpty()) {
+            errorLabel.setText("Please enter both email and reset code.");
+            return;
+        }
+
+        try {
+            userService.validateResetCode(email, resetCodeEntered);
+
+            Stage stage = (Stage) resetPasswordButton.getScene().getWindow();
+            NavigationUtils.navigateTo(stage, "forgotpassword", "Set New Password");
+
+        } catch (IllegalArgumentException ex) {
+            errorLabel.setText(ex.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            errorLabel.setText("An unexpected error occurred. Please try again.");
+        }
     }
 
 }

@@ -40,8 +40,8 @@
         <!-- errorLabel -->
         <Label fx:id="errorLabel" text="text" style="-fx-font-size: 10px; -fx-font-weight: bold;"/>
 
-        <!-- password -->
-        <PasswordField promptText="Enter reset code" styleClass="form-control"/>
+        <!-- reset code -->
+        <PasswordField fx:id="resetCodeField" promptText="Enter reset code" styleClass="form-control"/>
 
         <!-- reset password button -->
         <Button fx:id="resetPasswordButton" text="Reset Password" styleClass="" maxWidth="Infinity" onAction="#onResetPasswordClick"/>
