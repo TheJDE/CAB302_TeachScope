@@ -5,6 +5,9 @@ import com.cab302.teachscope.util.NavigationUtils;
 import com.cab302.teachscope.util.PasswordUtils;
 import jakarta.mail.MessagingException;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Hyperlink;
@@ -51,70 +54,53 @@ public class ResetCodeController {
     private final UserService userService = new UserService(new DbUserDao());
 
     /**
-     * Method to log the user in. Sets error label to relevant values on exceptions.
-     * @throws IOException On failed redirect.
+     * Method to trigger UserService.sendPasswordResetCode, on the click of a button
+     * @throws IllegalArgumentException If arguments are invalid or if user doesn't exist.
      */
-
     @FXML
-    protected void onSendResetCodeClick() throws IOException {
-
-        String userEmail = emailField.getText().trim();
-
-        if (userEmail.isEmpty()) {
+    protected void onSendResetCodeClick() {
+        String email = emailField.getText().trim();
+        if (email.isEmpty()) {
             errorLabel.setText("Please enter your email address.");
             return;
         }
         try {
-            String resetCode = PasswordUtils.generatePasswordResetCode(6);
-            String hashedResetCode = PasswordUtils.hashResetCode(resetCode);
-
-            DbUserDao userDao = new DbUserDao();
-            User user = userDao.getUser(userEmail);
-
-            if (user != null) {
-                user.setResetCodeHash(hashedResetCode);
-                userDao.updateUserResetCode(user);
-
-                PasswordUtils.sendResetCode(userEmail, resetCode);
-
-                errorLabel.setText("A reset code has been sent to your email.");
-            } else {
-                errorLabel.setText("No user found with that email.");
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            errorLabel.setText("Database error. Please try again.");
+            userService.sendPasswordResetCode(email);
+            errorLabel.setText("Reset code sent to your email!");
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            errorLabel.setText("Invalid email address.");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            errorLabel.setText("Failed to send email. Check the address or your SMTP settings.");
+            errorLabel.setText(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace(); // this will print the full stack trace
-            System.out.println("Exception type: " + e.getClass().getName());
-            System.out.println("Exception message: " + e.getMessage());
-            errorLabel.setText("An unexpected error occurred. Please try again.");
+            errorLabel.setText("Something went wrong. Please try again.");
+            e.printStackTrace();
         }
     }
 
+    /**
+     * Method to trigger UserService.validateResetCode, on the click of a button
+     * @throws IllegalArgumentException If arguments are invalid or if user doesn't exist.
+     */
     @FXML
     protected void onResetPasswordClick() throws IOException {
         String email = emailField.getText().trim();
         String resetCodeEntered = resetCodeField.getText().trim();
-
         if (email.isEmpty() || resetCodeEntered.isEmpty()) {
             errorLabel.setText("Please enter both email and reset code.");
             return;
         }
-
         try {
+            // Verify reset code using UserService
             userService.validateResetCode(email, resetCodeEntered);
-
+            // If valid, navigate to NewPassword page, PASSING the email entered
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/newpassword.fxml"));
+            Parent root = loader.load();
+            // Get the NewPasswordController and pass the email
+            NewPasswordController controller = loader.getController();
+            controller.setUserEmail(email);
+            // Switch scene
             Stage stage = (Stage) resetPasswordButton.getScene().getWindow();
-            NavigationUtils.navigateTo(stage, "forgotpassword", "Set New Password");
-
+            stage.setScene(new Scene(root));
+            stage.setTitle("Set New Password");
+            stage.show();
         } catch (IllegalArgumentException ex) {
             errorLabel.setText(ex.getMessage());
         } catch (Exception e) {

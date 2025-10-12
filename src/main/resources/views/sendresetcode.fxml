@@ -25,9 +25,6 @@
             </image>
         </ImageView>
 
-
-
-
         <!-- welcome text -->
         <Label text="Send Reset Code" style="-fx-font-size: 25px; -fx-font-weight: bold;"/>
 
@@ -45,10 +42,6 @@
 
         <!-- reset password button -->
         <Button fx:id="resetPasswordButton" text="Reset Password" styleClass="" maxWidth="Infinity" onAction="#onResetPasswordClick"/>
-
-
-
-
     </VBox>
 
     <!-- image -->
