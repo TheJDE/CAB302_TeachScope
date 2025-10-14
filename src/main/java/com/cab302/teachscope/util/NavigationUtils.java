@@ -26,7 +26,7 @@ public class NavigationUtils {
         Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.setScene(scene);
-        stage.setMaximized(true);
+        stage.setMaximized(false);
         stage.setTitle(title);
         stage.show();
     }

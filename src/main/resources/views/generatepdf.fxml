@@ -9,8 +9,10 @@
 <?import javafx.scene.control.ComboBox?>
 <?import java.lang.String?>
 
-<HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="0"
-      fx:controller="com.cab302.teachscope.controllers.FormController" stylesheets="@../css/styles.css">
+<StackPane xmlns:fx="http://javafx.com/fxml" alignment="CENTER"
+           fx:controller="com.cab302.teachscope.controllers.LoginController"
+           stylesheets="@../css/styles.css">
+<HBox alignment="CENTER" spacing="0">
 
     <!-- sidebar menu -->
     <VBox spacing="20" style="-fx-background-color: #E5E5E5;" prefWidth="220">
@@ -126,3 +128,4 @@
     </VBox>
 
 </HBox>
+</StackPane>
