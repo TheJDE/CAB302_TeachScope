@@ -74,10 +74,12 @@
                 <VBox spacing="5">
                     <Label text="First Name"/>
                     <TextField fx:id="firstName" promptText="First Name"/>
+                    <Label fx:id="firstNameError" textFill="red" style="-fx-font-size: 10px;"/>
                 </VBox>
                 <VBox spacing="5">
                     <Label text="Last Name"/>
                     <TextField fx:id="lastName" promptText="Last Name"/>
+                    <Label fx:id="lastNameError" textFill="red" style="-fx-font-size: 10px;"/>
                 </VBox>
                 <VBox spacing="5">
                     <Label text="Gender"/>
@@ -89,6 +91,7 @@
                             </FXCollections>
                         </items>
                     </ComboBox>
+                    <Label fx:id="genderError" textFill="red" style="-fx-font-size: 10px;"/>
                 </VBox>
             </HBox>
 
@@ -109,10 +112,12 @@
                             </FXCollections>
                         </items>
                     </ComboBox>
+                    <Label fx:id="gradeLevelError" textFill="red" style="-fx-font-size: 10px;"/>
                 </VBox>
                 <VBox spacing="5">
                     <Label text="Class"/>
                     <TextField fx:id="classField" promptText="Class"/>
+                    <Label fx:id="classError" textFill="red" style="-fx-font-size: 10px;"/>
                 </VBox>
             </HBox>
 
@@ -128,6 +133,7 @@
                             </FXCollections>
                         </items>
                     </ComboBox>
+                    <Label fx:id="statusError" textFill="red" style="-fx-font-size: 10px;"/>
                 </VBox>
             </HBox>
 

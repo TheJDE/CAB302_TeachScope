@@ -72,9 +72,21 @@ public class StudentController {
     @FXML
     private Hyperlink deleteLink;
 
+    @FXML
+    private Label firstNameError;
+    @FXML
+    private Label lastNameError;
+    @FXML
+    private Label classError;
+    @FXML
+    private Label genderError;
+    @FXML
+    private Label gradeLevelError;
+    @FXML
+    private Label statusError;
+
     private final StudentService studentService = new StudentService(new DbStudentDao());
     private Optional<Student> editingStudent = Optional.empty(); //tracks if we're editing
-
 
     /**
      * Initializes the controller after the FXML is loaded
@@ -231,7 +243,10 @@ public class StudentController {
      */
     @FXML
     private void handleSave() {
+        if (!validateForm()) return;
+
         try {
+
             String fName = firstName.getText();
             String lName = lastName.getText();
             String cls = classField.getText();
@@ -380,4 +395,45 @@ public class StudentController {
         this.editingStudent = Optional.ofNullable(student);
         editingStudent.ifPresent(this::populateForm);
     }
+
+    /**
+     * Validates all fields individually, and display inline errors
+     */
+    private boolean validateForm() {
+        boolean valid = true;
+
+        firstNameError.setText("");
+        lastNameError.setText("");
+        classError.setText("");
+        genderError.setText("");
+        gradeLevelError.setText("");
+        statusError.setText("");
+
+        if (firstName.getText() == null || firstName.getText().trim().isEmpty()) {
+            firstNameError.setText("First name is required");
+            valid = false;
+        }
+        if (lastName.getText() == null || lastName.getText().trim().isEmpty()) {
+            lastNameError.setText("Last name is required");
+            valid = false;
+        }
+        if (classField.getText() == null || classField.getText().trim().isEmpty()) {
+            classError.setText("Class is required");
+            valid = false;
+        }
+        if (gender.getValue() == null) {
+            genderError.setText("Select a gender");
+            valid = false;
+        }
+        if (gradeLevel.getValue() == null) {
+            gradeLevelError.setText("Select a grade level");
+            valid = false;
+        }
+        if (studentStatus.getValue() == null) {
+            statusError.setText("Select an enrolment status");
+            valid = false;
+        }
+        return valid;
+    }
+
 }
