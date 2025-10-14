@@ -1,7 +1,9 @@
 package com.cab302.teachscope.util;
 
 import com.cab302.teachscope.Main;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
@@ -23,12 +25,13 @@ public class NavigationUtils {
      */
     public static void navigateTo(Stage stage, String page, String title) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/" + page + ".fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root, 1000, 700);
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.setScene(scene);
-        stage.setMaximized(false);
         stage.setTitle(title);
         stage.show();
+        Platform.runLater(() -> root.requestFocus());
     }
 
     public static void openKnowledgeBasePDF(){

@@ -1,5 +1,6 @@
 package com.cab302.teachscope.controllers;
 
+
 import com.cab302.teachscope.util.NavigationUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
