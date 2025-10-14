@@ -86,6 +86,7 @@
                                     </FXCollections>
                                 </items>
                             </ComboBox>
+                            <Label fx:id="termError" textFill="red" style="-fx-font-size: 10px;"/>
                         </VBox>
                         <VBox spacing="5">
                             <Label text="Week"/>
@@ -105,6 +106,7 @@
                                     </FXCollections>
                                 </items>
                             </ComboBox>
+                            <Label fx:id="weekError" textFill="red" style="-fx-font-size: 10px;"/>
                         </VBox>
                         <VBox spacing="5">
                         </VBox>
@@ -118,6 +120,7 @@
                             <ComboBox fx:id="attendancedays">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="0"/>
                                         <String fx:value="1"/>
                                         <String fx:value="2"/>
                                         <String fx:value="3"/>
@@ -126,23 +129,15 @@
                                     </FXCollections>
                                 </items>
                             </ComboBox>
+                            <Label fx:id="attendanceError" textFill="red" style="-fx-font-size: 10px;"/>
                         </VBox>
+
                         <VBox spacing="5">
-                            <Label text="Was the student late this week?"/>
-                            <fx:define>
-                                <ToggleGroup fx:id="lateGroup"/>
-                            </fx:define>
-                            <HBox spacing="10">
-                                <RadioButton text="No" fx:id="lateNo" toggleGroup="$lateGroup" selected="true"/>
-                                <RadioButton text="Yes" fx:id="lateYes" toggleGroup="$lateGroup"/>
-                            </HBox>
-                        </VBox>
-                        <VBox spacing="5">
-                            <Label text="How many times?"/>
+                            <Label text="Number of days late this week"/>
                             <ComboBox fx:id="dayslate">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="Not Late"/>
+                                        <String fx:value="0"/>
                                         <String fx:value="1"/>
                                         <String fx:value="2"/>
                                         <String fx:value="3"/>
@@ -151,6 +146,7 @@
                                     </FXCollections>
                                 </items>
                             </ComboBox>
+                            <Label fx:id="daysLateError" textFill="red" style="-fx-font-size: 10px;"/>
                         </VBox>
                     </HBox>
 
@@ -168,6 +164,7 @@
                                     </FXCollections>
                                 </items>
                             </ComboBox>
+                            <Label fx:id="attentionError" textFill="red" style="-fx-font-size: 10px;"/>
                         </VBox>
                         <VBox spacing="5">
                             <Label text="Homework completion"/>
@@ -178,6 +175,7 @@
                                 <RadioButton text="No" fx:id="homeworkNo" toggleGroup="$homeworkGroup"/>
                                 <RadioButton text="Yes" fx:id="homeworkYes" toggleGroup="$homeworkGroup"/>
                             </HBox>
+                            <Label fx:id="homeworkError" textFill="red" style="-fx-font-size: 10px;"/>
                         </VBox>
                         <VBox spacing="5">
                             <Label text="Participation"/>
@@ -190,6 +188,7 @@
                                     </FXCollections>
                                 </items>
                             </ComboBox>
+                            <Label fx:id="participationError" textFill="red" style="-fx-font-size: 10px;"/>
                         </VBox>
                     </HBox>
 
@@ -207,6 +206,7 @@
                                     </FXCollections>
                                 </items>
                             </ComboBox>
+                            <Label fx:id="literacyError" textFill="red" style="-fx-font-size: 10px;"/>
                         </VBox>
                         <VBox spacing="5">
                             <Label text="Numeracy"/>
@@ -219,6 +219,7 @@
                                     </FXCollections>
                                 </items>
                             </ComboBox>
+                            <Label fx:id="numeracyError" textFill="red" style="-fx-font-size: 10px;"/>
                         </VBox>
                         <VBox spacing="5">
                             <Label text="Understanding of current topics"/>
@@ -231,6 +232,7 @@
                                     </FXCollections>
                                 </items>
                             </ComboBox>
+                            <Label fx:id="understandingError" textFill="red" style="-fx-font-size: 10px;"/>
                         </VBox>
                     </HBox>
 
@@ -248,6 +250,7 @@
                                     </FXCollections>
                                 </items>
                             </ComboBox>
+                            <Label fx:id="behaviourError" textFill="red" style="-fx-font-size: 10px;"/>
                         </VBox>
                         <VBox spacing="5">
                             <Label text="Peer Interaction"/>
@@ -260,6 +263,7 @@
                                     </FXCollections>
                                 </items>
                             </ComboBox>
+                            <Label fx:id="peerInteractionError" textFill="red" style="-fx-font-size: 10px;"/>
                         </VBox>
                         <VBox spacing="5">
                             <Label text="Respect for rules"/>
@@ -272,6 +276,7 @@
                                     </FXCollections>
                                 </items>
                             </ComboBox>
+                            <Label fx:id="respectRulesError" textFill="red" style="-fx-font-size: 10px;"/>
                         </VBox>
                     </HBox>
 
@@ -289,6 +294,7 @@
                             <RadioButton text="Withdrawn 😕" fx:id="withdrawnRadio" toggleGroup="$emotionalGroup"/>
                             <RadioButton text="Anxious 😟" fx:id="anxiousRadio" toggleGroup="$emotionalGroup"/>
                         </HBox>
+                        <Label fx:id="emotionalStateError" textFill="red" style="-fx-font-size: 10px;"/>
                     </VBox>
 
                     <!-- teacher concerns -->
@@ -303,6 +309,7 @@
                             <RadioButton text="Yes" fx:id="concernYes" toggleGroup="$concernGroup"/>
                         </HBox>
                         <TextArea fx:id="concernsText" promptText="If yes, enter details here..." prefRowCount="3"/>
+                        <Label fx:id="teacherConcernsError" textFill="red" style="-fx-font-size: 10px;"/>
                     </VBox>
 
                     <HBox alignment="CENTER_LEFT" spacing="30">

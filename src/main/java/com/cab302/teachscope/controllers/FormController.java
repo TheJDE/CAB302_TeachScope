@@ -62,6 +62,22 @@ public class FormController {
     @FXML private Button newFormButton, saveFormButton, logoutButton, studentNav, timelineButton, generatePDF, addNewFormButton, weeklyformsButton, viewStudents;
     @FXML private Label weeklyFormsTitle, formTitle, PDFTitle;
 
+    @FXML private Label termError;
+    @FXML private Label weekError;
+    @FXML private Label attendanceError;
+    @FXML private Label daysLateError;
+    @FXML private Label attentionError;
+    @FXML private Label homeworkError;
+    @FXML private Label participationError;
+    @FXML private Label literacyError;
+    @FXML private Label numeracyError;
+    @FXML private Label understandingError;
+    @FXML private Label behaviourError;
+    @FXML private Label peerInteractionError;
+    @FXML private Label respectRulesError;
+    @FXML private Label emotionalStateError;
+    @FXML private Label teacherConcernsError;
+
     @FXML private Hyperlink deleteFormLink;
 
     private final FormService formService = new FormService(new DbFormDao());
@@ -531,6 +547,9 @@ public class FormController {
      */
     @FXML
     protected void onSubmitFormClick() {
+        if (!validateAddNewForm()) {
+            return; // Stop submission if there are errors
+        }
         try {
             int termVal = term.getSelectionModel().getSelectedIndex() + 1;
             int weekVal = week.getSelectionModel().getSelectedIndex() + 1;
@@ -653,4 +672,149 @@ public class FormController {
         alert.setHeaderText(null);
         alert.showAndWait();
     }
+
+    /**
+     * Validates the Add New Form inputs and displays error messages under each field.
+     *
+     * @return true if all inputs are valid, false otherwise
+     */
+    private boolean validateAddNewForm() {
+        boolean isValid = true;
+
+        termError.setText("");
+        weekError.setText("");
+        attendanceError.setText("");
+        daysLateError.setText("");
+        attentionError.setText("");
+        homeworkError.setText("");
+        participationError.setText("");
+        literacyError.setText("");
+        numeracyError.setText("");
+        understandingError.setText("");
+        behaviourError.setText("");
+        peerInteractionError.setText("");
+        respectRulesError.setText("");
+        emotionalStateError.setText("");
+        teacherConcernsError.setText("");
+
+        // Term
+        if (term.getSelectionModel().getSelectedIndex() < 0) {
+            termError.setText("Term is required.");
+            isValid = false;
+        }
+
+        // Week
+        if (week.getSelectionModel().getSelectedIndex() < 0) {
+            weekError.setText("Week is required.");
+            isValid = false;
+        }
+
+        // Attendance Days
+        int daysAttended = 0;
+        if (attendancedays.getValue() == null || attendancedays.getValue().isBlank()) {
+            attendanceError.setText("Number of days attended is required.");
+            isValid = false;
+        } else {
+            try {
+                daysAttended = Integer.parseInt(attendancedays.getValue());
+                if (daysAttended < 0 || daysAttended > 5) {
+                    attendanceError.setText("Attendance must be between 0-5.");
+                    isValid = false;
+                }
+            } catch (NumberFormatException e) {
+                attendanceError.setText("Invalid number.");
+                isValid = false;
+            }
+        }
+
+        // Days Late
+        if (dayslate.getValue() == null || dayslate.getValue().isBlank()) {
+            daysLateError.setText("Please select days late.");
+            isValid = false;
+        } else {
+            try {
+                int late = Integer.parseInt(dayslate.getValue());
+                if (late < 0 || late > 5) {
+                    daysLateError.setText("Days late must be between 0-5.");
+                    isValid = false;
+                } else if (late > daysAttended) {
+                    daysLateError.setText("Days late cannot exceed days attended.");
+                    isValid = false;
+                }
+            } catch (NumberFormatException e) {
+                daysLateError.setText("Invalid number of days late.");
+                isValid = false;
+            }
+        }
+
+        // Attention
+        if (attention.getSelectionModel().getSelectedIndex() < 0) {
+            attentionError.setText("Attention rating is required.");
+            isValid = false;
+        }
+
+        // Homework
+        if (!homeworkYes.isSelected() && !homeworkNo.isSelected()) {
+            homeworkError.setText("Please indicate if homework is done.");
+            isValid = false;
+        }
+
+        // Participation
+        if (participation.getSelectionModel().getSelectedIndex() < 0) {
+            participationError.setText("Participation rating is required.");
+            isValid = false;
+        }
+
+        // Literacy
+        if (literacy.getSelectionModel().getSelectedIndex() < 0) {
+            literacyError.setText("Literacy rating is required.");
+            isValid = false;
+        }
+
+        // Numeracy
+        if (numeracy.getSelectionModel().getSelectedIndex() < 0) {
+            numeracyError.setText("Numeracy rating is required.");
+            isValid = false;
+        }
+
+        // Understanding
+        if (understanding.getSelectionModel().getSelectedIndex() < 0) {
+            understandingError.setText("Understanding rating is required.");
+            isValid = false;
+        }
+
+        // Behaviour
+        if (behaviour.getSelectionModel().getSelectedIndex() < 0) {
+            behaviourError.setText("Behaviour rating is required.");
+            isValid = false;
+        }
+
+        // Peer Interaction
+        if (peerInteraction.getSelectionModel().getSelectedIndex() < 0) {
+            peerInteractionError.setText("Peer interaction rating is required.");
+            isValid = false;
+        }
+
+        // Respect Rules
+        if (respectRules.getSelectionModel().getSelectedIndex() < 0) {
+            respectRulesError.setText("Respect for rules rating is required.");
+            isValid = false;
+        }
+
+        // Emotional State
+        if (!happyRadio.isSelected() && !neutralRadio.isSelected() &&
+                !withdrawnRadio.isSelected() && !anxiousRadio.isSelected()) {
+            emotionalStateError.setText("Emotional state is required.");
+            isValid = false;
+        }
+
+        // Teacher Concerns
+        if (concernsText.getText() == null) {
+            teacherConcernsError.setText("Teacher concerns cannot be null.");
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
 }
