@@ -34,7 +34,8 @@ public class DbStudentDao implements StudentDao{
                     + "classCode TEXT NOT NULL,"
                     + "gender TEXT NOT NULL,"
                     + "enrolmentStatus TEXT NOT NULL,"
-                    + "gradeLevel TEXT NOT NULL"
+                    + "gradeLevel TEXT NOT NULL, "
+                    + "teacher TEXT NOT NULL"
                     + ")";
         statement.executeUpdate(query);
         } catch (Exception ex) {
@@ -48,9 +49,9 @@ public class DbStudentDao implements StudentDao{
      * @throws SQLException On misformed query.
      */
     @Override
-    public void addStudent(Student student) throws SQLException {
-        String query = "INSERT INTO students (id, firstName, lastName, classCode, gender, enrolmentStatus, gradeLevel)"
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public void addStudent(Student student, String teacherEmail) throws SQLException {
+        String query = "INSERT INTO students (id, firstName, lastName, classCode, gender, enrolmentStatus, gradeLevel, teacher)"
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement statement = connection.prepareStatement(query);
 
         //Set String Fields
@@ -61,6 +62,7 @@ public class DbStudentDao implements StudentDao{
         statement.setString(5, student.getGender().name());
         statement.setString(6, student.getEnrolmentStatus().name());
         statement.setString(7, student.getGradeLevel().name());
+        statement.setString(8, teacherEmail);
 
         statement.executeUpdate();
     }
@@ -120,12 +122,13 @@ public class DbStudentDao implements StudentDao{
             String gender = resultSet.getString("gender");
             String enrolmentStatus = resultSet.getString("enrolmentStatus");
             String gradeLevel = resultSet.getString("gradeLevel");
+            String teacher = resultSet.getString("teacher");
             // Our Student constructor needs these ENUMs as ENUMs, not as Strings, we need to convert them back
             Student.Gender genderEnum = Student.Gender.valueOf(gender);
             Student.EnrolmentStatus enrolmentStatusEnum = Student.EnrolmentStatus.valueOf(enrolmentStatus);
             Student.GradeLevel gradeLevelEnum = Student.GradeLevel.valueOf(gradeLevel);
 
-            return new Student(Optional.of(id), firstName, lastName, genderEnum, gradeLevelEnum, classCode, enrolmentStatusEnum);
+            return new Student(Optional.of(id), firstName, lastName, genderEnum, gradeLevelEnum, classCode, enrolmentStatusEnum, teacher);
         }
 
         return null;
@@ -137,13 +140,14 @@ public class DbStudentDao implements StudentDao{
      * @throws SQLException On misformed query.
      */
     @Override
-    public List<Student> getAllStudents() throws SQLException {
+    public List<Student> getAllStudents(String teacherEmail) throws SQLException {
         List<Student> students = new ArrayList<>();
 
-        Statement statement = connection.createStatement();
-        String query = "SELECT * FROM students";
+        String query = "SELECT * FROM students WHERE teacher = ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, teacherEmail);            // bind the teacher email
+        ResultSet resultSet = statement.executeQuery();  // run query
 
-        ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             String id = resultSet.getString("id");
             String firstName = resultSet.getString("firstName");
@@ -152,11 +156,14 @@ public class DbStudentDao implements StudentDao{
             String gender = resultSet.getString("gender");
             String enrolmentStatus = resultSet.getString("enrolmentStatus");
             String gradeLevel = resultSet.getString("gradeLevel");
-            // Our Student constructor needs these ENUMs as ENUMs, not as Strings, we need to convert them back
+            String teacher = resultSet.getString("teacher");
+
             Student.Gender genderEnum = Student.Gender.valueOf(gender);
             Student.EnrolmentStatus enrolmentStatusEnum = Student.EnrolmentStatus.valueOf(enrolmentStatus);
             Student.GradeLevel gradeLevelEnum = Student.GradeLevel.valueOf(gradeLevel);
-            Student student = new Student(Optional.of(id), firstName, lastName, genderEnum, gradeLevelEnum, classCode, enrolmentStatusEnum);
+
+            Student student = new Student(Optional.of(id), firstName, lastName, genderEnum,
+                    gradeLevelEnum, classCode, enrolmentStatusEnum, teacher);
             students.add(student);
         }
 

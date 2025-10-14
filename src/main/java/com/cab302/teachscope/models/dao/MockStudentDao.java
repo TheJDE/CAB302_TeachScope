@@ -2,8 +2,10 @@ package com.cab302.teachscope.models.dao;
 
 import com.cab302.teachscope.models.entities.Student;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,7 +22,7 @@ public class MockStudentDao implements StudentDao {
      * @param student - the student to add
      */
     @Override
-    public void addStudent(Student student) {
+    public void addStudent(Student student, String currentTeacherEmail) {
         students.put(student.getId(), student);
     }
 
@@ -57,7 +59,7 @@ public class MockStudentDao implements StudentDao {
      * @return ArrayList of student entity objects.
      */
     @Override
-    public ArrayList<Student> getAllStudents() {
+    public ArrayList<Student> getAllStudents(String teacherEmail) {
         return new ArrayList<>(students.values());
     }
 }

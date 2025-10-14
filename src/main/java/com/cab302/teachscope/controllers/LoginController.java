@@ -1,6 +1,9 @@
 package com.cab302.teachscope.controllers;
 
 
+import com.cab302.teachscope.models.dao.DbStudentDao;
+import com.cab302.teachscope.models.services.StudentService;
+import com.cab302.teachscope.util.LoggedInUser;
 import com.cab302.teachscope.util.NavigationUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -70,8 +73,10 @@ public class LoginController {
         try {
             userService.login(email, password);
 
-            Stage stage = (Stage) loginButton.getScene().getWindow();
+            LoggedInUser.setEmail(email);
+            LoggedInUser.setStudentService(new StudentService(new DbStudentDao()));
 
+            Stage stage = (Stage) loginButton.getScene().getWindow();
             NavigationUtils.navigateTo(stage, "dashboard", "Dashboard");
 
         } catch (IllegalArgumentException e) {

@@ -4,6 +4,7 @@ import com.cab302.teachscope.models.dao.DbStudentDao;
 import com.cab302.teachscope.models.dao.StudentDao;
 import com.cab302.teachscope.models.entities.Student;
 import com.cab302.teachscope.models.services.StudentService;
+import com.cab302.teachscope.util.LoggedInUser;
 import com.cab302.teachscope.util.NavigationUtils;
 import javafx.scene.Parent;
 import javafx.beans.property.SimpleStringProperty;
@@ -30,14 +31,9 @@ public class StudentController {
     @FXML
     private Button studentNav;
     @FXML
-    private Button knowledgeBaseButton;
-
-    @FXML
     private Button viewFormsButton;
-
     @FXML
     private Button timelineButton;
-
 
     @FXML
     private TableView<Student> studentsTable;
@@ -86,8 +82,15 @@ public class StudentController {
     @FXML
     private Label statusError;
 
-    private final StudentService studentService = new StudentService(new DbStudentDao());
-    private Optional<Student> editingStudent = Optional.empty(); //tracks if we're editing
+    private StudentService studentService;
+    private Optional<Student> editingStudent = Optional.empty();
+
+    // No-arg constructor for FXML
+    public StudentController() { }
+
+    public void setStudentService(StudentService studentService) {
+        this.studentService = studentService;
+    }
 
     /**
      * Initializes the controller after the FXML is loaded
@@ -95,6 +98,7 @@ public class StudentController {
      */
     @FXML
     protected void initialize() {
+        studentService = LoggedInUser.getStudentService();
         if (studentsTable != null) {
             // If this is the students list page
             setupTable();
@@ -139,6 +143,7 @@ public class StudentController {
      */
     @FXML
     protected void onLogoutClick() {
+        LoggedInUser.clear();
         Stage stage = (Stage) logoutButton.getScene().getWindow();
         try {
             NavigationUtils.navigateTo(stage, "login", "Login");
@@ -208,7 +213,9 @@ public class StudentController {
      * Refreshes the student table by reloading all students from the database
      */
     private void refreshStudentTable() {
-        studentsTable.getItems().setAll(studentService.getAllStudents());
+        studentsTable.getItems().setAll(
+                studentService.getAllStudents(LoggedInUser.getEmail())
+        );
     }
 
     /**
@@ -257,6 +264,8 @@ public class StudentController {
             Student.GradeLevel gl = getEnumFromComboBox(gradeLevel, Student.GradeLevel.class);
             Student.EnrolmentStatus status = getEnumFromComboBox(studentStatus, Student.EnrolmentStatus.class);
 
+            StudentService service = LoggedInUser.getStudentService();
+
             if (editingStudent.isPresent()) {
                 //editing an existing student
                 Student student = editingStudent.get();
@@ -270,7 +279,7 @@ public class StudentController {
                 studentService.updateStudent(student.getId(), fName, lName, g, gl, cls, status);
             } else {
                 //adding a new student
-                studentService.registerStudent(fName, lName, g, gl, cls, status);
+                studentService.registerStudent(fName, lName, g, gl, cls, status, LoggedInUser.getEmail());
             }
 
             Stage stage = (Stage) addStudentButton.getScene().getWindow();
@@ -380,13 +389,22 @@ public class StudentController {
     private void openEditPage(Student student) {
         Stage stage = (Stage) studentsTable.getScene().getWindow();
         try {
-            NavigationUtils.navigateTo(stage, "newstudent", "Edit Student");
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/newstudent.fxml"));
-            Parent root = loader.load();
+            loader.setControllerFactory(controllerClass -> {
+                if (controllerClass == StudentController.class) {
+                    return new StudentController();
+                } else {
+                    try { return controllerClass.getDeclaredConstructor().newInstance(); }
+                    catch (Exception e) { throw new RuntimeException(e); }
 
+                }
+            });
+
+            Parent root = loader.load();
             StudentController formController = loader.getController();
-            formController.setEditingStudent(student); // populate form
+
+            formController.studentService = this.studentService;
+            formController.setEditingStudent(student);
 
             stage.getScene().setRoot(root);
             stage.setTitle("Edit Student");
@@ -493,5 +511,6 @@ public class StudentController {
             default -> System.err.println("Unknown field error: " + message);
         }
     }
+
 
 }
