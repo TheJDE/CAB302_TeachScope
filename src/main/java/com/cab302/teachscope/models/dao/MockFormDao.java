@@ -28,6 +28,11 @@ public class MockFormDao implements FormDao {
     }
 
     @Override
+    public Map<String, Double> findAverageScoresForStudent(String studentId) {
+        return new HashMap<>();
+    }
+
+    @Override
     public List<WeeklyForm> findAll() {
         return new ArrayList<>(forms.values());
     }

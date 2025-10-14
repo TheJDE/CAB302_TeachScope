@@ -270,6 +270,44 @@ public class DbFormDao implements FormDao {
     }
 
     /**
+     * Fetches the average of all score-related fields for a student.
+     *
+     * @param studentId The student ID
+     * @return A map containing average scores for each field
+     * @throws SQLException On database error
+     */
+    public Map<String, Double> findAverageScoresForStudent(String studentId) throws SQLException {
+        String sql = "SELECT " +
+                "AVG(attentionScore) AS attentionScore, " +
+                "AVG(participationScore) AS participationScore, " +
+                "AVG(literacyScore) AS literacyScore, " +
+                "AVG(numeracyScore) AS numeracyScore, " +
+                "AVG(understandingScore) AS understandingScore, " +
+                "AVG(behaviourScore) AS behaviourScore, " +
+                "AVG(peerInteractionScore) AS peerInteractionScore, " +
+                "AVG(respectForRulesScore) AS respectForRulesScore " +
+                "FROM weekly_forms WHERE studentId = ?";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, studentId);
+        ResultSet rs = statement.executeQuery();
+
+        Map<String, Double> averages = new HashMap<>();
+        if (rs.next()) {
+            averages.put("attentionScore", rs.getDouble("attentionScore"));
+            averages.put("participationScore", rs.getDouble("participationScore"));
+            averages.put("literacyScore", rs.getDouble("literacyScore"));
+            averages.put("numeracyScore", rs.getDouble("numeracyScore"));
+            averages.put("understandingScore", rs.getDouble("understandingScore"));
+            averages.put("behaviourScore", rs.getDouble("behaviourScore"));
+            averages.put("peerInteractionScore", rs.getDouble("peerInteractionScore"));
+            averages.put("respectForRulesScore", rs.getDouble("respectForRulesScore"));
+        }
+
+        return averages;
+    }
+
+    /**
      * Gets all forms in the database
      * @return List of all forms
      * @throws SQLException On misformed query
