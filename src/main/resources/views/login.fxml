@@ -39,7 +39,7 @@
         <PasswordField promptText="Password" fx:id="passwordField" styleClass="form-control"/>
 
         <!-- login button -->
-        <Button fx:id="loginButton" text="Login" styleClass="" maxWidth="Infinity" onAction="#onLoginClick"/>
+        <Button fx:id="loginButton" text="Login" styleClass="" maxWidth="Infinity" onAction="#onLoginClick" defaultButton="true"/>
 
         <!-- sign up link -->
         <HBox alignment="CENTER" spacing="5">
