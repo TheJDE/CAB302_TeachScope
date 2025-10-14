@@ -6,6 +6,7 @@ import com.cab302.teachscope.models.services.FormService;
 import com.cab302.teachscope.models.entities.WeeklyForm;
 import com.cab302.teachscope.models.dao.DbStudentDao;
 import com.cab302.teachscope.models.services.StudentService;
+import com.cab302.teachscope.util.LoggedInUser;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -511,7 +512,8 @@ public class FormController {
             }
 
             //get all students using StudentService
-            var allStudents = studentService.getAllStudents();
+            String currentTeacherEmail = LoggedInUser.getEmail();
+            var allStudents = studentService.getAllStudents(currentTeacherEmail);
 
             //build the timeline data
             var timelineData = allStudents.stream().map(student -> {

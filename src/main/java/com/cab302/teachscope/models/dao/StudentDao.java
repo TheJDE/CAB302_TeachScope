@@ -15,8 +15,10 @@ public interface StudentDao {
     /**
      * Adds a new Student to the database
      * @param student - the user to add
+     * @param teacherEmail  - the email of the User that created the student
      */
-    public void addStudent(Student student) throws SQLException;
+
+    void addStudent(Student student, String teacherEmail) throws SQLException;
 
     /**
      * Updates existing Student Enrolment Status in the database
@@ -41,7 +43,7 @@ public interface StudentDao {
      * Retrieves all users from the database
      * @return - the user with the given userName, or null if not found.
      */
-    public List<Student> getAllStudents() throws SQLException;
+    public List<Student> getAllStudents(String teacherEmail) throws SQLException;
 }
 
 
