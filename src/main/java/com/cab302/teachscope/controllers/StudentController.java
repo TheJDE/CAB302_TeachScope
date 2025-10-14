@@ -280,7 +280,15 @@ public class StudentController {
             }
 
         } catch (IllegalArgumentException e) {
-            showAlert("Error", e.getMessage());
+            // Map the exception message to the correct field
+            String msg = e.getMessage().toLowerCase();
+            if (msg.contains("first")) displayFieldError("firstName", e.getMessage());
+            else if (msg.contains("last")) displayFieldError("lastName", e.getMessage());
+            else if (msg.contains("class")) displayFieldError("class", e.getMessage());
+            else if (msg.contains("gender")) displayFieldError("gender", e.getMessage());
+            else if (msg.contains("grade")) displayFieldError("gradeLevel", e.getMessage());
+            else if (msg.contains("status")) displayFieldError("status", e.getMessage());
+            else System.err.println("Unhandled error: " + e.getMessage());
         }
     }
 
@@ -397,11 +405,12 @@ public class StudentController {
     }
 
     /**
-     * Validates all fields individually, and display inline errors
+     * Validates all fields individually, and display inline errors.
      */
     private boolean validateForm() {
         boolean valid = true;
 
+        // Clear previous errors
         firstNameError.setText("");
         lastNameError.setText("");
         classError.setText("");
@@ -409,31 +418,64 @@ public class StudentController {
         gradeLevelError.setText("");
         statusError.setText("");
 
-        if (firstName.getText() == null || firstName.getText().trim().isEmpty()) {
+        // FIRST NAME
+        if (firstName.getText().trim().isEmpty()) {
             firstNameError.setText("First name is required");
             valid = false;
         }
-        if (lastName.getText() == null || lastName.getText().trim().isEmpty()) {
+        if (!firstName.getText().trim().isEmpty() && !firstName.getText().matches("[A-Za-z]+")) {
+            firstNameError.setText("First name must only contain letters");
+            valid = false;
+        }
+        // LAST NAME
+        if (lastName.getText().trim().isEmpty()) {
             lastNameError.setText("Last name is required");
             valid = false;
         }
-        if (classField.getText() == null || classField.getText().trim().isEmpty()) {
+        if (!lastName.getText().trim().isEmpty() && !lastName.getText().matches("[A-Za-z]+")) {
+            lastNameError.setText("Last name must only contain letters");
+            valid = false;
+        }
+        // CLASS
+        if (classField.getText().trim().isEmpty()) {
             classError.setText("Class is required");
             valid = false;
         }
+        if (!classField.getText().trim().isEmpty() && !classField.getText().matches("^[A-Za-z]$+")) {
+            classError.setText("Class must be only a single letter");
+            valid = false;
+        }
+        // GENDER
         if (gender.getValue() == null) {
-            genderError.setText("Select a gender");
+            genderError.setText("Gender must be selected");
             valid = false;
         }
+        // GRADE LEVEL
         if (gradeLevel.getValue() == null) {
-            gradeLevelError.setText("Select a grade level");
+            gradeLevelError.setText("Grade level must be selected");
             valid = false;
         }
+        // STATUS
         if (studentStatus.getValue() == null) {
-            statusError.setText("Select an enrolment status");
+            statusError.setText("Enrolment status must be selected");
             valid = false;
         }
         return valid;
+    }
+
+    /**
+     * Maps exception messages to individual field errorLabels
+     */
+    private void displayFieldError(String field, String message) {
+        switch (field) {
+            case "firstName" -> firstNameError.setText(message);
+            case "lastName" -> lastNameError.setText(message);
+            case "class" -> classError.setText(message);
+            case "gender" -> genderError.setText(message);
+            case "gradeLevel" -> gradeLevelError.setText(message);
+            case "status" -> statusError.setText(message);
+            default -> System.err.println("Unknown field error: " + message);
+        }
     }
 
 }
