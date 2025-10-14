@@ -16,6 +16,7 @@ import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
 import java.util.Optional;
+
 import javafx.scene.Scene;
 
 import com.cab302.teachscope.controllers.FormController;
@@ -320,16 +321,31 @@ public class StudentController {
     @FXML
     protected void onDeleteLinkClick() {
         editingStudent.ifPresent(student -> {
-            try {
-                studentService.deleteStudent(student.getId());
-                Stage stage = (Stage) deleteLink.getScene().getWindow();
+            //Confirmation alert before deleting
+            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmAlert.setTitle("Confirm Delete");
+            confirmAlert.setHeaderText("Delete Student");
+            confirmAlert.setContentText("Are you sure you want to delete " +
+                    student.getFirstName() + " " + student.getLastName() + "?");
+
+            ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
+            ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+            confirmAlert.getButtonTypes().setAll(yesButton, cancelButton);
+
+            Optional<ButtonType> result = confirmAlert.showAndWait();
+
+            if (result.isPresent() && result.get() == yesButton) {
                 try {
-                    NavigationUtils.navigateTo(stage, "dashboard", "Dashboard");
-                } catch (IOException e) {
-                    showAlert("Navigation Error", "Failed to open the dashboard.");
+                    studentService.deleteStudent(student.getId());
+                    Stage stage = (Stage) deleteLink.getScene().getWindow();
+                    try {
+                        NavigationUtils.navigateTo(stage, "dashboard", "Dashboard");
+                    } catch (IOException e) {
+                        showAlert("Navigation Error", "Failed to open the dashboard.");
+                    }
+                } catch (IllegalArgumentException e) {
+                    showAlert("Error", e.getMessage());
                 }
-            } catch (IllegalArgumentException e) {
-                showAlert("Error", e.getMessage());
             }
         });
     }
