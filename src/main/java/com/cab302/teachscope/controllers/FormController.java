@@ -1,7 +1,6 @@
 package com.cab302.teachscope.controllers;
 
 import com.cab302.teachscope.models.dao.DbFormDao;
-import com.cab302.teachscope.models.entities.Student;
 import com.cab302.teachscope.models.services.FormService;
 import com.cab302.teachscope.models.entities.WeeklyForm;
 import com.cab302.teachscope.models.dao.DbStudentDao;
@@ -14,12 +13,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+
 import java.util.Optional;
+
 import javafx.scene.layout.HBox;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
+
 import java.io.IOException;
+
 import com.cab302.teachscope.util.NavigationUtils;
+
 import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.HashMap;
@@ -31,17 +35,26 @@ import java.util.HashMap;
  */
 public class FormController {
 
-    @FXML private TableView<WeeklyForm> formsTableTerm1;
-    @FXML private TableView<WeeklyForm> formsTableTerm2;
-    @FXML private TableView<WeeklyForm> formsTableTerm3;
-    @FXML private TableView<WeeklyForm> formsTableTerm4;
+    @FXML
+    private TableView<WeeklyForm> formsTableTerm1;
+    @FXML
+    private TableView<WeeklyForm> formsTableTerm2;
+    @FXML
+    private TableView<WeeklyForm> formsTableTerm3;
+    @FXML
+    private TableView<WeeklyForm> formsTableTerm4;
 
-    @FXML private TableColumn<WeeklyForm, Integer> weekColTerm1, termColTerm1;
-    @FXML private TableColumn<WeeklyForm, Integer> weekColTerm2, termColTerm2;
-    @FXML private TableColumn<WeeklyForm, Integer> weekColTerm3, termColTerm3;
-    @FXML private TableColumn<WeeklyForm, Integer> weekColTerm4, termColTerm4;
+    @FXML
+    private TableColumn<WeeklyForm, Integer> weekColTerm1, termColTerm1;
+    @FXML
+    private TableColumn<WeeklyForm, Integer> weekColTerm2, termColTerm2;
+    @FXML
+    private TableColumn<WeeklyForm, Integer> weekColTerm3, termColTerm3;
+    @FXML
+    private TableColumn<WeeklyForm, Integer> weekColTerm4, termColTerm4;
 
-    @FXML private TableColumn<WeeklyForm, Void> actionsColTerm1, actionsColTerm2, actionsColTerm3, actionsColTerm4;
+    @FXML
+    private TableColumn<WeeklyForm, Void> actionsColTerm1, actionsColTerm2, actionsColTerm3, actionsColTerm4;
 
     @FXML
     private TableView<Map<String, String>> timelineTable;
@@ -52,34 +65,52 @@ public class FormController {
     @FXML
     private TableColumn<Map<String, String>, String> formColumn;
 
-    @FXML private ComboBox<String> term, week, attendancedays, dayslate, attention,
+    @FXML
+    private ComboBox<String> term, week, attendancedays, dayslate, attention,
             participation, literacy, numeracy, understanding, behaviour,
-            peerInteraction, respectRules, timelineTerm, timelineWeek;
+            peerInteraction, respectRules, timelineTerm, timelineWeek, homework, emotionalState, teacherConcern;
 
-    @FXML private TextArea concernsText;
-    @FXML private RadioButton homeworkNo, homeworkYes, happyRadio, neutralRadio, withdrawnRadio, anxiousRadio;
-    @FXML private ToggleGroup homeworkGroup, emotionalGroup;
+    @FXML
+    private TextArea concernsText;
 
-    @FXML private Button newFormButton, saveFormButton, logoutButton, studentNav, timelineButton, generatePDF, addNewFormButton, weeklyformsButton, viewStudents;
-    @FXML private Label weeklyFormsTitle, formTitle, PDFTitle;
+    @FXML
+    private Button newFormButton, saveFormButton, logoutButton, studentNav, timelineButton, generatePDF, addNewFormButton, weeklyformsButton, viewStudents;
+    @FXML
+    private Label weeklyFormsTitle, formTitle, PDFTitle;
 
-    @FXML private Label termError;
-    @FXML private Label weekError;
-    @FXML private Label attendanceError;
-    @FXML private Label daysLateError;
-    @FXML private Label attentionError;
-    @FXML private Label homeworkError;
-    @FXML private Label participationError;
-    @FXML private Label literacyError;
-    @FXML private Label numeracyError;
-    @FXML private Label understandingError;
-    @FXML private Label behaviourError;
-    @FXML private Label peerInteractionError;
-    @FXML private Label respectRulesError;
-    @FXML private Label emotionalStateError;
-    @FXML private Label teacherConcernsError;
+    @FXML
+    private Label termError;
+    @FXML
+    private Label weekError;
+    @FXML
+    private Label attendanceError;
+    @FXML
+    private Label daysLateError;
+    @FXML
+    private Label attentionError;
+    @FXML
+    private Label homeworkError;
+    @FXML
+    private Label participationError;
+    @FXML
+    private Label literacyError;
+    @FXML
+    private Label numeracyError;
+    @FXML
+    private Label understandingError;
+    @FXML
+    private Label behaviourError;
+    @FXML
+    private Label peerInteractionError;
+    @FXML
+    private Label respectRulesError;
+    @FXML
+    private Label emotionalStateError;
+    @FXML
+    private Label teacherConcernsError;
 
-    @FXML private Hyperlink deleteFormLink;
+    @FXML
+    private Hyperlink deleteFormLink;
 
     private final FormService formService = new FormService(new DbFormDao());
     private final StudentService studentService = new StudentService(new DbStudentDao());
@@ -101,22 +132,31 @@ public class FormController {
     @FXML
     protected void onLogoutClick() {
         Stage stage = (Stage) logoutButton.getScene().getWindow();
-        try { NavigationUtils.navigateTo(stage, "login", "Login"); }
-        catch (IOException e) { showAlert("Navigation Error", "Cannot open login page."); }
+        try {
+            NavigationUtils.navigateTo(stage, "login", "Login");
+        } catch (IOException e) {
+            showAlert("Navigation Error", "Cannot open login page.");
+        }
     }
 
     @FXML
     protected void onStudentClick() {
         Stage stage = (Stage) studentNav.getScene().getWindow();
-        try { NavigationUtils.navigateTo(stage, "dashboard", "Dashboard"); }
-        catch (IOException e) { showAlert("Navigation Error", "Cannot open dashboard."); }
+        try {
+            NavigationUtils.navigateTo(stage, "dashboard", "Dashboard");
+        } catch (IOException e) {
+            showAlert("Navigation Error", "Cannot open dashboard.");
+        }
     }
 
     @FXML
     protected void onTimelineClick() {
         Stage stage = (Stage) timelineButton.getScene().getWindow();
-        try { NavigationUtils.navigateTo(stage, "timeline", "Timeline"); }
-        catch (IOException e) { showAlert("Navigation Error", "Cannot open timeline."); }
+        try {
+            NavigationUtils.navigateTo(stage, "timeline", "Timeline");
+        } catch (IOException e) {
+            showAlert("Navigation Error", "Cannot open timeline.");
+        }
     }
 
 
@@ -268,7 +308,6 @@ public class FormController {
                     String status = rowData.getOrDefault("status", "Incomplete");
 
 
-
                     if ("Completed".equals(status) && formId != null && !formId.isEmpty()) {
                         // completed means open existing form
                         link.setText("View form for Term " + term + " - Week " + week);
@@ -387,7 +426,6 @@ public class FormController {
     }
 
 
-
     /**
      * Loads all weekly forms for the current student into the table.
      */
@@ -431,7 +469,7 @@ public class FormController {
             formTitle.setText("Add New Form (" + studentName + ")");
         }
 
-        if(PDFTitle != null) {
+        if (PDFTitle != null) {
             PDFTitle.setText("Generate PDF for " + studentName);
         }
 
@@ -454,8 +492,6 @@ public class FormController {
             attendancedays.setValue(String.valueOf(form.getAttendanceDays()));
             dayslate.setValue(String.valueOf(form.getDaysLate()));
             attention.getSelectionModel().select(form.getAttentionScore());
-            homeworkYes.setSelected(form.isHomeworkDone());
-            homeworkNo.setSelected(!form.isHomeworkDone());
             participation.getSelectionModel().select(form.getParticipationScore());
             literacy.getSelectionModel().select(form.getLiteracyScore());
             numeracy.getSelectionModel().select(form.getNumeracyScore());
@@ -464,14 +500,29 @@ public class FormController {
             peerInteraction.getSelectionModel().select(form.getPeerInteractionScore());
             respectRules.getSelectionModel().select(form.getRespectForRulesScore());
 
-            switch (form.getEmotionalState()) {
-                case "Happy" -> happyRadio.setSelected(true);
-                case "Neutral" -> neutralRadio.setSelected(true);
-                case "Withdrawn" -> withdrawnRadio.setSelected(true);
-                default -> anxiousRadio.setSelected(true);
+            if (form.isHomeworkDone()) {
+                homework.setValue("Yes");
+            } else {
+                homework.setValue("No");
             }
 
-            concernsText.setText(form.getTeacherConcerns());
+            String emotionalValue = switch (form.getEmotionalState()) {
+                case "Happy" -> "Happy 🙂";
+                case "Neutral" -> "Neutral 😐";
+                case "Withdrawn" -> "Withdrawn 😕";
+                case "Anxious" -> "Anxious 😟";
+                default -> null;
+            };
+            emotionalState.setValue(emotionalValue);
+
+            if (form.getTeacherConcerns() != null && !form.getTeacherConcerns().isBlank()) {
+                teacherConcern.setValue("Yes");
+                concernsText.setText(form.getTeacherConcerns());
+            } else {
+                teacherConcern.setValue("No");
+                concernsText.clear();
+            }
+
             formTitle.setText("Edit Form (" + studentName + ")");
             saveFormButton.setText("Update Form");
 
@@ -558,7 +609,6 @@ public class FormController {
             int attendance = Integer.parseInt(attendancedays.getValue());
             int late = Integer.parseInt(dayslate.getValue());
             int attentionVal = attention.getSelectionModel().getSelectedIndex();
-            boolean homeworkDone = homeworkYes.isSelected();
             int participationVal = participation.getSelectionModel().getSelectedIndex();
             int literacyVal = literacy.getSelectionModel().getSelectedIndex();
             int numeracyVal = numeracy.getSelectionModel().getSelectedIndex();
@@ -567,11 +617,21 @@ public class FormController {
             int peerVal = peerInteraction.getSelectionModel().getSelectedIndex();
             int respectVal = respectRules.getSelectionModel().getSelectedIndex();
 
-            String emotionalState = happyRadio.isSelected() ? "Happy" :
-                    neutralRadio.isSelected() ? "Neutral" :
-                            withdrawnRadio.isSelected() ? "Withdrawn" : "Anxious";
+            boolean homeworkDone = "Yes".equals(homework.getValue());
 
-            String teacherConcerns = concernsText.getText();
+            String emotionalSelection = emotionalState.getValue();
+            String emotionalStateValue = null;
+            if (emotionalSelection != null) {
+                if (emotionalSelection.contains("Happy")) emotionalStateValue = "Happy";
+                else if (emotionalSelection.contains("Neutral")) emotionalStateValue = "Neutral";
+                else if (emotionalSelection.contains("Withdrawn")) emotionalStateValue = "Withdrawn";
+                else if (emotionalSelection.contains("Anxious")) emotionalStateValue = "Anxious";
+            }
+
+            String teacherConcernSelection = teacherConcern.getValue();
+            String teacherConcerns = "Yes".equals(teacherConcernSelection)
+                    ? concernsText.getText()
+                    : "";
 
             if (editingForm.isPresent()) {
                 WeeklyForm form = editingForm.get();
@@ -591,14 +651,14 @@ public class FormController {
                         behaviourVal,
                         peerVal,
                         respectVal,
-                        emotionalState,
+                        emotionalStateValue,
                         teacherConcerns
                 ));
                 editingForm = Optional.empty();
             } else {
                 formService.createForm(studentId, termVal, weekVal, attendance, late,
                         attentionVal, homeworkDone, participationVal, literacyVal, numeracyVal,
-                        understandingVal, behaviourVal, peerVal, respectVal, emotionalState, teacherConcerns);
+                        understandingVal, behaviourVal, peerVal, respectVal, emotionalStateValue, teacherConcerns);
             }
             if (formsTableTerm1 != null && formsTableTerm2 != null &&
                     formsTableTerm3 != null && formsTableTerm4 != null) {
@@ -756,8 +816,8 @@ public class FormController {
         }
 
         // Homework
-        if (!homeworkYes.isSelected() && !homeworkNo.isSelected()) {
-            homeworkError.setText("Please indicate if homework is done.");
+        if (homework.getValue() == null || homework.getValue().isBlank()) {
+            homeworkError.setText("Please select if homework is done.");
             isValid = false;
         }
 
@@ -804,16 +864,20 @@ public class FormController {
         }
 
         // Emotional State
-        if (!happyRadio.isSelected() && !neutralRadio.isSelected() &&
-                !withdrawnRadio.isSelected() && !anxiousRadio.isSelected()) {
+        if (emotionalState.getValue() == null || emotionalState.getValue().isBlank()) {
             emotionalStateError.setText("Emotional state is required.");
             isValid = false;
         }
 
-        // Teacher Concerns
-        if (concernsText.getText() == null) {
-            teacherConcernsError.setText("Teacher concerns cannot be null.");
+        //Teacher Concerns
+        if (teacherConcern.getValue() == null || teacherConcern.getValue().isBlank()) {
+            teacherConcernsError.setText("Please indicate if there are any teacher concerns.");
             isValid = false;
+        } else if ("Yes".equals(teacherConcern.getValue())) {
+            if (concernsText.getText() == null || concernsText.getText().isBlank()) {
+                teacherConcernsError.setText("Please provide details for teacher concerns.");
+                isValid = false;
+            }
         }
 
         return isValid;

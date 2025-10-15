@@ -168,13 +168,14 @@
                         </VBox>
                         <VBox spacing="5">
                             <Label text="Homework completion"/>
-                            <fx:define>
-                                <ToggleGroup fx:id="homeworkGroup"/>
-                            </fx:define>
-                            <HBox spacing="10">
-                                <RadioButton text="No" fx:id="homeworkNo" toggleGroup="$homeworkGroup"/>
-                                <RadioButton text="Yes" fx:id="homeworkYes" toggleGroup="$homeworkGroup"/>
-                            </HBox>
+                            <ComboBox fx:id="homework">
+                                <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="Yes"/>
+                                        <String fx:value="No"/>
+                                    </FXCollections>
+                                </items>
+                            </ComboBox>
                             <Label fx:id="homeworkError" textFill="red" style="-fx-font-size: 10px;"/>
                         </VBox>
                         <VBox spacing="5">
@@ -284,30 +285,30 @@
                     <Label text="Emotional State" styleClass="h2"/>
                     <VBox spacing="5">
                         <Label text="Student appeared"/>
-                        <fx:define>
-                            <ToggleGroup fx:id="emotionalGroup"/>
-                        </fx:define>
-                        <HBox spacing="15">
-                            <RadioButton text="Happy 🙂" fx:id="happyRadio" toggleGroup="$emotionalGroup"
-                                         selected="true"/>
-                            <RadioButton text="Neutral 😐" fx:id="neutralRadio" toggleGroup="$emotionalGroup"/>
-                            <RadioButton text="Withdrawn 😕" fx:id="withdrawnRadio" toggleGroup="$emotionalGroup"/>
-                            <RadioButton text="Anxious 😟" fx:id="anxiousRadio" toggleGroup="$emotionalGroup"/>
-                        </HBox>
+                        <ComboBox fx:id="emotionalState">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Happy 🙂"/>
+                                    <String fx:value="Neutral 😐"/>
+                                    <String fx:value="Withdrawn 😕"/>
+                                    <String fx:value="Anxious 😟"/>
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
                         <Label fx:id="emotionalStateError" textFill="red" style="-fx-font-size: 10px;"/>
                     </VBox>
 
                     <!-- teacher concerns -->
                     <Label text="Teacher Concerns" styleClass="h2"/>
                     <VBox spacing="10">
-                        <Label text="Teacher concerns for the week?"/>
-                        <fx:define>
-                            <ToggleGroup fx:id="concernGroup"/>
-                        </fx:define>
-                        <HBox spacing="10">
-                            <RadioButton text="No" fx:id="concernNo" toggleGroup="$concernGroup" selected="true"/>
-                            <RadioButton text="Yes" fx:id="concernYes" toggleGroup="$concernGroup"/>
-                        </HBox>
+                        <ComboBox fx:id="teacherConcern">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="No"/>
+                                    <String fx:value="Yes"/>
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
                         <TextArea fx:id="concernsText" promptText="If yes, enter details here..." prefRowCount="3"/>
                         <Label fx:id="teacherConcernsError" textFill="red" style="-fx-font-size: 10px;"/>
                     </VBox>
