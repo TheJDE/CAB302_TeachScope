@@ -308,6 +308,43 @@ public class DbFormDao implements FormDao {
     }
 
     /**
+     * Finds the average of all score fields across all students.
+     * @return Map of average scores for each category.
+     * @throws SQLException On query error
+     */
+    @Override
+    public Map<String, Double> findGlobalAverageScores() throws SQLException {
+        String sql = "SELECT " +
+                "AVG(attentionScore) AS attentionScore, " +
+                "AVG(participationScore) AS participationScore, " +
+                "AVG(literacyScore) AS literacyScore, " +
+                "AVG(numeracyScore) AS numeracyScore, " +
+                "AVG(understandingScore) AS understandingScore, " +
+                "AVG(behaviourScore) AS behaviourScore, " +
+                "AVG(peerInteractionScore) AS peerInteractionScore, " +
+                "AVG(respectForRulesScore) AS respectForRulesScore " +
+                "FROM weekly_forms";
+
+        Map<String, Double> averages = new HashMap<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                averages.put("attentionScore", rs.getDouble("attentionScore"));
+                averages.put("participationScore", rs.getDouble("participationScore"));
+                averages.put("literacyScore", rs.getDouble("literacyScore"));
+                averages.put("numeracyScore", rs.getDouble("numeracyScore"));
+                averages.put("understandingScore", rs.getDouble("understandingScore"));
+                averages.put("behaviourScore", rs.getDouble("behaviourScore"));
+                averages.put("peerInteractionScore", rs.getDouble("peerInteractionScore"));
+                averages.put("respectForRulesScore", rs.getDouble("respectForRulesScore"));
+            }
+        }
+
+        return averages;
+    }
+    /**
      * Gets all forms in the database
      * @return List of all forms
      * @throws SQLException On misformed query

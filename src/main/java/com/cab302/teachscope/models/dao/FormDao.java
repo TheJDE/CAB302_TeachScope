@@ -16,6 +16,8 @@ public interface FormDao {
 
     Map<String, Double> findAverageScoresForStudent(String studentId) throws SQLException;
 
+    Map<String, Double> findGlobalAverageScores() throws SQLException;
+
     List<WeeklyForm> findAll() throws SQLException;
 
     List<WeeklyForm> findAllForStudent(String studentId) throws SQLException;
