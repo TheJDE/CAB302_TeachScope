@@ -273,10 +273,13 @@ public class DbFormDao implements FormDao {
      * Fetches the average of all score-related fields for a student.
      *
      * @param studentId The student ID
+     * @param term The chosen term INT
+     * @param fromWeek The starting week of the search INT
+     * @param toWeek The end week of the search INT
      * @return A map containing average scores for each field
      * @throws SQLException On database error
      */
-    public Map<String, Double> findAverageScoresForStudent(String studentId) throws SQLException {
+    public Map<String, Double> findAverageScoresForStudent(String studentId, int term, int fromWeek, int toWeek) throws SQLException {
         String sql = "SELECT " +
                 "AVG(attentionScore) AS attentionScore, " +
                 "AVG(participationScore) AS participationScore, " +
@@ -286,10 +289,14 @@ public class DbFormDao implements FormDao {
                 "AVG(behaviourScore) AS behaviourScore, " +
                 "AVG(peerInteractionScore) AS peerInteractionScore, " +
                 "AVG(respectForRulesScore) AS respectForRulesScore " +
-                "FROM weekly_forms WHERE studentId = ?";
+                "FROM weekly_forms" +
+                "WHERE studentId = ? AND term = ? AND week BETWEEN ? AND ?";
 
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, studentId);
+        statement.setInt(2, term);
+        statement.setInt(3, fromWeek);
+        statement.setInt(4, toWeek);
         ResultSet rs = statement.executeQuery();
 
         Map<String, Double> averages = new HashMap<>();
@@ -309,11 +316,14 @@ public class DbFormDao implements FormDao {
 
     /**
      * Finds the average of all score fields across all students.
+     * @param term The chosen term INT
+     * @param fromWeek The starting week of the search INT
+     * @param toWeek The end week of the search INT
      * @return Map of average scores for each category.
      * @throws SQLException On query error
      */
     @Override
-    public Map<String, Double> findGlobalAverageScores() throws SQLException {
+    public Map<String, Double> findGlobalAverageScores(int term, int fromWeek, int toWeek) throws SQLException {
         String sql = "SELECT " +
                 "AVG(attentionScore) AS attentionScore, " +
                 "AVG(participationScore) AS participationScore, " +
@@ -323,12 +333,17 @@ public class DbFormDao implements FormDao {
                 "AVG(behaviourScore) AS behaviourScore, " +
                 "AVG(peerInteractionScore) AS peerInteractionScore, " +
                 "AVG(respectForRulesScore) AS respectForRulesScore " +
-                "FROM weekly_forms";
+                "FROM weekly_forms" +
+                "WHERE term = ? AND week BETWEEN ? AND ?";
 
         Map<String, Double> averages = new HashMap<>();
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, term);
+            stmt.setInt(2, fromWeek);
+            stmt.setInt(3, toWeek);
+
+            ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 averages.put("attentionScore", rs.getDouble("attentionScore"));
@@ -349,6 +364,7 @@ public class DbFormDao implements FormDao {
      * @return List of all forms
      * @throws SQLException On misformed query
      */
+
     @Override
     public List<WeeklyForm> findAll() throws SQLException {
         // TODO: implement fetch all
