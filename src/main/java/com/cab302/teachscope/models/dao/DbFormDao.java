@@ -375,7 +375,7 @@ public class DbFormDao implements FormDao {
         String sql = """
         SELECT
             AVG(attendanceDays) AS avgAttendanceDays,
-            AVG(daysLate) AS avgDaysLate,
+            SUM(daysLate) AS totalDaysLate,
             AVG(homeworkDone) AS avgHomeworkDone,
             (
                 SELECT emotionalState
@@ -406,7 +406,7 @@ public class DbFormDao implements FormDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     result.put("avgAttendanceDays", rs.getDouble("avgAttendanceDays"));
-                    result.put("avgDaysLate", rs.getDouble("avgDaysLate"));
+                    result.put("totalDaysLate", rs.getInt("totalDaysLate"));
                     result.put("avgHomeworkDone", rs.getDouble("avgHomeworkDone"));
                     result.put("mostCommonEmotionalState", rs.getString("mostCommonEmotionalState"));
                 }
