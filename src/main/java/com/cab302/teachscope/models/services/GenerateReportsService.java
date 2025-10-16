@@ -77,8 +77,8 @@ public class GenerateReportsService {
         Map<String, Double> averageValues;
         Map<String, Double> totalAverageValues;
         try {
-            averageValues = formDao.findAverageScoresForStudent(studentID);
-            totalAverageValues = formDao.findGlobalAverageScores();
+            averageValues = formDao.findAverageScoresForStudent(studentID, term, fromWeek, toWeek);
+            totalAverageValues = formDao.findGlobalAverageScores(term, fromWeek, toWeek);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

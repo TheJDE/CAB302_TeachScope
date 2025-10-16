@@ -359,6 +359,65 @@ public class DbFormDao implements FormDao {
 
         return averages;
     }
+
+    /**
+     * Retrieves the average attendance statistics and the most common emotional state
+     * for a specific student within a given term and week range.
+     *
+     * @param studentId the unique ID of the student
+     * @param term the term number to query (e.g., 1, 2, 3, 4)
+     * @param fromWeek the starting week number of the range
+     * @param toWeek the ending week number of the range
+     * @return a Map containing data not shown in graph
+     */
+
+    public Map<String, Object> findAverageAttendanceAndEmotionForStudent(String studentId, int term, int fromWeek, int toWeek) {
+        String sql = """
+        SELECT
+            AVG(attendanceDays) AS avgAttendanceDays,
+            AVG(daysLate) AS avgDaysLate,
+            AVG(homeworkDone) AS avgHomeworkDone,
+            (
+                SELECT emotionalState
+                FROM weekly_forms AS wf2
+                WHERE wf2.studentId = wf.studentId
+                  AND wf2.term = wf.term
+                  AND wf2.week BETWEEN ? AND ?
+                GROUP BY emotionalState
+                ORDER BY COUNT(*) DESC
+                LIMIT 1
+            ) AS mostCommonEmotionalState
+        FROM weekly_forms AS wf
+        WHERE wf.studentId = ?
+          AND wf.term = ?
+          AND wf.week BETWEEN ? AND ?;
+    """;
+
+        Map<String, Object> result = new HashMap<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, fromWeek);
+            stmt.setInt(2, toWeek);
+            stmt.setString(3, studentId);
+            stmt.setInt(4, term);
+            stmt.setInt(5, fromWeek);
+            stmt.setInt(6, toWeek);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    result.put("avgAttendanceDays", rs.getDouble("avgAttendanceDays"));
+                    result.put("avgDaysLate", rs.getDouble("avgDaysLate"));
+                    result.put("avgHomeworkDone", rs.getDouble("avgHomeworkDone"));
+                    result.put("mostCommonEmotionalState", rs.getString("mostCommonEmotionalState"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
     /**
      * Gets all forms in the database
      * @return List of all forms
