@@ -1,6 +1,5 @@
 package com.cab302.teachscope.models.services;
 
-import com.cab302.teachscope.models.dao.DbStudentDao;
 import com.cab302.teachscope.models.dao.FormDao;
 import com.cab302.teachscope.models.dao.StudentDao;
 import com.cab302.teachscope.models.entities.Student;
@@ -24,7 +23,6 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -50,7 +48,7 @@ public class GenerateReportsService {
      */
     public GenerateReportsService(FormDao formDao, StudentDao studentDao) {this.formDao = formDao; this.studentDao = studentDao;}
 
-    public void createReport(String studentID) {
+    public void createReport(String studentID, int term, int fromWeek, int toWeek) {
         // Check student ID is valid
         if (studentID == null || !studentID.matches("^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"))
         {
@@ -58,14 +56,14 @@ public class GenerateReportsService {
         }
 
         // Check term is valid
-//        if (term < 1 || term > 4) {
-//            throw new IllegalArgumentException("Term must be between 1-4");
-//        }
+        if (term < 1 || term > 4) {
+            throw new IllegalArgumentException("Term must be between 1-4");
+        }
 
         // Check weeks are valid
-//        if (fromWeek < 0 || fromWeek > 12 || fromWeek > toWeek) {
-//            throw new IllegalArgumentException("Invalid term");
-//        }
+        if (fromWeek < 0 || fromWeek > 12 || fromWeek > toWeek) {
+            throw new IllegalArgumentException("Invalid term");
+        }
 
         // Get student details to input into text areas
         Student student;
@@ -162,7 +160,7 @@ public class GenerateReportsService {
         PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);
 
-
+        // Place text and images onto the PDF
         try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
             BufferedImage barChartImage = barChart.createBufferedImage(1200, 500);
             PDImageXObject pdfBarChartImage = JPEGFactory.createFromImage(document, barChartImage, 1.0f);
@@ -190,6 +188,7 @@ public class GenerateReportsService {
             PDType0Font fontRegular = PDType0Font.load(document, new File("src/main/resources/fonts/PlaypenSans-Regular.ttf"));
             Color navyBlue = new Color(0x24, 0x31, 0x81);
 
+            // Title/Subtitle
             contentStream.beginText();
             contentStream.setFont(fontBold, 18); // font + size
             contentStream.setNonStrokingColor(navyBlue); // set text color
@@ -198,8 +197,48 @@ public class GenerateReportsService {
             contentStream.setFont(fontRegular, 18); // font + size
             contentStream.newLineAtOffset(0, -25); // x, y position
             contentStream.showText("Term 1 (Week 1 - Week 10)");
-            contentStream.endText();
 
+            // Additional Student Metrics
+            // Attendance
+            contentStream.setFont(fontBold, 16); // font + size
+            contentStream.newLineAtOffset(-40, -360); // x, y position
+            contentStream.showText("Attendance Rate:");
+
+            contentStream.setFont(fontRegular, 14); // font + size
+            contentStream.newLineAtOffset(150, 0); // x, y position
+            contentStream.showText("FIX");
+
+            // Homework
+            contentStream.setFont(fontBold, 16); // font + size
+            contentStream.newLineAtOffset(60, 0); // x, y position
+            contentStream.showText("Homework completion:");
+
+            contentStream.setFont(fontRegular, 14); // font + size
+            contentStream.newLineAtOffset(190, 0); // x, y position
+            contentStream.showText("~87%");
+
+            // Days Late
+            contentStream.setFont(fontBold, 16); // font + size
+            contentStream.newLineAtOffset(-400, -50); // x, y position
+            contentStream.showText("Days Late:");
+
+            contentStream.setFont(fontRegular, 14); // font + size
+            contentStream.newLineAtOffset(90, 0); // x, y position
+            contentStream.showText("15");
+
+            // Emotional State
+            contentStream.setFont(fontBold, 16); // font + size
+            contentStream.newLineAtOffset(120, 0); // x, y position
+            contentStream.showText("Most Common Emotional State:");
+
+            contentStream.setFont(fontRegular, 14); // font + size
+            contentStream.newLineAtOffset(260, 0); // x, y position
+            contentStream.showText("Happy");
+
+            // Teacher notes
+
+
+            contentStream.endText();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

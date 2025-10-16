@@ -29,7 +29,7 @@ public class Main extends Application {
         formDao = new DbFormDao();
         studentDao = new DbStudentDao();
         generateReportsService = new GenerateReportsService(formDao, studentDao);
-        generateReportsService.createReport("e215947f-4d73-4726-baaf-dbec6258968f");
+        generateReportsService.createReport("e215947f-4d73-4726-baaf-dbec6258968f", 1, 1,10);
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
