@@ -9,18 +9,21 @@
 
 <!--current test email is kayla@gmail.com-->
 <!--current test password is Password1!-->
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           alignment="CENTER"
+           fx:controller="com.cab302.teachscope.controllers.LoginController"
+           stylesheets="@../css/styles.css">
 
-<HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="0"
-      fx:controller="com.cab302.teachscope.controllers.LoginController" stylesheets="@../css/styles.css">
+    <HBox alignment="CENTER" spacing="0" HBox.hgrow="ALWAYS">
 
     <!-- login form -->
-    <VBox alignment="CENTER" spacing="15.0" prefWidth="400" style="-fx-background-color: white;">
+    <VBox alignment="CENTER" spacing="15.0" prefWidth="400" style="-fx-background-color: white;" HBox.hgrow="ALWAYS">
         <padding>
             <Insets top="70" right="70" bottom="70" left="320"/>
         </padding>
 
         <!-- logo -->
-        <ImageView pickOnBounds="true" preserveRatio="true" fitWidth="500">
+        <ImageView pickOnBounds="true" preserveRatio="true" fitWidth="250">
             <image>
                 <Image url="@../images/logo_teachscope.png"/>
             </image>
@@ -36,7 +39,7 @@
         <PasswordField promptText="Password" fx:id="passwordField" styleClass="form-control"/>
 
         <!-- login button -->
-        <Button fx:id="loginButton" text="Login" styleClass="" maxWidth="Infinity" onAction="#onLoginClick"/>
+        <Button fx:id="loginButton" text="Login" styleClass="" maxWidth="Infinity" onAction="#onLoginClick" defaultButton="true"/>
 
         <!-- sign up link -->
         <HBox alignment="CENTER" spacing="5">
@@ -47,16 +50,16 @@
 
         <!-- forgot password -->
         <HBox alignment="CENTER" spacing="5">
-            <Label text="Forgot your password?"/>
-            <Hyperlink fx:id="forgotPasswordLink" text="Reset password" onAction="#forgotPasswordClick"/>
+            <Hyperlink fx:id="forgotPasswordLink" text="Forgot password" onAction="#forgotPasswordClick"/>
         </HBox>
     </VBox>
 
     <!-- image -->
-    <ImageView pickOnBounds="true" preserveRatio="true">
+    <ImageView pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
         <image>
             <Image url="@../images/login_picture.png"/>
         </image>
     </ImageView>
 
 </HBox>
+</StackPane>

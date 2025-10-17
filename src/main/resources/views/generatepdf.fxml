@@ -9,8 +9,10 @@
 <?import javafx.scene.control.ComboBox?>
 <?import java.lang.String?>
 
-<HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="0"
-      fx:controller="com.cab302.teachscope.controllers.FormController" stylesheets="@../css/styles.css">
+<StackPane xmlns:fx="http://javafx.com/fxml" alignment="CENTER"
+           fx:controller="com.cab302.teachscope.controllers.GeneratePDFController"
+           stylesheets="@../css/styles.css">
+<HBox alignment="CENTER" spacing="0">
 
     <!-- sidebar menu -->
     <VBox spacing="20" style="-fx-background-color: #E5E5E5;" prefWidth="220">
@@ -120,9 +122,10 @@
             </HBox>
 
             <HBox alignment="CENTER_LEFT" spacing="30">
-                <Button text="Generate Report" fx:id="generateReport"/>
+                <Button text="Generate Report" fx:id="generateReport" onAction="#onGenerateReportClick"/>
             </HBox>
         </VBox>
     </VBox>
 
 </HBox>
+</StackPane>

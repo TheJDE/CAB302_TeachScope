@@ -34,7 +34,8 @@ public class StudentService {
             Student.Gender gender,
             Student.GradeLevel gradeLevel,
             String classCode,
-            Student.EnrolmentStatus enrolmentStatus
+            Student.EnrolmentStatus enrolmentStatus,
+            String currentTeacherEmail
     ) throws IllegalArgumentException {
 
         // Validate user inputs
@@ -64,10 +65,10 @@ public class StudentService {
         }
 
         // Create and add user
-        Student student = new Student(Optional.empty(), firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+        Student student = new Student(Optional.empty(), firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
 
         try {
-            studentDAO.addStudent(student);
+            studentDAO.addStudent(student, currentTeacherEmail);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -164,9 +165,9 @@ public class StudentService {
      * Gets all students.
      * @return A list of all student objects.
      */
-    public List<Student> getAllStudents() {
+    public List<Student> getAllStudents(String currentTeacherEmail) {
         try {
-            return studentDAO.getAllStudents();
+            return studentDAO.getAllStudents(currentTeacherEmail);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -355,7 +355,7 @@ public class DbFormDao implements FormDao {
                 "AVG(behaviourScore) AS behaviourScore, " +
                 "AVG(peerInteractionScore) AS peerInteractionScore, " +
                 "AVG(respectForRulesScore) AS respectForRulesScore " +
-                "FROM weekly_forms" +
+                "FROM weekly_forms " +
                 "WHERE term = ? AND week BETWEEN ? AND ?";
 
         Map<String, Double> averages = new HashMap<>();
@@ -383,8 +383,8 @@ public class DbFormDao implements FormDao {
     }
 
     /**
-     * Finds averages and totals for a student's attendance, lateness, homework completion,
-     * and most common emotional state over a given term and week range.
+     * Retrieves the average attendance statistics and the most common emotional state
+     * for a specific student within a given term and week range.
      *
      * @param studentId ID of the student to retrieve data for
      * @param term Term number to search

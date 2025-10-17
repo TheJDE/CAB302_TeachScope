@@ -44,6 +44,11 @@ public class Student {
      */
     private EnrolmentStatus enrolmentStatus;
 
+    /**
+     * Student's enrolment status
+     */
+    private String teacher;
+
     //ENUMs
     /**
      * Enum of gender values.
@@ -98,7 +103,7 @@ public class Student {
      * @param classCode Student class code.
      * @param enrolmentStatus Student enrolment status.
      */
-    public Student(Optional<String> Id, String firstName, String lastName, Gender gender, GradeLevel gradeLevel, String classCode, EnrolmentStatus enrolmentStatus){
+    public Student(Optional<String> Id, String firstName, String lastName, Gender gender, GradeLevel gradeLevel, String classCode, EnrolmentStatus enrolmentStatus, String teacher){
         // If an ID is provided, use that, otherwise generate a new ID
         if (Id.isPresent()) {
              setId(Id.get());
@@ -111,6 +116,7 @@ public class Student {
         setGradeLevel(gradeLevel);
         setClassCode(classCode);
         setEnrolmentStatus(enrolmentStatus);
+        setTeacher(teacher);
     }
 
     //Getters and Setters
@@ -225,6 +231,22 @@ public class Student {
      */
     public EnrolmentStatus getEnrolmentStatus() {
         return enrolmentStatus;
+    }
+
+    /**
+     * Teacher getter.
+     * @return Teacher.
+     */
+    public String getTeacher() {
+        return teacher;
+    }
+
+    /**
+     * Teacher setter.
+     * @param teacher - Students teacher
+     */
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
     }
 }
 

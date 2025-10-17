@@ -23,6 +23,7 @@ public class StudentTest {
     private Student.GradeLevel gradeLevel;
     private String classCode;
     private Student.EnrolmentStatus enrolmentStatus;
+    private String currentTeacherEmail;
 
     // Student values 2
     private String firstName2;
@@ -31,6 +32,7 @@ public class StudentTest {
     private Student.GradeLevel gradeLevel2;
     private String classCode2;
     private Student.EnrolmentStatus enrolmentStatus2;
+    private String currentTeacherEmail2;
 
     @BeforeEach
     void setup() {
@@ -57,10 +59,10 @@ public class StudentTest {
     // ADDING TO DATABASE
     @Test
     void TestAddStudentValid() {
-        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
 
         try {
-            Student student = studentDao.getAllStudents().getFirst();
+            Student student = studentDao.getAllStudents(currentTeacherEmail).getFirst();
 
             assertEquals(firstName, student.getFirstName());
         } catch (SQLException e) {
@@ -71,78 +73,78 @@ public class StudentTest {
     @Test
     void TestAddStudentNullFirstName() {
         assertThrows(IllegalArgumentException.class, () -> {
-            studentService.registerStudent(null, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+            studentService.registerStudent(null, lastName, gender, gradeLevel, classCode, enrolmentStatus,currentTeacherEmail);
         });
     }
 
     @Test
     void TestAddStudentNullLastName() {
         assertThrows(IllegalArgumentException.class, () -> {
-            studentService.registerStudent(firstName, null, gender, gradeLevel, classCode, enrolmentStatus);
+            studentService.registerStudent(firstName, null, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
         });
     }
 
     @Test
     void TestAddStudentNullGender() {
         assertThrows(IllegalArgumentException.class, () -> {
-            studentService.registerStudent(firstName, lastName, null, gradeLevel, classCode, enrolmentStatus);
+            studentService.registerStudent(firstName, lastName, null, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
         });
     }
 
     @Test
     void TestAddStudentNullGradeLevel() {
         assertThrows(IllegalArgumentException.class, () -> {
-            studentService.registerStudent(firstName, lastName, gender, null, classCode, enrolmentStatus);
+            studentService.registerStudent(firstName, lastName, gender, null, classCode, enrolmentStatus, currentTeacherEmail);
         });
     }
 
     @Test
     void TestAddStudentNullClassCode() {
         assertThrows(IllegalArgumentException.class, () -> {
-            studentService.registerStudent(firstName, lastName, gender, gradeLevel, null, enrolmentStatus);
+            studentService.registerStudent(firstName, lastName, gender, gradeLevel, null, enrolmentStatus, currentTeacherEmail);
         });
     }
 
     @Test
     void TestAddStudentNullEnrolment() {
         assertThrows(IllegalArgumentException.class, () -> {
-            studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, null);
+            studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, null, currentTeacherEmail);
         });
     }
 
     @Test
     void TestAddStudentInvalidFirstName() {
         assertThrows(IllegalArgumentException.class, () -> {
-            studentService.registerStudent("@", lastName, gender, gradeLevel, classCode, enrolmentStatus);
+            studentService.registerStudent("@", lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
         });
     }
 
     @Test
     void TestAddStudentInvalidLastName() {
         assertThrows(IllegalArgumentException.class, () -> {
-            studentService.registerStudent(firstName, "@", gender, gradeLevel, classCode, enrolmentStatus);
+            studentService.registerStudent(firstName, "@", gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
         });
     }
 
     @Test
     void TestAddStudentInvalidClassCode() {
         assertThrows(IllegalArgumentException.class, () -> {
-            studentService.registerStudent(firstName, lastName, gender, gradeLevel, "NA", enrolmentStatus);
+            studentService.registerStudent(firstName, lastName, gender, gradeLevel, "NA", enrolmentStatus, currentTeacherEmail);
         });
     }
 
     // UPDATING
     @Test
     void TestUpdateStudentValid() {
-        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
 
         try {
-            Student student = studentDao.getAllStudents().getFirst();
+            Student student = studentDao.getAllStudents(currentTeacherEmail).getFirst();
 
             studentService.updateStudent(student.getId(), firstName2, lastName2, gender2, gradeLevel2, classCode2, enrolmentStatus2);
 
             // Get updated student
-            Student updatedStudent = studentDao.getAllStudents().getFirst();
+            Student updatedStudent = studentDao.getAllStudents(currentTeacherEmail).getFirst();
 
             assertEquals(firstName2, updatedStudent.getFirstName());
         } catch (Exception e) {
@@ -152,11 +154,11 @@ public class StudentTest {
 
     @Test
     void TestUpdateStudentNullFirstName() {
-        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
 
         // Get input student
         try {
-            Student student = studentDao.getAllStudents().getFirst();
+            Student student = studentDao.getAllStudents(currentTeacherEmail).getFirst();
 
             assertThrows(IllegalArgumentException.class, () -> {
                 studentService.updateStudent(student.getId(), null, lastName2, gender2, gradeLevel2, classCode2, enrolmentStatus2);
@@ -168,11 +170,11 @@ public class StudentTest {
 
     @Test
     void TestUpdateStudentNullLastName() {
-        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
 
         // Get input student
         try {
-            Student student = studentDao.getAllStudents().getFirst();
+            Student student = studentDao.getAllStudents(currentTeacherEmail).getFirst();
 
             assertThrows(IllegalArgumentException.class, () -> {
                 studentService.updateStudent(student.getId(), firstName2, null, gender2, gradeLevel2, classCode2, enrolmentStatus2);
@@ -184,11 +186,11 @@ public class StudentTest {
 
     @Test
     void TestUpdateStudentNullGender() {
-        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
 
         // Get input student
         try {
-            Student student = studentDao.getAllStudents().getFirst();
+            Student student = studentDao.getAllStudents(currentTeacherEmail).getFirst();
 
             assertThrows(IllegalArgumentException.class, () -> {
                 studentService.updateStudent(student.getId(), firstName2, lastName2, null, gradeLevel2, classCode2, enrolmentStatus2);
@@ -200,11 +202,11 @@ public class StudentTest {
 
     @Test
     void TestUpdateStudentNullGradeLevel() {
-        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
 
         // Get input student
         try {
-            Student student = studentDao.getAllStudents().getFirst();
+            Student student = studentDao.getAllStudents(currentTeacherEmail).getFirst();
 
             assertThrows(IllegalArgumentException.class, () -> {
                 studentService.updateStudent(student.getId(), firstName2, lastName2, gender2, null, classCode2, enrolmentStatus2);
@@ -216,11 +218,11 @@ public class StudentTest {
 
     @Test
     void TestUpdateStudentNullClassCode() {
-        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
 
         // Get input student
         try {
-            Student student = studentDao.getAllStudents().getFirst();
+            Student student = studentDao.getAllStudents(currentTeacherEmail).getFirst();
 
             assertThrows(IllegalArgumentException.class, () -> {
                 studentService.updateStudent(student.getId(), firstName2, lastName2, gender2, gradeLevel2, null, enrolmentStatus2);
@@ -232,11 +234,11 @@ public class StudentTest {
 
     @Test
     void TestUpdateStudentNullEnrolment() {
-        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
 
         // Get input student
         try {
-            Student student = studentDao.getAllStudents().getFirst();
+            Student student = studentDao.getAllStudents(currentTeacherEmail).getFirst();
 
             assertThrows(IllegalArgumentException.class, () -> {
                 studentService.updateStudent(student.getId(), firstName2, lastName2, gender2, gradeLevel2, classCode2, null);
@@ -248,11 +250,11 @@ public class StudentTest {
 
     @Test
     void TestUpdateStudentInvalidFirstName() {
-        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
 
         // Get input student
         try {
-            Student student = studentDao.getAllStudents().getFirst();
+            Student student = studentDao.getAllStudents(currentTeacherEmail).getFirst();
 
             assertThrows(IllegalArgumentException.class, () -> {
                 studentService.updateStudent(student.getId(), "@", lastName2, gender2, gradeLevel2, classCode2, enrolmentStatus2);
@@ -264,11 +266,11 @@ public class StudentTest {
 
     @Test
     void TestUpdateStudentInvalidLastName() {
-        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
 
         // Get input student
         try {
-            Student student = studentDao.getAllStudents().getFirst();
+            Student student = studentDao.getAllStudents(currentTeacherEmail).getFirst();
 
             assertThrows(IllegalArgumentException.class, () -> {
                 studentService.updateStudent(student.getId(), firstName2, "@", gender2, gradeLevel2, classCode2, enrolmentStatus2);
@@ -280,11 +282,11 @@ public class StudentTest {
 
     @Test
     void TestUpdateStudentInvalidClassCode() {
-        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
 
         // Get input student\
         try {
-            Student student = studentDao.getAllStudents().getFirst();
+            Student student = studentDao.getAllStudents(currentTeacherEmail).getFirst();
 
             assertThrows(IllegalArgumentException.class, () -> {
                 studentService.updateStudent(student.getId(), firstName2, lastName2, gender2, gradeLevel2, "NA", enrolmentStatus2);
@@ -297,10 +299,10 @@ public class StudentTest {
     // Retrieval
     @Test
     void TestRetrieveValidStudentId() {
-        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
 
         try {
-            Student student = studentDao.getAllStudents().getFirst();
+            Student student = studentDao.getAllStudents(currentTeacherEmail).getFirst();
 
             assertEquals(student.getId(), studentService.getStudentById(student.getId()).getId());
         } catch (SQLException e) {
@@ -317,13 +319,13 @@ public class StudentTest {
 
     @Test
     void TestRetrieveAllStudentsTwoStudents() {
-        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
-        studentService.registerStudent(firstName2, lastName2, gender2, gradeLevel2, classCode2, enrolmentStatus2);
+        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
+        studentService.registerStudent(firstName2, lastName2, gender2, gradeLevel2, classCode2, enrolmentStatus2 ,currentTeacherEmail2);
 
         try {
-            List<Student> students = studentDao.getAllStudents();
+            List<Student> students = studentDao.getAllStudents(currentTeacherEmail);
 
-            assertEquals(students, studentService.getAllStudents());
+            assertEquals(students, studentService.getAllStudents(currentTeacherEmail));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -332,9 +334,9 @@ public class StudentTest {
     @Test
     void TestRetrieveAllStudentsEmpty() {
         try {
-            List<Student> students = studentDao.getAllStudents();
+            List<Student> students = studentDao.getAllStudents(currentTeacherEmail);
 
-            assertEquals(students, studentService.getAllStudents());
+            assertEquals(students, studentService.getAllStudents(currentTeacherEmail));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -343,11 +345,11 @@ public class StudentTest {
     // DELETE
     @Test
     void TestDeleteStudentValid() {
-        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
 
         // Get input student
         try {
-            Student student = studentDao.getAllStudents().getFirst();
+            Student student = studentDao.getAllStudents(currentTeacherEmail).getFirst();
 
             studentService.deleteStudent(student.getId());
 
@@ -360,11 +362,11 @@ public class StudentTest {
 
     @Test
     void TestDeleteStudentInvalidId() {
-        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus);
+        studentService.registerStudent(firstName, lastName, gender, gradeLevel, classCode, enrolmentStatus, currentTeacherEmail);
 
         // Get input student
         try {
-            Student student = studentDao.getAllStudents().getFirst();
+            Student student = studentDao.getAllStudents(currentTeacherEmail).getFirst();
 
             assertThrows(IllegalArgumentException.class, () -> {
                 studentService.deleteStudent("invalidId");
