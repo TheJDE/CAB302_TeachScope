@@ -76,18 +76,23 @@ public class GenerateReportsService {
             throw new RuntimeException(e);
         }
 
+        // Ensure student exists
         if (student == null) {
             System.err.println("No student found for report: " + studentID);
             return;
         }
 
 
-        // Get average scores for student and class
+
+        // Get data to display
         Map<String, Double> averageValues;
         Map<String, Double> totalAverageValues;
+        Map<String, Object> additionalStats;
         try {
-            averageValues = formDao.findAverageScoresForStudent(studentID, term, fromWeek, toWeek);
-            totalAverageValues = formDao.findGlobalAverageScores(term, fromWeek, toWeek);
+            averageValues = formDao.findAverageScoresForStudent(studentID, term, fromWeek, toWeek); // Student averages
+            totalAverageValues = formDao.findGlobalAverageScores(term, fromWeek, toWeek); // Class averages
+            additionalStats = formDao.findAverageAttendanceAndEmotionForStudent(studentID, term, fromWeek, toWeek); // Additional stats
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -155,7 +160,7 @@ public class GenerateReportsService {
         plot.setRangeGridlinePaint(Color.GRAY);
         barChart.setBackgroundPaint(Color.WHITE);
 
-        // Add class average line to same graph rather than it's own
+        // Add class average line to same graph rather than its own
         plot.setDataset(1, classAverages);
         plot.setDatasetRenderingOrder(DatasetRenderingOrder.FORWARD); // This puts it in front of the bars
         plot.mapDatasetToRangeAxis(1, 0);
@@ -215,41 +220,41 @@ public class GenerateReportsService {
 
             contentStream.setFont(fontRegular, 14); // font + size
             contentStream.newLineAtOffset(150, 0); // x, y position
-            contentStream.showText("FIX");
+            contentStream.showText((double) additionalStats.get("avgAttendanceDays") * 20 + "%");
 
             // Homework
             contentStream.setFont(fontBold, 16); // font + size
-            contentStream.newLineAtOffset(60, 0); // x, y position
+            contentStream.newLineAtOffset(70, 0); // x, y position
             contentStream.showText("Homework completion:");
 
             contentStream.setFont(fontRegular, 14); // font + size
             contentStream.newLineAtOffset(190, 0); // x, y position
-            contentStream.showText("~87%");
+            contentStream.showText("~" + (double) additionalStats.get("avgHomeworkDone") * 20 + "%");
 
             // Days Late
             contentStream.setFont(fontBold, 16); // font + size
-            contentStream.newLineAtOffset(-400, -50); // x, y position
+            contentStream.newLineAtOffset(-410, -50); // x, y position
             contentStream.showText("Days Late:");
 
             contentStream.setFont(fontRegular, 14); // font + size
             contentStream.newLineAtOffset(90, 0); // x, y position
-            contentStream.showText("15");
+            contentStream.showText(additionalStats.get("totalDaysLate").toString());
 
             // Emotional State
             contentStream.setFont(fontBold, 16); // font + size
-            contentStream.newLineAtOffset(120, 0); // x, y position
+            contentStream.newLineAtOffset(130, 0); // x, y position
             contentStream.showText("Most Common Emotional State:");
 
             contentStream.setFont(fontRegular, 14); // font + size
             contentStream.newLineAtOffset(260, 0); // x, y position
-            contentStream.showText("Happy");
+            contentStream.showText(additionalStats.get("mostCommonEmotionalState").toString());
 
             // Teacher notes
 
 
             contentStream.endText();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException("Something went wrong...");
         }
 
         try {
@@ -260,7 +265,7 @@ public class GenerateReportsService {
             }
 
             // Save the PDF
-            document.save(new File(pdfDir, student.getFirstName() + "-" + student.getLastName() + ".pdf"));
+            document.save(new File(pdfDir, student.getFirstName() + "-" + student.getLastName() + "-Report.pdf"));
 
         } catch (IOException e) {
             throw new RuntimeException(e);
