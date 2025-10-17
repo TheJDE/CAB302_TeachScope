@@ -43,6 +43,11 @@ public class MockFormDao implements FormDao {
     }
 
     @Override
+    public List<Map<String, String>> findTeacherConcernsForStudent(String studentId, int term, int fromWeek, int toWeek) {
+        return new ArrayList<>();
+    }
+
+    @Override
     public List<WeeklyForm> findAll() {
         return new ArrayList<>(forms.values());
     }
