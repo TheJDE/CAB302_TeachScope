@@ -1,5 +1,10 @@
 package com.cab302.teachscope;
 
+import com.cab302.teachscope.models.dao.DbFormDao;
+import com.cab302.teachscope.models.dao.DbStudentDao;
+import com.cab302.teachscope.models.dao.FormDao;
+import com.cab302.teachscope.models.dao.StudentDao;
+import com.cab302.teachscope.models.services.GenerateReportsService;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -16,8 +21,18 @@ import java.sql.Connection;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
 public class Main extends Application {
+
+    private FormDao formDao;
+    private StudentDao studentDao;
+    private GenerateReportsService generateReportsService;
+
     @Override
     public void start(Stage stage) throws IOException {
+        formDao = new DbFormDao();
+        studentDao = new DbStudentDao();
+        generateReportsService = new GenerateReportsService(formDao, studentDao);
+        generateReportsService.createReport("e215947f-4d73-4726-baaf-dbec6258968f", 1, 1,10);
+
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/views/login.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root, 1000, 700);

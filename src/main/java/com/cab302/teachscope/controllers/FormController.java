@@ -5,6 +5,7 @@ import com.cab302.teachscope.models.services.FormService;
 import com.cab302.teachscope.models.entities.WeeklyForm;
 import com.cab302.teachscope.models.dao.DbStudentDao;
 import com.cab302.teachscope.models.services.StudentService;
+import com.cab302.teachscope.controllers.GeneratePDFController;
 import com.cab302.teachscope.util.LoggedInUser;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -210,15 +211,15 @@ public class FormController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/generatepdf.fxml"));
             Parent root = loader.load();
 
-            // Get the controller and pass the student info
-            FormController controller = loader.getController();
+            // Get the correct controller type
+            GeneratePDFController controller = loader.getController();
             controller.setStudent(studentId, studentName);
 
             stage.setTitle("Generate PDF");
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
-            showAlert("Navigation Error", "Could not open the new form page.");
+            showAlert("Navigation Error", "Could not open the Generate PDF page.");
         }
     }
 

@@ -270,10 +270,160 @@ public class DbFormDao implements FormDao {
     }
 
     /**
+     * Fetches the average of all score-related fields for a student.
+     *
+     * @param studentId The student ID
+     * @param term The chosen term INT
+     * @param fromWeek The starting week of the search INT
+     * @param toWeek The end week of the search INT
+     * @return A map containing average scores for each field
+     * @throws SQLException On database error
+     */
+    public Map<String, Double> findAverageScoresForStudent(String studentId, int term, int fromWeek, int toWeek) throws SQLException {
+        String sql = "SELECT " +
+                "AVG(attentionScore) AS attentionScore, " +
+                "AVG(participationScore) AS participationScore, " +
+                "AVG(literacyScore) AS literacyScore, " +
+                "AVG(numeracyScore) AS numeracyScore, " +
+                "AVG(understandingScore) AS understandingScore, " +
+                "AVG(behaviourScore) AS behaviourScore, " +
+                "AVG(peerInteractionScore) AS peerInteractionScore, " +
+                "AVG(respectForRulesScore) AS respectForRulesScore " +
+                "FROM weekly_forms " +
+                "WHERE studentId = ? AND term = ? AND week BETWEEN ? AND ?";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, studentId);
+        statement.setInt(2, term);
+        statement.setInt(3, fromWeek);
+        statement.setInt(4, toWeek);
+        ResultSet rs = statement.executeQuery();
+
+        Map<String, Double> averages = new HashMap<>();
+        if (rs.next()) {
+            averages.put("attentionScore", rs.getDouble("attentionScore"));
+            averages.put("participationScore", rs.getDouble("participationScore"));
+            averages.put("literacyScore", rs.getDouble("literacyScore"));
+            averages.put("numeracyScore", rs.getDouble("numeracyScore"));
+            averages.put("understandingScore", rs.getDouble("understandingScore"));
+            averages.put("behaviourScore", rs.getDouble("behaviourScore"));
+            averages.put("peerInteractionScore", rs.getDouble("peerInteractionScore"));
+            averages.put("respectForRulesScore", rs.getDouble("respectForRulesScore"));
+        }
+
+        return averages;
+    }
+
+    /**
+     * Finds the average of all score fields across all students.
+     * @param term The chosen term INT
+     * @param fromWeek The starting week of the search INT
+     * @param toWeek The end week of the search INT
+     * @return Map of average scores for each category.
+     * @throws SQLException On query error
+     */
+    @Override
+    public Map<String, Double> findGlobalAverageScores(int term, int fromWeek, int toWeek) throws SQLException {
+        String sql = "SELECT " +
+                "AVG(attentionScore) AS attentionScore, " +
+                "AVG(participationScore) AS participationScore, " +
+                "AVG(literacyScore) AS literacyScore, " +
+                "AVG(numeracyScore) AS numeracyScore, " +
+                "AVG(understandingScore) AS understandingScore, " +
+                "AVG(behaviourScore) AS behaviourScore, " +
+                "AVG(peerInteractionScore) AS peerInteractionScore, " +
+                "AVG(respectForRulesScore) AS respectForRulesScore " +
+                "FROM weekly_forms " +
+                "WHERE term = ? AND week BETWEEN ? AND ?";
+
+        Map<String, Double> averages = new HashMap<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, term);
+            stmt.setInt(2, fromWeek);
+            stmt.setInt(3, toWeek);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                averages.put("attentionScore", rs.getDouble("attentionScore"));
+                averages.put("participationScore", rs.getDouble("participationScore"));
+                averages.put("literacyScore", rs.getDouble("literacyScore"));
+                averages.put("numeracyScore", rs.getDouble("numeracyScore"));
+                averages.put("understandingScore", rs.getDouble("understandingScore"));
+                averages.put("behaviourScore", rs.getDouble("behaviourScore"));
+                averages.put("peerInteractionScore", rs.getDouble("peerInteractionScore"));
+                averages.put("respectForRulesScore", rs.getDouble("respectForRulesScore"));
+            }
+        }
+
+        return averages;
+    }
+
+    /**
+     * Retrieves the average attendance statistics and the most common emotional state
+     * for a specific student within a given term and week range.
+     *
+     * @param studentId the unique ID of the student
+     * @param term the term number to query (e.g., 1, 2, 3, 4)
+     * @param fromWeek the starting week number of the range
+     * @param toWeek the ending week number of the range
+     * @return a Map containing data not shown in graph
+     */
+
+    public Map<String, Object> findAverageAttendanceAndEmotionForStudent(String studentId, int term, int fromWeek, int toWeek) {
+        String sql = """
+        SELECT
+            AVG(attendanceDays) AS avgAttendanceDays,
+            SUM(daysLate) AS totalDaysLate,
+            AVG(homeworkDone) AS avgHomeworkDone,
+            (
+                SELECT emotionalState
+                FROM weekly_forms AS wf2
+                WHERE wf2.studentId = wf.studentId
+                  AND wf2.term = wf.term
+                  AND wf2.week BETWEEN ? AND ?
+                GROUP BY emotionalState
+                ORDER BY COUNT(*) DESC
+                LIMIT 1
+            ) AS mostCommonEmotionalState
+        FROM weekly_forms AS wf
+        WHERE wf.studentId = ?
+          AND wf.term = ?
+          AND wf.week BETWEEN ? AND ?;
+    """;
+
+        Map<String, Object> result = new HashMap<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, fromWeek);
+            stmt.setInt(2, toWeek);
+            stmt.setString(3, studentId);
+            stmt.setInt(4, term);
+            stmt.setInt(5, fromWeek);
+            stmt.setInt(6, toWeek);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    result.put("avgAttendanceDays", rs.getDouble("avgAttendanceDays"));
+                    result.put("totalDaysLate", rs.getInt("totalDaysLate"));
+                    result.put("avgHomeworkDone", rs.getDouble("avgHomeworkDone"));
+                    result.put("mostCommonEmotionalState", rs.getString("mostCommonEmotionalState"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    /**
      * Gets all forms in the database
      * @return List of all forms
      * @throws SQLException On misformed query
      */
+
     @Override
     public List<WeeklyForm> findAll() throws SQLException {
         // TODO: implement fetch all
