@@ -430,15 +430,10 @@ public class DbFormDao implements FormDao {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                Double avgAttendance = rs.getDouble("avgAttendance");
+                Double avgAttendance = rs.getDouble("avgAttendanceDays");
                 Double totalDaysLate = rs.getDouble("totalDaysLate");
                 Double avgHomeworkDone = rs.getDouble("avgHomeworkDone");
                 String mostCommonEmotion = rs.getString("mostCommonEmotionalState");
-
-                // 🔹 Check if all fields are missing (no data at all)
-                if (avgAttendance == null && totalDaysLate == null && avgHomeworkDone == null && mostCommonEmotion == null) {
-                    throw new IllegalStateException("No data found for student in the given range");
-                }
 
                 Map<String, Object> result = new HashMap<>();
                 result.put("avgAttendance", avgAttendance);

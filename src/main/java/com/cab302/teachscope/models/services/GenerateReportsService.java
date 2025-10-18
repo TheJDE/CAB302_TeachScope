@@ -3,6 +3,7 @@ package com.cab302.teachscope.models.services;
 import com.cab302.teachscope.models.dao.FormDao;
 import com.cab302.teachscope.models.dao.StudentDao;
 import com.cab302.teachscope.models.entities.Student;
+import com.cab302.teachscope.util.NavigationUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -92,10 +93,12 @@ public class GenerateReportsService {
             averageValues = formDao.findAverageScoresForStudent(studentID, term, fromWeek, toWeek); // Student averages
             totalAverageValues = formDao.findGlobalAverageScores(term, fromWeek, toWeek); // Class averages
             additionalStats = formDao.findAverageAttendanceAndEmotionForStudent(studentID, term, fromWeek, toWeek); // Additional stats
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        System.out.println(averageValues);
+        System.out.println(additionalStats);
 
         // Create and populate dataset for individual student
         DefaultCategoryDataset averageScores = new DefaultCategoryDataset();
@@ -220,7 +223,7 @@ public class GenerateReportsService {
 
             contentStream.setFont(fontRegular, 14); // font + size
             contentStream.newLineAtOffset(150, 0); // x, y position
-            contentStream.showText((double) additionalStats.get("avgAttendanceDays") * 20 + "%");
+            contentStream.showText((double) additionalStats.get("avgAttendance") * 20 + "%");
 
             // Homework
             contentStream.setFont(fontBold, 16); // font + size
@@ -259,13 +262,16 @@ public class GenerateReportsService {
 
         try {
             // Ensure 'pdfs' folder exists
-            File pdfDir = new File("pdfs");
+            String userHome = System.getProperty("user.home");
+
+            File pdfDir = new File(userHome, "/Documents/pdfs");
             if (!pdfDir.exists()) {
                 pdfDir.mkdirs();
             }
 
             // Save the PDF
-            document.save(new File(pdfDir, student.getFirstName() + "-" + student.getLastName() + "-Report.pdf"));
+            String fileName = student.getFirstName() + "-" + student.getLastName() + "-Report.pdf";
+            document.save(new File(pdfDir, fileName));
 
         } catch (IOException e) {
             throw new RuntimeException(e);

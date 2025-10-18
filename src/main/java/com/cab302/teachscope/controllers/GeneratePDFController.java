@@ -15,6 +15,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 
 public class GeneratePDFController {
@@ -73,12 +75,12 @@ public class GeneratePDFController {
 
     @FXML
     protected void onKnowledgeBaseClick() {
-        NavigationUtils.openKnowledgeBasePDF();
+        NavigationUtils.openPDF("/src/main/resources/images/user_introductory_tutorial.pdf");
     }
 
     @FXML
     protected void onIntroductoryTutorialClick() {
-        NavigationUtils.openIntroductoryTutorial();
+        NavigationUtils.openPDF("/src/main/resources/images/user_introductory_tutorial.pdf");
     }
 
     @FXML
@@ -158,9 +160,15 @@ public class GeneratePDFController {
             return;
         }
 
+        String userHome = System.getProperty("user.home");
+
+        File pdfDir = new File(userHome, "/Documents/pdfs");
+
         try {
             reportsService.createReport(studentId, termNumber, from, to);
-            showAlert("Success", "PDF report generated successfully!");
+            showAlert("Success", "PDF report generated at " + pdfDir);
+            Desktop.getDesktop().open(pdfDir);
+
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error Generating Report", e.getMessage());

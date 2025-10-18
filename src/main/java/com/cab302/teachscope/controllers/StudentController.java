@@ -117,12 +117,12 @@ public class StudentController {
 
     @FXML
     protected void onKnowledgeBaseClick() {
-        NavigationUtils.openKnowledgeBasePDF();
+        NavigationUtils.openPDF("/src/main/resources/images/knowledge_base_final.pdf");
     }
 
     @FXML
     protected void onIntroductoryTutorialClick() {
-        NavigationUtils.openIntroductoryTutorial();
+        NavigationUtils.openPDF("/src/main/resources/images/user_introductory_tutorial.pdf");
     }
 
     /**
