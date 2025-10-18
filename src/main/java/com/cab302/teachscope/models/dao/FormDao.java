@@ -24,6 +24,8 @@ public interface FormDao {
 
     List<WeeklyForm> findAll() throws SQLException;
 
+    List<String> findStudentsInRange(int term, int fromWeek, int toWeek) throws SQLException;
+
     List<WeeklyForm> findAllForStudent(String studentId) throws SQLException;
 
     List<Map<String, String>> findAllForGivenWeek(int term, int week) throws SQLException;

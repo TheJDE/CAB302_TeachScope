@@ -3,6 +3,7 @@ package com.cab302.teachscope.models.dao;
 import com.cab302.teachscope.models.entities.Student;
 import com.cab302.teachscope.models.entities.WeeklyForm;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +51,10 @@ public class MockFormDao implements FormDao {
     @Override
     public List<WeeklyForm> findAll() {
         return new ArrayList<>(forms.values());
+    }
+
+    public List<String> findStudentsInRange(int term, int fromWeek, int toWeek) throws SQLException {
+        return null;
     }
 
     @Override

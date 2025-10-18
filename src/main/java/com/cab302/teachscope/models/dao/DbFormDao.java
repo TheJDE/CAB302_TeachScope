@@ -496,11 +496,28 @@ public class DbFormDao implements FormDao {
      * @return List of all forms
      * @throws SQLException On misformed query
      */
-
     @Override
     public List<WeeklyForm> findAll() throws SQLException {
         // TODO: implement fetch all
         return new ArrayList<>();
+    }
+
+    @Override
+    public List<String> findStudentsInRange(int term, int fromWeek, int toWeek) throws SQLException {
+        List<String> students = new ArrayList<>();
+
+        PreparedStatement statement = connection.prepareStatement("SELECT studentId FROM weekly_forms WHERE term = ? AND week BETWEEN ? AND ?");
+        statement.setInt(1, term);
+        statement.setInt(2, fromWeek);
+        statement.setInt(2, toWeek);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            students.add(resultSet.getString("studentId"));
+        }
+
+        return students;
     }
 
     /**

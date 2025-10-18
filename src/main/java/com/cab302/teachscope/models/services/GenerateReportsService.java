@@ -3,7 +3,6 @@ package com.cab302.teachscope.models.services;
 import com.cab302.teachscope.models.dao.FormDao;
 import com.cab302.teachscope.models.dao.StudentDao;
 import com.cab302.teachscope.models.entities.Student;
-import com.cab302.teachscope.util.NavigationUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -29,6 +28,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class GenerateReportsService {
@@ -275,6 +276,32 @@ public class GenerateReportsService {
 
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void generateAll(int term, int fromWeek, int toWeek) {
+        // Check term is valid
+        if (term < 1 || term > 4) {
+            throw new IllegalArgumentException("Term must be between 1-4");
+        }
+
+        // Check weeks are valid
+        if (fromWeek < 0 || fromWeek > 12 || fromWeek > toWeek) {
+            throw new IllegalArgumentException("Invalid term");
+        }
+
+        // Get students with forms within time range
+        List<String> students;
+
+        try {
+            students = formDao.findStudentsInRange(term, fromWeek, toWeek);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        // For each student in the list, call the report method
+        for (String student : students) {
+            createReport(student, term, fromWeek, toWeek);
         }
     }
 
