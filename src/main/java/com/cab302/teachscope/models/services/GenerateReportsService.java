@@ -98,9 +98,6 @@ public class GenerateReportsService {
             throw new RuntimeException(e);
         }
 
-        System.out.println(averageValues);
-        System.out.println(additionalStats);
-
         // Create and populate dataset for individual student
         DefaultCategoryDataset averageScores = new DefaultCategoryDataset();
         for (Map.Entry<String, Double> entry : averageValues.entrySet()) {

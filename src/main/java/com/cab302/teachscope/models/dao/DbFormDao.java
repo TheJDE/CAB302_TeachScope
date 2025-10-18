@@ -281,60 +281,40 @@ public class DbFormDao implements FormDao {
      * @throws IllegalArgumentException If no valid data is found in any category.
      */
 
-    @Override
-    public Map<String, Double> findAverageScoresForStudent(String studentId, int term, int fromWeek, int toWeek) {
-        String sql = """
-        SELECT 
-            AVG(attentionScore) AS avgAttention,
-            AVG(participationScore) AS avgParticipation,
-            AVG(literacyScore) AS avgLiteracy,
-            AVG(numeracyScore) AS avgNumeracy,
-            AVG(understandingScore) AS avgUnderstanding,
-            AVG(behaviourScore) AS avgBehaviour,
-            AVG(peerInteractionScore) AS avgPeerInteraction,
-            AVG(respectForRulesScore) AS avgRespectForRules
-        FROM weekly_forms
-        WHERE studentId = ?
-          AND term = ?
-          AND week BETWEEN ? AND ?;
-    """;
+    public Map<String, Double> findAverageScoresForStudent(String studentId, int term, int fromWeek, int toWeek) throws SQLException {
+        String sql = "SELECT " +
+                "AVG(attentionScore) AS attentionScore, " +
+                "AVG(participationScore) AS participationScore, " +
+                "AVG(literacyScore) AS literacyScore, " +
+                "AVG(numeracyScore) AS numeracyScore, " +
+                "AVG(understandingScore) AS understandingScore, " +
+                "AVG(behaviourScore) AS behaviourScore, " +
+                "AVG(peerInteractionScore) AS peerInteractionScore, " +
+                "AVG(respectForRulesScore) AS respectForRulesScore " +
+                "FROM weekly_forms " +
+                "WHERE studentId = ? AND term = ? AND week BETWEEN ? AND ?";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, studentId);
+        statement.setInt(2, term);
+        statement.setInt(3, fromWeek);
+        statement.setInt(4, toWeek);
+        ResultSet rs = statement.executeQuery();
 
         Map<String, Double> averages = new HashMap<>();
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, studentId);
-            stmt.setInt(2, term);
-            stmt.setInt(3, fromWeek);
-            stmt.setInt(4, toWeek);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    boolean allNull = true;
-
-                    for (String col : new String[]{
-                            "avgAttention", "avgParticipation", "avgLiteracy", "avgNumeracy",
-                            "avgUnderstanding", "avgBehaviour", "avgPeerInteraction", "avgRespectForRules"}) {
-                        double val = rs.getDouble(col);
-                        if (!rs.wasNull()) {
-                            averages.put(col, val);
-                            allNull = false;
-                        }
-                    }
-
-                    if (allNull) {
-                        throw new IllegalArgumentException("No weekly form data found for student.");
-                    }
-                } else {
-                    throw new IllegalArgumentException("No weekly form data found for student.");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (rs.next()) {
+            averages.put("attentionScore", rs.getDouble("attentionScore"));
+            averages.put("participationScore", rs.getDouble("participationScore"));
+            averages.put("literacyScore", rs.getDouble("literacyScore"));
+            averages.put("numeracyScore", rs.getDouble("numeracyScore"));
+            averages.put("understandingScore", rs.getDouble("understandingScore"));
+            averages.put("behaviourScore", rs.getDouble("behaviourScore"));
+            averages.put("peerInteractionScore", rs.getDouble("peerInteractionScore"));
+            averages.put("respectForRulesScore", rs.getDouble("respectForRulesScore"));
         }
 
         return averages;
     }
-
 
     /**
      * Finds the average of all score fields across all students.

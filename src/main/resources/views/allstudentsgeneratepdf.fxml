@@ -118,7 +118,7 @@
                 </HBox>
 
                 <HBox alignment="CENTER_LEFT" spacing="30">
-                    <Button text="Generate Report for All Students" fx:id="generateReportAllStudents"/>
+                    <Button text="Generate Report for All Students" fx:id="generateReportAllStudents" onAction="#onGenerateAllReportsClick"/>
                 </HBox>
             </VBox>
         </VBox>

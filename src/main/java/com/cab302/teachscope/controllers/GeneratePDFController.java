@@ -185,6 +185,40 @@ public class GeneratePDFController {
         }
     }
 
+    @FXML
+    protected void onGenerateAllReportsClick() {
+        String termValue = term.getValue();
+        String fromValue = fromWeek.getValue();
+        String toValue = toWeek.getValue();
+
+        if (termValue == null || fromValue == null || toValue == null) {
+            showAlert("Missing Selection", "Please select a term and week range.");
+            return;
+        }
+
+        int termNumber = parseTermNumber(termValue);
+        int from = parseWeekNumber(fromValue);
+        int to = parseWeekNumber(toValue);
+
+        if (from > to) {
+            showAlert("Invalid Range", "'From Week' cannot be after 'To Week'.");
+            return;
+        }
+
+        String userHome = System.getProperty("user.home");
+
+        File pdfDir = new File(userHome, "/Documents/pdfs");
+
+        try {
+            reportsService.generateAll(termNumber, from, to);
+            showAlert("Success", "PDF report generated at " + pdfDir);
+            Desktop.getDesktop().open(pdfDir);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error Generating Report", e.getMessage());
+        }
+    }
 
     private int parseTermNumber(String termText) {
         return Integer.parseInt(termText.replaceAll("\\D+", ""));
