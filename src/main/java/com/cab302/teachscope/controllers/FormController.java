@@ -75,7 +75,7 @@ public class FormController {
     private TextArea concernsText;
 
     @FXML
-    private Button newFormButton, saveFormButton, logoutButton, studentNav, timelineButton, generatePDF, addNewFormButton, weeklyformsButton, viewStudents;
+    private Button newFormButton, saveFormButton, logoutButton, studentNav, timelineButton, generatePDF, addNewFormButton, weeklyformsButton, viewStudents, reportButton;
     @FXML
     private Label weeklyFormsTitle, formTitle, PDFTitle;
 
@@ -157,6 +157,16 @@ public class FormController {
             NavigationUtils.navigateTo(stage, "timeline", "Timeline");
         } catch (IOException e) {
             showAlert("Navigation Error", "Cannot open timeline.");
+        }
+    }
+
+    @FXML
+    protected void onGeneratePDFAllStudentsClick() {
+        Stage stage = (Stage) reportButton.getScene().getWindow();
+        try {
+            NavigationUtils.navigateTo(stage, "allstudentsgeneratepdf", "Generate PDF for All Students");
+        } catch (IOException e) {
+            showAlert("Navigation Error", "Cannot open Class Report Page.");
         }
     }
 

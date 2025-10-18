@@ -33,6 +33,7 @@
         <VBox spacing="10">
             <Button fx:id="studentNav" text="Students" maxWidth="Infinity" onAction="#onStudentClick"/>
             <Button fx:id="timelineButton" text="Timeline" styleClass="" maxWidth="Infinity" onAction="#onTimelineClick"/>
+            <Button fx:id="reportButton" text="Generate Class Report" styleClass="" maxWidth="Infinity" onAction="#onGeneratePDFAllStudentsClick"/>
             <Button text="Knowledge Base" styleClass="" maxWidth="Infinity" onAction="#onKnowledgeBaseClick"/>
             <Button text="User Introductory Tutorial" styleClass="" maxWidth="Infinity" onAction="#onIntroductoryTutorialClick"/>
         </VBox>

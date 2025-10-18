@@ -40,7 +40,7 @@ public class GeneratePDFController {
     private Button studentNav;
 
     @FXML
-    private Button timelineButton;
+    private Button timelineButton, reportButton;
 
     @FXML
     private Button weeklyformsButton;
@@ -100,6 +100,16 @@ public class GeneratePDFController {
             NavigationUtils.navigateTo(stage, "dashboard", "Dashboard");
         } catch (IOException e) {
             showAlert("Navigation Error", "Cannot open dashboard.");
+        }
+    }
+
+    @FXML
+    protected void onGeneratePDFAllStudentsClick() {
+        Stage stage = (Stage) reportButton.getScene().getWindow();
+        try {
+            NavigationUtils.navigateTo(stage, "allstudentsgeneratepdf", "Generate PDF for All Students");
+        } catch (IOException e) {
+            showAlert("Navigation Error", "Cannot open Class Report Page.");
         }
     }
 

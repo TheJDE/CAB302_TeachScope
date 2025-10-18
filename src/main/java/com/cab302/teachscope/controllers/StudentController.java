@@ -65,7 +65,7 @@ public class StudentController {
     @FXML
     private Label formTitle;
     @FXML
-    private Button addStudentButton;
+    private Button addStudentButton, reportButton;
     @FXML
     private Hyperlink deleteLink;
 
@@ -172,6 +172,16 @@ public class StudentController {
             NavigationUtils.navigateTo(stage, "timeline", "Timeline");
         } catch (IOException e) {
             showAlert("Navigation Error", "Could not open timeline page.");
+        }
+    }
+
+    @FXML
+    protected void onGeneratePDFAllStudentsClick() {
+        Stage stage = (Stage) reportButton.getScene().getWindow();
+        try {
+            NavigationUtils.navigateTo(stage, "allstudentsgeneratepdf", "Generate PDF for All Students");
+        } catch (IOException e) {
+            showAlert("Navigation Error", "Cannot open Class Report Page.");
         }
     }
 
