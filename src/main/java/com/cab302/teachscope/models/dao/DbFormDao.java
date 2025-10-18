@@ -506,10 +506,10 @@ public class DbFormDao implements FormDao {
     public List<String> findStudentsInRange(int term, int fromWeek, int toWeek) throws SQLException {
         List<String> students = new ArrayList<>();
 
-        PreparedStatement statement = connection.prepareStatement("SELECT studentId FROM weekly_forms WHERE term = ? AND week BETWEEN ? AND ?");
+        PreparedStatement statement = connection.prepareStatement("SELECT DISTINCT studentId FROM weekly_forms WHERE term = ? AND week BETWEEN ? AND ?");
         statement.setInt(1, term);
         statement.setInt(2, fromWeek);
-        statement.setInt(2, toWeek);
+        statement.setInt(3, toWeek);
 
         ResultSet resultSet = statement.executeQuery();
 
