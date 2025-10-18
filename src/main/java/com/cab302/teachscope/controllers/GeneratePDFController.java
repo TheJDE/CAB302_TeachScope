@@ -211,7 +211,7 @@ public class GeneratePDFController {
 
         try {
             reportsService.generateAll(termNumber, from, to);
-            showAlert("Success", "PDF report generated at " + pdfDir);
+            showAlert("Success", "All reports for students within week range generated at " + pdfDir);
             Desktop.getDesktop().open(pdfDir);
 
         } catch (Exception e) {
