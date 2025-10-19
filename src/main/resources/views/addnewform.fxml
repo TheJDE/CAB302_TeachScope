@@ -159,9 +159,9 @@
                             <ComboBox fx:id="attention">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="Always Attentive"/>
-                                        <String fx:value="Sometimes Attentive"/>
                                         <String fx:value="Rarely Attentive"/>
+                                        <String fx:value="Sometimes Attentive"/>
+                                        <String fx:value="Always Attentive"/>
                                     </FXCollections>
                                 </items>
                             </ComboBox>
@@ -184,9 +184,9 @@
                             <ComboBox fx:id="participation">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="Very Active"/>
-                                        <String fx:value="Somewhat Active"/>
                                         <String fx:value="Passive"/>
+                                        <String fx:value="Somewhat Active"/>
+                                        <String fx:value="Very Active"/>
                                     </FXCollections>
                                 </items>
                             </ComboBox>
@@ -202,9 +202,9 @@
                             <ComboBox fx:id="literacy">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="Exceeding Expectations"/>
-                                        <String fx:value="Meeting Expectations"/>
                                         <String fx:value="Needs Improvement"/>
+                                        <String fx:value="Meeting Expectations"/>
+                                        <String fx:value="Exceeding Expectations"/>
                                     </FXCollections>
                                 </items>
                             </ComboBox>
@@ -215,9 +215,9 @@
                             <ComboBox fx:id="numeracy">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="Exceeding Expectations"/>
-                                        <String fx:value="Meeting Expectations"/>
                                         <String fx:value="Needs Improvement"/>
+                                        <String fx:value="Meeting Expectations"/>
+                                        <String fx:value="Exceeding Expectations"/>
                                     </FXCollections>
                                 </items>
                             </ComboBox>
@@ -228,9 +228,9 @@
                             <ComboBox fx:id="understanding">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="Exceeding Expectations"/>
-                                        <String fx:value="Meeting Expectations"/>
                                         <String fx:value="Needs Improvement"/>
+                                        <String fx:value="Meeting Expectations"/>
+                                        <String fx:value="Exceeding Expectations"/>
                                     </FXCollections>
                                 </items>
                             </ComboBox>
@@ -246,9 +246,9 @@
                             <ComboBox fx:id="behaviour">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="Very Good"/>
-                                        <String fx:value="Good"/>
                                         <String fx:value="Needs Improvement"/>
+                                        <String fx:value="Meeting Expectations"/>
+                                        <String fx:value="Exceeding Expectations"/>
                                     </FXCollections>
                                 </items>
                             </ComboBox>
@@ -259,9 +259,9 @@
                             <ComboBox fx:id="peerInteraction">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="Very Collaborative"/>
-                                        <String fx:value="Collaborative"/>
-                                        <String fx:value="Struggles with Collaboration"/>
+                                        <String fx:value="Needs Improvement"/>
+                                        <String fx:value="Meeting Expectations"/>
+                                        <String fx:value="Exceeding Expectations"/>
                                     </FXCollections>
                                 </items>
                             </ComboBox>
@@ -272,9 +272,9 @@
                             <ComboBox fx:id="respectRules">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="Very Respectful"/>
-                                        <String fx:value="Respectful"/>
                                         <String fx:value="Needs Improvement"/>
+                                        <String fx:value="Meeting Expectations"/>
+                                        <String fx:value="Exceeding Expectations"/>
                                     </FXCollections>
                                 </items>
                             </ComboBox>

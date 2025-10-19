@@ -196,7 +196,7 @@ public class GenerateReportsService {
 //            contentStream.drawImage(supportingImage, 370, 650, width2 * (float) 2.2, height2 * (float) 2.2);
 
             // Graph
-            contentStream.drawImage(pdfBarChartImage, 0, 360, 600, 250);
+            contentStream.drawImage(pdfBarChartImage, 0, 380, 600, 250);
 
             // Text
             PDType0Font fontBold = PDType0Font.load(document, new File("src/main/resources/fonts/PlaypenSans-Bold.ttf"));
@@ -216,7 +216,7 @@ public class GenerateReportsService {
             // Additional Student Metrics
             // Attendance
             contentStream.setFont(fontBold, 16); // font + size
-            contentStream.newLineAtOffset(-40, -360); // x, y position
+            contentStream.newLineAtOffset(-40, -340); // x, y position
             contentStream.showText("Attendance Rate:");
 
             contentStream.setFont(fontRegular, 14); // font + size
