@@ -442,11 +442,11 @@ public class DbFormDao implements FormDao {
      * @throws IllegalStateException If no data is found for the given range.
      */
     @Override
-    public List<Map<String, String>> findTeacherConcernsForStudent(String studentId, int term, int fromWeek, int toWeek) throws SQLException {
-        List<Map<String, String>> concerns = new ArrayList<>();
+    public Map<String, String> findTeacherConcernsForStudent(String studentId, int term, int fromWeek, int toWeek) throws SQLException {
+        Map<String, String> concerns = new LinkedHashMap<>();
 
         String sql = "SELECT week, teacherConcerns FROM weekly_forms " +
-                "WHERE studentId = ? AND term = ? AND week BETWEEN ? AND ? ORDER BY week ASC";
+                "WHERE studentId = ? AND term = ? AND week BETWEEN ? AND ? ORDER BY CAST(week AS INTEGER) ASC";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, studentId);
@@ -457,16 +457,23 @@ public class DbFormDao implements FormDao {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                Map<String, String> entry = new HashMap<>();
-                entry.put("Week " + rs.getInt("week"), rs.getString("teacherConcerns"));
-                concerns.add(entry);
+                concerns.put("Week " + rs.getInt("week"), rs.getString("teacherConcerns"));
             }
         }
 
         // Throw if no data found
-        if (concerns.isEmpty()) {
+        boolean existingData = false;
+        for (Map.Entry<String, String> concern : concerns.entrySet()) {
+            if (!(concern.getValue().isEmpty())) {
+                existingData = true;
+                break;
+            }
+        }
+
+        if (!existingData) {
             throw new IllegalStateException("No teacher concern data found for student " + studentId + " in the given range.");
         }
+
 
         return concerns;
     }

@@ -20,7 +20,7 @@ public interface FormDao {
 
     Map<String, Object> findAverageAttendanceAndEmotionForStudent(String studentId, int term, int fromWeek, int toWeek) throws SQLException;
 
-    List<Map<String, String>> findTeacherConcernsForStudent(String studentId, int term, int fromWeek, int toWeek) throws SQLException;
+    Map<String, String> findTeacherConcernsForStudent(String studentId, int term, int fromWeek, int toWeek) throws SQLException;
 
     List<WeeklyForm> findAll() throws SQLException;
 

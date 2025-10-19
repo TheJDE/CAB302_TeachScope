@@ -101,7 +101,7 @@ public class GenerateReportsService {
         // Create and populate dataset for individual student
         DefaultCategoryDataset averageScores = new DefaultCategoryDataset();
         for (Map.Entry<String, Double> entry : averageValues.entrySet()) {
-            averageScores.addValue(entry.getValue(), "Average", entry.getKey().substring(0, 1).toUpperCase() + entry.getKey().substring(1, entry.getKey().length() - 5).replaceAll("([a-z])([A-Z])", "$1 $2"));
+            averageScores.addValue(entry.getValue(), student.getFirstName(), entry.getKey().substring(0, 1).toUpperCase() + entry.getKey().substring(1, entry.getKey().length() - 5).replaceAll("([a-z])([A-Z])", "$1 $2"));
         }
 
         // Create and popular dataset for class averages
@@ -112,7 +112,7 @@ public class GenerateReportsService {
 
         // Create bar graph for student
         JFreeChart barChart = ChartFactory.createBarChart(
-                student.getFirstName() + "'s Average Scores",
+                "",
                 "Attribute",
                 "Score",
                 averageScores
@@ -186,7 +186,7 @@ public class GenerateReportsService {
             float aspect = (float) logo.getWidth() / logo.getHeight();
             float width = 100;
             float height = width / aspect;
-            contentStream.drawImage(logo, 0, 700, width * 3, height * 3);
+            contentStream.drawImage(logo, 0, 720, width * 3, height * 3);
 
             // Supporting Image
 //            PDImageXObject supportingImage = PDImageXObject.createFromFile("src/main/resources/images/login_picture.png", document);
@@ -196,7 +196,7 @@ public class GenerateReportsService {
 //            contentStream.drawImage(supportingImage, 370, 650, width2 * (float) 2.2, height2 * (float) 2.2);
 
             // Graph
-            contentStream.drawImage(pdfBarChartImage, 0, 380, 600, 250);
+            contentStream.drawImage(pdfBarChartImage, 0, 440, 600, 250);
 
             // Text
             PDType0Font fontBold = PDType0Font.load(document, new File("src/main/resources/fonts/PlaypenSans-Bold.ttf"));
@@ -207,16 +207,16 @@ public class GenerateReportsService {
             contentStream.beginText();
             contentStream.setFont(fontBold, 18); // font + size
             contentStream.setNonStrokingColor(navyBlue); // set text color
-            contentStream.newLineAtOffset(75, 700); // x, y position
+            contentStream.newLineAtOffset(75, 720); // x, y position
             contentStream.showText(student.getFirstName() + " " + student.getLastName() + "'s Report");
             contentStream.setFont(fontRegular, 18); // font + size
-            contentStream.newLineAtOffset(0, -25); // x, y position
-            contentStream.showText("Term 1 (Week 1 - Week 10)");
+            contentStream.newLineAtOffset(0, -30); // x, y position
+            contentStream.showText("Term " + term + " (Week " + fromWeek + " - Week " + toWeek + ")");
 
             // Additional Student Metrics
             // Attendance
             contentStream.setFont(fontBold, 16); // font + size
-            contentStream.newLineAtOffset(-40, -340); // x, y position
+            contentStream.newLineAtOffset(-40, -300); // x, y position
             contentStream.showText("Attendance Rate:");
 
             contentStream.setFont(fontRegular, 14); // font + size
@@ -234,7 +234,7 @@ public class GenerateReportsService {
 
             // Days Late
             contentStream.setFont(fontBold, 16); // font + size
-            contentStream.newLineAtOffset(-410, -50); // x, y position
+            contentStream.newLineAtOffset(-410, -30); // x, y position
             contentStream.showText("Days Late:");
 
             contentStream.setFont(fontRegular, 14); // font + size
@@ -251,7 +251,30 @@ public class GenerateReportsService {
             contentStream.showText(additionalStats.get("mostCommonEmotionalState").toString());
 
             // Teacher notes
+            contentStream.setFont(fontBold, 16); // font + size
+            contentStream.newLineAtOffset(-480, -40); // x, y position
+            contentStream.showText("Teacher Concerns");
 
+            try {
+                Map<String, String> concerns = formDao.findTeacherConcernsForStudent(studentID, term, fromWeek, toWeek);
+                for (Map.Entry<String, String> concern : concerns.entrySet()) {
+                    contentStream.setFont(fontBold, 16); // font + size
+                    contentStream.newLineAtOffset(0, -30); // x, y position
+                    contentStream.showText(concern.getKey() + ":");
+
+                    contentStream.setFont(fontRegular, 14); // font + size
+                    contentStream.newLineAtOffset(80, 0); // x, y position
+                    contentStream.showText(concern.getValue());
+
+                    contentStream.newLineAtOffset(-80, 0); // x, y position
+                }
+            } catch (IllegalStateException e) {
+                contentStream.setFont(fontRegular, 14); // font + size
+                contentStream.newLineAtOffset(0, -30); // x, y position
+                contentStream.showText("No additional concerns outlined.");
+            } catch (SQLException e) {
+                throw new RuntimeException();
+            }
 
             contentStream.endText();
         } catch (IOException e) {
