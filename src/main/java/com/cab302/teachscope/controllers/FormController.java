@@ -248,6 +248,15 @@ public class FormController {
 
         populateFormIfEditing();
 
+        //limit TextArea input to 50 characters
+        if (concernsText != null) {
+            concernsText.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null && newValue.length() > 50) {
+                    concernsText.setText(oldValue);
+                }
+            });
+        }
+
     }
 
     /**
