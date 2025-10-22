@@ -35,6 +35,16 @@ public class UserService {
     public void registerUser(String email, String password) throws IllegalArgumentException{
         // Validate user inputs
         // Password must be 8–30 characters
+
+        // Basic email RE
+        if (email == null || !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+            throw new IllegalArgumentException("Invalid email");
+        }
+
+        if (password == null) {
+            throw new IllegalArgumentException("Password cannot be null");
+        }
+
         if (password.length() < 8 || password.length() > 30) {
             throw new IllegalArgumentException("Password must be between 8 and 30 characters");
         }
@@ -55,7 +65,7 @@ public class UserService {
             throw new IllegalArgumentException("Password must contain at least one special character (!@#$%^&*()-_+=)");
         }
         // 8 Chars, max 30 Chars, 1 uppercase, 1 lowercase, 1 digit, 1 special char (!@#$%^&*()-_+=)
-        if (password == null || !password.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,30}$")) {
+        if (!password.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,30}$")) {
             throw new IllegalArgumentException("Invalid password");
         }
         // Throw error if user already exists
