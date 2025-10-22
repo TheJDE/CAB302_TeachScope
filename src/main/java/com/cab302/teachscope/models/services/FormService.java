@@ -87,7 +87,7 @@ public class FormService {
         try {
             formDao.create(form);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Duplicate form created for student. Please change the term/week of the report to one that hasn't been created.");
         }
     }
 

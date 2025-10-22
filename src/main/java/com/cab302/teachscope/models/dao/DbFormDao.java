@@ -47,7 +47,8 @@ public class DbFormDao implements FormDao {
                     "respectForRulesScore INTEGER NOT NULL," +
                     "emotionalState TEXT NOT NULL," +
                     "teacherConcerns TEXT NOT NULL, " +
-                    "FOREIGN KEY(studentId) REFERENCES students(id)" +
+                    "FOREIGN KEY(studentId) REFERENCES students(id)," +
+                    "UNIQUE(studentId, term, week)" +
                     ")";
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
@@ -270,6 +271,215 @@ public class DbFormDao implements FormDao {
     }
 
     /**
+     * Fetches the average of all score-related fields for a student.
+     *
+     * @param studentId The student ID
+     * @param term The chosen term INT
+     * @param fromWeek The starting week of the search INT
+     * @param toWeek The end week of the search INT
+     * @return A map containing average scores for each field
+     * @throws SQLException On database error
+     * @throws IllegalArgumentException If no valid data is found in any category.
+     */
+
+    public Map<String, Double> findAverageScoresForStudent(String studentId, int term, int fromWeek, int toWeek) throws SQLException {
+        String sql = "SELECT " +
+                "AVG(attentionScore) AS attentionScore, " +
+                "AVG(participationScore) AS participationScore, " +
+                "AVG(literacyScore) AS literacyScore, " +
+                "AVG(numeracyScore) AS numeracyScore, " +
+                "AVG(understandingScore) AS understandingScore, " +
+                "AVG(behaviourScore) AS behaviourScore, " +
+                "AVG(peerInteractionScore) AS peerInteractionScore, " +
+                "AVG(respectForRulesScore) AS respectForRulesScore " +
+                "FROM weekly_forms " +
+                "WHERE studentId = ? AND term = ? AND week BETWEEN ? AND ?";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, studentId);
+        statement.setInt(2, term);
+        statement.setInt(3, fromWeek);
+        statement.setInt(4, toWeek);
+        ResultSet rs = statement.executeQuery();
+
+        Map<String, Double> averages = new HashMap<>();
+        if (rs.next()) {
+            averages.put("attentionScore", rs.getDouble("attentionScore"));
+            averages.put("participationScore", rs.getDouble("participationScore"));
+            averages.put("literacyScore", rs.getDouble("literacyScore"));
+            averages.put("numeracyScore", rs.getDouble("numeracyScore"));
+            averages.put("understandingScore", rs.getDouble("understandingScore"));
+            averages.put("behaviourScore", rs.getDouble("behaviourScore"));
+            averages.put("peerInteractionScore", rs.getDouble("peerInteractionScore"));
+            averages.put("respectForRulesScore", rs.getDouble("respectForRulesScore"));
+        }
+
+        return averages;
+    }
+
+    /**
+     * Finds the average of all score fields across all students.
+     * @param term The chosen term INT
+     * @param fromWeek The starting week of the search INT
+     * @param toWeek The end week of the search INT
+     * @return Map of average scores for each category.
+     * @throws SQLException On query error
+     */
+    @Override
+    public Map<String, Double> findGlobalAverageScores(int term, int fromWeek, int toWeek) throws SQLException {
+        String sql = "SELECT " +
+                "AVG(attentionScore) AS attentionScore, " +
+                "AVG(participationScore) AS participationScore, " +
+                "AVG(literacyScore) AS literacyScore, " +
+                "AVG(numeracyScore) AS numeracyScore, " +
+                "AVG(understandingScore) AS understandingScore, " +
+                "AVG(behaviourScore) AS behaviourScore, " +
+                "AVG(peerInteractionScore) AS peerInteractionScore, " +
+                "AVG(respectForRulesScore) AS respectForRulesScore " +
+                "FROM weekly_forms " +
+                "WHERE term = ? AND week BETWEEN ? AND ?";
+
+        Map<String, Double> averages = new HashMap<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, term);
+            stmt.setInt(2, fromWeek);
+            stmt.setInt(3, toWeek);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                averages.put("attentionScore", rs.getDouble("attentionScore"));
+                averages.put("participationScore", rs.getDouble("participationScore"));
+                averages.put("literacyScore", rs.getDouble("literacyScore"));
+                averages.put("numeracyScore", rs.getDouble("numeracyScore"));
+                averages.put("understandingScore", rs.getDouble("understandingScore"));
+                averages.put("behaviourScore", rs.getDouble("behaviourScore"));
+                averages.put("peerInteractionScore", rs.getDouble("peerInteractionScore"));
+                averages.put("respectForRulesScore", rs.getDouble("respectForRulesScore"));
+            }
+        }
+
+        return averages;
+    }
+
+    /**
+     * Retrieves the average attendance statistics and the most common emotional state
+     * for a specific student within a given term and week range.
+     *
+     * @param studentId ID of the student to retrieve data for
+     * @param term Term number to search
+     * @param fromWeek Starting week (inclusive)
+     * @param toWeek Ending week (inclusive)
+     * @return Map containing average attendanceDays, total daysLate, average homeworkDone, and most common emotionalState
+     * @throws IllegalStateException If no data was found in any category
+     */
+    @Override
+    public Map<String, Object> findAverageAttendanceAndEmotionForStudent(String studentId, int term, int fromWeek, int toWeek) throws SQLException {
+
+        String sql = """
+        SELECT
+            AVG(attendanceDays) AS avgAttendanceDays,
+            SUM(daysLate) AS totalDaysLate,
+            AVG(homeworkDone) AS avgHomeworkDone,
+            (
+                SELECT emotionalState
+                FROM weekly_forms AS wf2
+                WHERE wf2.studentId = wf.studentId
+                  AND wf2.term = wf.term
+                  AND wf2.week BETWEEN ? AND ?
+                GROUP BY emotionalState
+                ORDER BY COUNT(*) DESC
+                LIMIT 1
+            ) AS mostCommonEmotionalState
+        FROM weekly_forms AS wf
+        WHERE wf.studentId = ?
+          AND wf.term = ?
+          AND wf.week BETWEEN ? AND ?;
+    """;
+
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, fromWeek);
+            stmt.setInt(2, toWeek);
+            stmt.setString(3, studentId);
+            stmt.setInt(4, term);
+            stmt.setInt(5, fromWeek);
+            stmt.setInt(6, toWeek);
+
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Double avgAttendance = rs.getDouble("avgAttendanceDays");
+                Double totalDaysLate = rs.getDouble("totalDaysLate");
+                Double avgHomeworkDone = rs.getDouble("avgHomeworkDone");
+                String mostCommonEmotion = rs.getString("mostCommonEmotionalState");
+
+                Map<String, Object> result = new HashMap<>();
+                result.put("avgAttendance", avgAttendance);
+                result.put("totalDaysLate", totalDaysLate);
+                result.put("avgHomeworkDone", avgHomeworkDone);
+                result.put("mostCommonEmotionalState", mostCommonEmotion);
+                return result;
+            } else {
+                throw new IllegalStateException("No data found for student in the given range");
+            }
+        }
+    }
+
+
+    /**
+     * Retrieves teacher concerns for a student within a specific term and week range.
+     *
+     * @param studentId ID of the student whose concerns are being retrieved.
+     * @param term       The term to search in.
+     * @param fromWeek   The starting week (inclusive).
+     * @param toWeek     The ending week (inclusive).
+     * @return A list of maps, each containing:
+     *         - "Week [x]" as key and
+     *         - The teacher's concerns as value.
+     * @throws SQLException If the query fails.
+     * @throws IllegalStateException If no data is found for the given range.
+     */
+    @Override
+    public Map<String, String> findTeacherConcernsForStudent(String studentId, int term, int fromWeek, int toWeek) throws SQLException {
+        Map<String, String> concerns = new LinkedHashMap<>();
+
+        String sql = "SELECT week, teacherConcerns FROM weekly_forms " +
+                "WHERE studentId = ? AND term = ? AND week BETWEEN ? AND ? ORDER BY CAST(week AS INTEGER) ASC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, studentId);
+            stmt.setInt(2, term);
+            stmt.setInt(3, fromWeek);
+            stmt.setInt(4, toWeek);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                concerns.put("Week " + rs.getInt("week"), rs.getString("teacherConcerns"));
+            }
+        }
+
+        // Throw if no data found
+        boolean existingData = false;
+        for (Map.Entry<String, String> concern : concerns.entrySet()) {
+            if (!(concern.getValue().isEmpty())) {
+                existingData = true;
+                break;
+            }
+        }
+
+        if (!existingData) {
+            throw new IllegalStateException("No teacher concern data found for student " + studentId + " in the given range.");
+        }
+
+
+        return concerns;
+    }
+
+    /**
      * Gets all forms in the database
      * @return List of all forms
      * @throws SQLException On misformed query
@@ -278,6 +488,24 @@ public class DbFormDao implements FormDao {
     public List<WeeklyForm> findAll() throws SQLException {
         // TODO: implement fetch all
         return new ArrayList<>();
+    }
+
+    @Override
+    public List<String> findStudentsInRange(int term, int fromWeek, int toWeek) throws SQLException {
+        List<String> students = new ArrayList<>();
+
+        PreparedStatement statement = connection.prepareStatement("SELECT DISTINCT studentId FROM weekly_forms WHERE term = ? AND week BETWEEN ? AND ?");
+        statement.setInt(1, term);
+        statement.setInt(2, fromWeek);
+        statement.setInt(3, toWeek);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            students.add(resultSet.getString("studentId"));
+        }
+
+        return students;
     }
 
     /**

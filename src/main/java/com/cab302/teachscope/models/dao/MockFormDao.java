@@ -3,6 +3,7 @@ package com.cab302.teachscope.models.dao;
 import com.cab302.teachscope.models.entities.Student;
 import com.cab302.teachscope.models.entities.WeeklyForm;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,8 +29,32 @@ public class MockFormDao implements FormDao {
     }
 
     @Override
+    public Map<String, Double> findAverageScoresForStudent(String studentId, int term, int fromWeek, int toWeek) {
+        return new HashMap<>();
+    }
+
+    @Override
+    public Map<String, Double> findGlobalAverageScores(int term, int fromWeek, int toWeek) {
+        return new HashMap<>();
+    }
+
+    @Override
+    public Map<String, Object> findAverageAttendanceAndEmotionForStudent(String studentId, int term, int fromWeek, int toWeek) {
+        return new HashMap<>();
+    }
+
+    @Override
+    public Map<String, String> findTeacherConcernsForStudent(String studentId, int term, int fromWeek, int toWeek) {
+        return null;
+    }
+
+    @Override
     public List<WeeklyForm> findAll() {
         return new ArrayList<>(forms.values());
+    }
+
+    public List<String> findStudentsInRange(int term, int fromWeek, int toWeek) throws SQLException {
+        return null;
     }
 
     @Override

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.ComboBox?>
+<?import java.lang.String?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml" alignment="CENTER"
+           fx:controller="com.cab302.teachscope.controllers.GeneratePDFController"
+           stylesheets="@../css/styles.css">
+    <HBox alignment="CENTER" spacing="0">
+
+        <!-- sidebar menu -->
+        <VBox spacing="20" style="-fx-background-color: #E5E5E5;" prefWidth="220">
+            <padding>
+                <Insets top="20" right="10" bottom="20" left="10"/>
+            </padding>
+
+            <!-- logo -->
+            <VBox alignment="CENTER" spacing="10">
+                <ImageView pickOnBounds="true" preserveRatio="true" fitWidth="250">
+                    <image>
+                        <Image url="@../images/logo_teachscope.png"/>
+                    </image>
+                </ImageView>
+            </VBox>
+
+            <!-- nav -->
+            <VBox spacing="10">
+                <Button fx:id="studentNav" text="Students" maxWidth="Infinity" onAction="#onStudentClick"/>
+                <Button fx:id="timelineButton" text="Timeline" styleClass="" maxWidth="Infinity" onAction="#onTimelineClick"/>
+                <Button fx:id="reportButton" text="Generate Class Report" styleClass="active" maxWidth="Infinity" onAction="#onGeneratePDFAllStudentsClick"/>
+                <Button text="Knowledge Base" styleClass="" maxWidth="Infinity" onAction="#onKnowledgeBaseClick"/>
+                <Button text="User Introductory Tutorial" styleClass="" maxWidth="Infinity" onAction="#onIntroductoryTutorialClick"/>
+            </VBox>
+
+            <VBox VBox.vgrow="ALWAYS"/>
+
+            <!-- logout button -->
+            <Button fx:id="logoutButton" text="Logout" styleClass="" maxWidth="Infinity" onAction="#onLogoutClick"/>
+        </VBox>
+
+        <VBox spacing="20" HBox.hgrow="ALWAYS">
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <Label fx:id="PDFTitle" text="Generate Report for All Students" styleClass="h1">
+                    <padding>
+                        <Insets top="20" left="30"/>
+                    </padding>
+                </Label>
+                <Pane HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+
+            <!-- form for generate pdf -->
+            <VBox spacing="20" style="-fx-background-color: #f7f7f7;" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets top="20" right="40" bottom="20" left="40"/>
+                </padding>
+
+
+                <HBox spacing="15">
+                    <VBox spacing="5">
+                        <Label text="Term"/>
+                        <ComboBox fx:id="term" promptText="Select an option">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Term 1"/>
+                                    <String fx:value="Term 2"/>
+                                    <String fx:value="Term 3"/>
+                                    <String fx:value="Term 4"/>
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                    </VBox>
+                    <VBox spacing="5">
+                        <Label text="From Week"/>
+                        <ComboBox fx:id="fromWeek" promptText="Select an option">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Week 1"/>
+                                    <String fx:value="Week 2"/>
+                                    <String fx:value="Week 3"/>
+                                    <String fx:value="Week 4"/>
+                                    <String fx:value="Week 5"/>
+                                    <String fx:value="Week 6"/>
+                                    <String fx:value="Week 7"/>
+                                    <String fx:value="Week 8"/>
+                                    <String fx:value="Week 9"/>
+                                    <String fx:value="Week 10"/>
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                    </VBox>
+                    <VBox spacing="5">
+                        <Label text="To Week"/>
+                        <ComboBox fx:id="toWeek" promptText="Select an option">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Week 1"/>
+                                    <String fx:value="Week 2"/>
+                                    <String fx:value="Week 3"/>
+                                    <String fx:value="Week 4"/>
+                                    <String fx:value="Week 5"/>
+                                    <String fx:value="Week 6"/>
+                                    <String fx:value="Week 7"/>
+                                    <String fx:value="Week 8"/>
+                                    <String fx:value="Week 9"/>
+                                    <String fx:value="Week 10"/>
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                    </VBox>
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="30">
+                    <Button text="Generate Report for All Students" fx:id="generateReportAllStudents" onAction="#onGenerateAllReportsClick"/>
+                </HBox>
+            </VBox>
+        </VBox>
+
+    </HBox>
+</StackPane>

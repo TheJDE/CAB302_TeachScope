@@ -4,6 +4,7 @@ import com.cab302.teachscope.models.dao.DbStudentDao;
 import com.cab302.teachscope.models.dao.StudentDao;
 import com.cab302.teachscope.models.entities.Student;
 import com.cab302.teachscope.models.services.StudentService;
+import com.cab302.teachscope.util.LoggedInUser;
 import com.cab302.teachscope.util.NavigationUtils;
 import javafx.scene.Parent;
 import javafx.beans.property.SimpleStringProperty;
@@ -16,6 +17,7 @@ import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
 import java.util.Optional;
+
 import javafx.scene.Scene;
 
 import com.cab302.teachscope.controllers.FormController;
@@ -29,14 +31,9 @@ public class StudentController {
     @FXML
     private Button studentNav;
     @FXML
-    private Button knowledgeBaseButton;
-
-    @FXML
     private Button viewFormsButton;
-
     @FXML
     private Button timelineButton;
-
 
     @FXML
     private TableView<Student> studentsTable;
@@ -68,13 +65,32 @@ public class StudentController {
     @FXML
     private Label formTitle;
     @FXML
-    private Button addStudentButton;
+    private Button addStudentButton, reportButton;
     @FXML
     private Hyperlink deleteLink;
 
-    private final StudentService studentService = new StudentService(new DbStudentDao());
-    private Optional<Student> editingStudent = Optional.empty(); //tracks if we're editing
+    @FXML
+    private Label firstNameError;
+    @FXML
+    private Label lastNameError;
+    @FXML
+    private Label classError;
+    @FXML
+    private Label genderError;
+    @FXML
+    private Label gradeLevelError;
+    @FXML
+    private Label statusError;
 
+    private StudentService studentService;
+    private Optional<Student> editingStudent = Optional.empty();
+
+    // No-arg constructor for FXML
+    public StudentController() { }
+
+    public void setStudentService(StudentService studentService) {
+        this.studentService = studentService;
+    }
 
     /**
      * Initializes the controller after the FXML is loaded
@@ -82,6 +98,7 @@ public class StudentController {
      */
     @FXML
     protected void initialize() {
+        studentService = LoggedInUser.getStudentService();
         if (studentsTable != null) {
             // If this is the students list page
             setupTable();
@@ -100,12 +117,12 @@ public class StudentController {
 
     @FXML
     protected void onKnowledgeBaseClick() {
-        NavigationUtils.openKnowledgeBasePDF();
+        NavigationUtils.openPDF("/src/main/resources/images/knowledge_base_final.pdf");
     }
 
     @FXML
     protected void onIntroductoryTutorialClick() {
-        NavigationUtils.openIntroductoryTutorial();
+        NavigationUtils.openPDF("/src/main/resources/images/user_introductory_tutorial.pdf");
     }
 
     /**
@@ -126,6 +143,7 @@ public class StudentController {
      */
     @FXML
     protected void onLogoutClick() {
+        LoggedInUser.clear();
         Stage stage = (Stage) logoutButton.getScene().getWindow();
         try {
             NavigationUtils.navigateTo(stage, "login", "Login");
@@ -154,6 +172,16 @@ public class StudentController {
             NavigationUtils.navigateTo(stage, "timeline", "Timeline");
         } catch (IOException e) {
             showAlert("Navigation Error", "Could not open timeline page.");
+        }
+    }
+
+    @FXML
+    protected void onGeneratePDFAllStudentsClick() {
+        Stage stage = (Stage) reportButton.getScene().getWindow();
+        try {
+            NavigationUtils.navigateTo(stage, "allstudentsgeneratepdf", "Generate PDF for All Students");
+        } catch (IOException e) {
+            showAlert("Navigation Error", "Cannot open Class Report Page.");
         }
     }
 
@@ -195,7 +223,9 @@ public class StudentController {
      * Refreshes the student table by reloading all students from the database
      */
     private void refreshStudentTable() {
-        studentsTable.getItems().setAll(studentService.getAllStudents());
+        studentsTable.getItems().setAll(
+                studentService.getAllStudents(LoggedInUser.getEmail())
+        );
     }
 
     /**
@@ -231,7 +261,10 @@ public class StudentController {
      */
     @FXML
     private void handleSave() {
+        if (!validateForm()) return;
+
         try {
+
             String fName = firstName.getText();
             String lName = lastName.getText();
             String cls = classField.getText();
@@ -240,6 +273,8 @@ public class StudentController {
             Student.Gender g = getEnumFromComboBox(gender, Student.Gender.class);
             Student.GradeLevel gl = getEnumFromComboBox(gradeLevel, Student.GradeLevel.class);
             Student.EnrolmentStatus status = getEnumFromComboBox(studentStatus, Student.EnrolmentStatus.class);
+
+            StudentService service = LoggedInUser.getStudentService();
 
             if (editingStudent.isPresent()) {
                 //editing an existing student
@@ -254,7 +289,7 @@ public class StudentController {
                 studentService.updateStudent(student.getId(), fName, lName, g, gl, cls, status);
             } else {
                 //adding a new student
-                studentService.registerStudent(fName, lName, g, gl, cls, status);
+                studentService.registerStudent(fName, lName, g, gl, cls, status, LoggedInUser.getEmail());
             }
 
             Stage stage = (Stage) addStudentButton.getScene().getWindow();
@@ -265,7 +300,15 @@ public class StudentController {
             }
 
         } catch (IllegalArgumentException e) {
-            showAlert("Error", e.getMessage());
+            // Map the exception message to the correct field
+            String msg = e.getMessage().toLowerCase();
+            if (msg.contains("first")) displayFieldError("firstName", e.getMessage());
+            else if (msg.contains("last")) displayFieldError("lastName", e.getMessage());
+            else if (msg.contains("class")) displayFieldError("class", e.getMessage());
+            else if (msg.contains("gender")) displayFieldError("gender", e.getMessage());
+            else if (msg.contains("grade")) displayFieldError("gradeLevel", e.getMessage());
+            else if (msg.contains("status")) displayFieldError("status", e.getMessage());
+            else System.err.println("Unhandled error: " + e.getMessage());
         }
     }
 
@@ -297,16 +340,31 @@ public class StudentController {
     @FXML
     protected void onDeleteLinkClick() {
         editingStudent.ifPresent(student -> {
-            try {
-                studentService.deleteStudent(student.getId());
-                Stage stage = (Stage) deleteLink.getScene().getWindow();
+            //Confirmation alert before deleting
+            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmAlert.setTitle("Confirm Delete");
+            confirmAlert.setHeaderText("Delete Student");
+            confirmAlert.setContentText("Are you sure you want to delete " +
+                    student.getFirstName() + " " + student.getLastName() + "?");
+
+            ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
+            ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+            confirmAlert.getButtonTypes().setAll(yesButton, cancelButton);
+
+            Optional<ButtonType> result = confirmAlert.showAndWait();
+
+            if (result.isPresent() && result.get() == yesButton) {
                 try {
-                    NavigationUtils.navigateTo(stage, "dashboard", "Dashboard");
-                } catch (IOException e) {
-                    showAlert("Navigation Error", "Failed to open the dashboard.");
+                    studentService.deleteStudent(student.getId());
+                    Stage stage = (Stage) deleteLink.getScene().getWindow();
+                    try {
+                        NavigationUtils.navigateTo(stage, "dashboard", "Dashboard");
+                    } catch (IOException e) {
+                        showAlert("Navigation Error", "Failed to open the dashboard.");
+                    }
+                } catch (IllegalArgumentException e) {
+                    showAlert("Error", e.getMessage());
                 }
-            } catch (IllegalArgumentException e) {
-                showAlert("Error", e.getMessage());
             }
         });
     }
@@ -341,13 +399,22 @@ public class StudentController {
     private void openEditPage(Student student) {
         Stage stage = (Stage) studentsTable.getScene().getWindow();
         try {
-            NavigationUtils.navigateTo(stage, "newstudent", "Edit Student");
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/newstudent.fxml"));
-            Parent root = loader.load();
+            loader.setControllerFactory(controllerClass -> {
+                if (controllerClass == StudentController.class) {
+                    return new StudentController();
+                } else {
+                    try { return controllerClass.getDeclaredConstructor().newInstance(); }
+                    catch (Exception e) { throw new RuntimeException(e); }
 
+                }
+            });
+
+            Parent root = loader.load();
             StudentController formController = loader.getController();
-            formController.setEditingStudent(student); // populate form
+
+            formController.studentService = this.studentService;
+            formController.setEditingStudent(student);
 
             stage.getScene().setRoot(root);
             stage.setTitle("Edit Student");
@@ -380,4 +447,80 @@ public class StudentController {
         this.editingStudent = Optional.ofNullable(student);
         editingStudent.ifPresent(this::populateForm);
     }
+
+    /**
+     * Validates all fields individually, and display inline errors.
+     */
+    private boolean validateForm() {
+        boolean valid = true;
+
+        // Clear previous errors
+        firstNameError.setText("");
+        lastNameError.setText("");
+        classError.setText("");
+        genderError.setText("");
+        gradeLevelError.setText("");
+        statusError.setText("");
+
+        // FIRST NAME
+        if (firstName.getText().trim().isEmpty()) {
+            firstNameError.setText("First name is required");
+            valid = false;
+        }
+        if (!firstName.getText().trim().isEmpty() && !firstName.getText().matches("[A-Za-z]+")) {
+            firstNameError.setText("First name must only contain letters");
+            valid = false;
+        }
+        // LAST NAME
+        if (lastName.getText().trim().isEmpty()) {
+            lastNameError.setText("Last name is required");
+            valid = false;
+        }
+        if (!lastName.getText().trim().isEmpty() && !lastName.getText().matches("[A-Za-z]+")) {
+            lastNameError.setText("Last name must only contain letters");
+            valid = false;
+        }
+        // CLASS
+        if (classField.getText().trim().isEmpty()) {
+            classError.setText("Class is required");
+            valid = false;
+        }
+        if (!classField.getText().trim().isEmpty() && !classField.getText().matches("^[A-Za-z]$+")) {
+            classError.setText("Class must be only a single letter");
+            valid = false;
+        }
+        // GENDER
+        if (gender.getValue() == null) {
+            genderError.setText("Gender must be selected");
+            valid = false;
+        }
+        // GRADE LEVEL
+        if (gradeLevel.getValue() == null) {
+            gradeLevelError.setText("Grade level must be selected");
+            valid = false;
+        }
+        // STATUS
+        if (studentStatus.getValue() == null) {
+            statusError.setText("Enrolment status must be selected");
+            valid = false;
+        }
+        return valid;
+    }
+
+    /**
+     * Maps exception messages to individual field errorLabels
+     */
+    private void displayFieldError(String field, String message) {
+        switch (field) {
+            case "firstName" -> firstNameError.setText(message);
+            case "lastName" -> lastNameError.setText(message);
+            case "class" -> classError.setText(message);
+            case "gender" -> genderError.setText(message);
+            case "gradeLevel" -> gradeLevelError.setText(message);
+            case "status" -> statusError.setText(message);
+            default -> System.err.println("Unknown field error: " + message);
+        }
+    }
+
+
 }

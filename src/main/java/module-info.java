@@ -5,6 +5,8 @@ module com.cab302.teachscope {
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
     requires java.desktop;
+    requires org.jfree.jfreechart;
+    requires org.apache.pdfbox;
 
 
     opens com.cab302.teachscope to javafx.fxml;

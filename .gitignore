@@ -8,6 +8,9 @@
 # DB
 database.db
 
+# PDF Folder
+pdfs/
+
 # MAC
 **/.DS_Store
 
