@@ -49,6 +49,13 @@ public class ResetCodeController {
     private Label errorLabel;
 
     /**
+     * Login page link.
+     */
+    @FXML
+    private Hyperlink loginPageLink;
+
+
+    /**
      * Selected user service and DAO.
      */
     private final UserService userService = new UserService(new DbUserDao());
@@ -107,6 +114,12 @@ public class ResetCodeController {
             e.printStackTrace();
             errorLabel.setText("An unexpected error occurred. Please try again.");
         }
+    }
+    @FXML
+    protected void loginPageClick() throws IOException {
+        Stage stage = (Stage) loginPageLink.getScene().getWindow();
+
+        NavigationUtils.navigateTo(stage, "login", "login");
     }
 
 }

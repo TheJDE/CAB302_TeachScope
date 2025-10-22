@@ -9,8 +9,12 @@
 
 
 
-<HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="0"
-      fx:controller="com.cab302.teachscope.controllers.ResetCodeController" stylesheets="@../css/styles.css">
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           alignment="CENTER"
+           fx:controller="com.cab302.teachscope.controllers.ResetCodeController"
+           stylesheets="@../css/styles.css">
+
+    <HBox alignment="CENTER" spacing="0" HBox.hgrow="ALWAYS">
 
     <!-- login form -->
     <VBox alignment="CENTER" spacing="15.0" prefWidth="400" style="-fx-background-color: white;">
@@ -19,7 +23,7 @@
         </padding>
 
         <!-- logo -->
-        <ImageView pickOnBounds="true" preserveRatio="true" fitWidth="500">
+        <ImageView pickOnBounds="true" preserveRatio="true" fitWidth="250">
             <image>
                 <Image url="@../images/logo_teachscope.png"/>
             </image>
@@ -35,13 +39,19 @@
         <Button fx:id="sendResetCodeButton" text="Send Reset Code" styleClass="" maxWidth="Infinity" onAction="#onSendResetCodeClick"/>
 
         <!-- errorLabel -->
-        <Label fx:id="errorLabel" text="text" style="-fx-font-size: 10px; -fx-font-weight: bold;"/>
+        <Label fx:id="errorLabel" text="" style="-fx-font-size: 10px; -fx-font-weight: bold;"/>
 
         <!-- reset code -->
         <PasswordField fx:id="resetCodeField" promptText="Enter reset code" styleClass="form-control"/>
 
         <!-- reset password button -->
         <Button fx:id="resetPasswordButton" text="Reset Password" styleClass="" maxWidth="Infinity" onAction="#onResetPasswordClick"/>
+
+        <!-- back link -->
+        <HBox alignment="CENTER" spacing="5">
+            <Hyperlink fx:id="loginPageLink" text="Back to Login" onAction="#loginPageClick"/>
+        </HBox>
+
     </VBox>
 
     <!-- image -->
@@ -52,3 +62,4 @@
     </ImageView>
 
 </HBox>
+</StackPane>
