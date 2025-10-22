@@ -99,7 +99,7 @@ public class LoginController {
     protected void forgotPasswordClick() throws IOException {
         Stage stage = (Stage) forgotPasswordLink.getScene().getWindow();
 
-        NavigationUtils.navigateTo(stage, "forgotpassword", "Forgot Password");
+        NavigationUtils.navigateTo(stage, "sendresetcode", "Reset Code");
     }
 
     @FXML

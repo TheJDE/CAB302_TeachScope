@@ -18,13 +18,19 @@ public class User {
     private String passwordHash;
 
     /**
+     * User's hashed password reset code.
+     */
+    private String resetCodeHash;
+
+    /**
      * Constructor.
      * @param email The user's email.
      * @param passwordHash The user's hashed password.
      */
-    public User(String email, String passwordHash){
+    public User(String email, String passwordHash, String resetCodeHash){
         setEmail(email);
         setPasswordHash(passwordHash);
+        setResetCodeHash(resetCodeHash);
     }
 
     //Getters and Setters
@@ -65,6 +71,24 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
+    /**
+     * resetCode hash getter.
+     * @return The user's hashed reset code.
+     */
+    public String getResetCodeHash() {
+        return resetCodeHash;
+    }
+
+    /**
+     * resetCode hash setter.
+     * @param resetCodeHash The user's hashed reset code.
+     */
+    public void setResetCodeHash(String resetCodeHash) {
+        this.resetCodeHash = resetCodeHash;
+    }
+
+
+
     // Public Methods
 
     /**
@@ -75,4 +99,15 @@ public class User {
     public Boolean checkPasswordMatches(String password) {
         return PasswordUtils.hashPassword(password).equals(passwordHash);
     }
+
+    /**
+     * Checks if given reset code matches the user's hashed reset code after hashing.
+     * @param resetCode The password to check.
+     * @return Matches: True, Doesn't Match: False
+     */
+    public Boolean checkResetCodeMatches(String resetCode) {
+        return PasswordUtils.hashResetCode(resetCode).equals(resetCodeHash);
+    }
 }
+
+

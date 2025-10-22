@@ -28,9 +28,10 @@ public class UserTest {
         // Create valid user
         String userEmail = "user@example.com";
         String userPassword = "V@l1Dpaswd";
+        String resetCode = "";
 
         // Add user
-        userService.registerUser(userEmail, userPassword);
+        userService.registerUser(userEmail, userPassword, resetCode);
 
         // Check user was added
         try {
@@ -46,7 +47,7 @@ public class UserTest {
     void TestSignUpEmailExistsAlready() {
         // Create existing user in DAO
         try {
-            userDao.addUser(new User ("user@example.com", "V@l1Dpaswd"));
+            userDao.addUser(new User ("user@example.com", "V@l1Dpaswd", ""));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -54,10 +55,11 @@ public class UserTest {
         // Create valid user
         String userEmail = "user@example.com";
         String userPassword = "V@l1Dpaswd";
+        String resetCode = "";
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            userService.registerUser(userEmail, userPassword);
+            userService.registerUser(userEmail, userPassword, resetCode);
         });
     }
 
@@ -66,10 +68,11 @@ public class UserTest {
         // Create invalid user
         String userEmail = null;
         String userPassword = "V@l1Dpaswd";
+        String resetCode = "";
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            userService.registerUser(userEmail, userPassword);
+            userService.registerUser(userEmail, userPassword, resetCode);
         });
     }
 
@@ -78,10 +81,11 @@ public class UserTest {
         // Create valid user
         String userEmail = "@example.com";
         String userPassword = "V@l1Dpaswd";
+        String resetCode = "";
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            userService.registerUser(userEmail, userPassword);
+            userService.registerUser(userEmail, userPassword, resetCode);
         });
     }
 
@@ -90,10 +94,11 @@ public class UserTest {
         // Create valid user
         String userEmail = "example.com";
         String userPassword = "V@l1Dpaswd";
+        String resetCode = "";
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            userService.registerUser(userEmail, userPassword);
+            userService.registerUser(userEmail, userPassword, resetCode);
         });
     }
 
@@ -102,10 +107,11 @@ public class UserTest {
         // Create valid user
         String userEmail = "user@";
         String userPassword = "V@l1Dpaswd";
+        String resetCode = "";
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            userService.registerUser(userEmail, userPassword);
+            userService.registerUser(userEmail, userPassword, resetCode);
         });
     }
 
@@ -114,10 +120,11 @@ public class UserTest {
         // Create valid user
         String userEmail = "user@email.com";
         String userPassword = null;
+        String resetCode = "";
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            userService.registerUser(userEmail, userPassword);
+            userService.registerUser(userEmail, userPassword, resetCode);
         });
     }
 
@@ -126,10 +133,11 @@ public class UserTest {
         // Create valid user
         String userEmail = "user@email.com";
         String userPassword = "Pp1#";
+        String resetCode = "";
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            userService.registerUser(userEmail, userPassword);
+            userService.registerUser(userEmail, userPassword, resetCode);
         });
     }
 
@@ -138,10 +146,11 @@ public class UserTest {
         // Create valid user
         String userEmail = "test@email.com";
         String userPassword = "Testingtolongpassword3";
+        String resetCode = "";
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            userService.registerUser(userEmail, userPassword);
+            userService.registerUser(userEmail, userPassword ,resetCode);
         });
     }
 
@@ -150,10 +159,11 @@ public class UserTest {
         // Create valid user
         String userEmail = "user@email.com";
         String userPassword = "Passw0rd";
+        String resetCode = "";
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            userService.registerUser(userEmail, userPassword);
+            userService.registerUser(userEmail, userPassword ,resetCode);
         });
     }
 
@@ -162,10 +172,11 @@ public class UserTest {
         // Create valid user
         String userEmail = "user@email.com";
         String userPassword = "Password!";
+        String resetCode = "";
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            userService.registerUser(userEmail, userPassword);
+            userService.registerUser(userEmail, userPassword ,resetCode);
         });
     }
 
@@ -174,10 +185,11 @@ public class UserTest {
         // Create valid user
         String userEmail = "user@email.com";
         String userPassword = "p!assw0rd";
+        String resetCode = "";
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            userService.registerUser(userEmail, userPassword);
+            userService.registerUser(userEmail, userPassword ,resetCode);
         });
     }
 
@@ -186,10 +198,11 @@ public class UserTest {
         // Create valid user
         String userEmail = "user@email.com";
         String userPassword = "PASSWORD!1";
+        String resetCode = "";
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            userService.registerUser(userEmail, userPassword);
+            userService.registerUser(userEmail, userPassword ,resetCode);
         });
     }
 
@@ -198,9 +211,10 @@ public class UserTest {
         // Create valid user
         String userEmail = "user@example.com";
         String userPassword = "V@l1Dpaswd";
+        String resetCode = "";
 
         // Add user
-        userService.registerUser(userEmail, userPassword);
+        userService.registerUser(userEmail, userPassword ,resetCode);
 
         assertDoesNotThrow(() -> {
             userService.login(userEmail, userPassword);
@@ -212,9 +226,10 @@ public class UserTest {
         // Create valid user
         String userEmail = "user@example.com";
         String userPassword = "V@l1Dpaswd";
+        String resetCode = "";
 
         // Add user
-        userService.registerUser(userEmail, userPassword);
+        userService.registerUser(userEmail, userPassword ,resetCode);
 
         assertThrows(IllegalArgumentException.class, () -> {
             userService.login(null, userPassword);
@@ -226,9 +241,10 @@ public class UserTest {
         // Create valid user
         String userEmail = "user@example.com";
         String userPassword = "V@l1Dpaswd";
+        String resetCode = "";
 
         // Add user
-        userService.registerUser(userEmail, userPassword);
+        userService.registerUser(userEmail, userPassword ,resetCode);
 
 
         String wrongEmail = "otheruser@example.com";
@@ -243,9 +259,10 @@ public class UserTest {
         // Create valid user
         String userEmail = "user@example.com";
         String userPassword = "V@l1Dpaswd";
+        String resetCode = "";
 
         // Add user
-        userService.registerUser(userEmail, userPassword);
+        userService.registerUser(userEmail, userPassword, resetCode);
 
 
         String wrongPassword = "otheruser@example.com";
@@ -260,9 +277,10 @@ public class UserTest {
         // Create valid user
         String userEmail = "user@example.com";
         String userPassword = "V@l1Dpaswd";
+        String resetCode = "";
 
         // Add user
-        userService.registerUser(userEmail, userPassword);
+        userService.registerUser(userEmail, userPassword, resetCode);
 
         assertThrows(IllegalArgumentException.class, () -> {
             userService.login(userEmail, null);
@@ -274,9 +292,10 @@ public class UserTest {
         // Create valid user
         String userEmail = "user@example.com";
         String userPassword = "V@l1Dpaswd";
+        String resetCode = "";
 
         // Add user
-        userService.registerUser(userEmail, userPassword);
+        userService.registerUser(userEmail, userPassword, resetCode);
 
 
         try {

@@ -6,6 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Database implementation of the user data access object.
  */
@@ -31,7 +32,8 @@ public class DbUserDao implements UserDao{
             createtable.execute(
             "CREATE TABLE IF NOT EXISTS users ("
                 + "email TEXT PRIMARY KEY,"
-                + "password TEXT NOT NULL"
+                + "password TEXT NOT NULL,"
+                + "resetCode TEXT"
                 + ")"
             );
         } catch (Exception ex) {
@@ -46,9 +48,10 @@ public class DbUserDao implements UserDao{
      */
     @Override
     public void addUser(User user) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("INSERT INTO users (email, password) VALUES (?, ?)");
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO users (email, password, resetCode) VALUES (?, ?, ?)");
         statement.setString(1, user.getEmail());
         statement.setString(2, user.getPasswordHash());
+        statement.setString(3,user.getResetCodeHash());
         statement.executeUpdate();
     }
 
@@ -60,6 +63,18 @@ public class DbUserDao implements UserDao{
     public void updateUserPassword(User user) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("UPDATE users SET password = ? WHERE email = ?");
         statement.setString(1, user.getPasswordHash());
+        statement.setString(2, user.getEmail());
+        statement.executeUpdate();
+    }
+
+    /**
+     * Updates existing user password in the database
+     * @param user - the user to update
+     */
+    @Override
+    public void updateUserResetCode(User user) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("UPDATE users SET resetCode = ? WHERE email = ?");
+        statement.setString(1, user.getResetCodeHash());
         statement.setString(2, user.getEmail());
         statement.executeUpdate();
     }
@@ -88,7 +103,8 @@ public class DbUserDao implements UserDao{
 
         if (resultSet.next()) {
             String password = resultSet.getString("password");
-            return new User(email, password);
+            String resetCode = resultSet.getString("resetCode");
+            return new User(email, password, resetCode);
         }
 
         return null;
@@ -108,10 +124,13 @@ public class DbUserDao implements UserDao{
         while (resultSet.next()) {
             String email = resultSet.getString("email");
             String password = resultSet.getString("password");
-            User user = new User(email, password);
+            String resetCode = resultSet.getString("resetCode");
+            User user = new User(email, password, resetCode);
             users.add(user);
         }
 
         return users;
     }
+
+
 }
