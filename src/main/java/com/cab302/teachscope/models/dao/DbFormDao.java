@@ -47,7 +47,8 @@ public class DbFormDao implements FormDao {
                     "respectForRulesScore INTEGER NOT NULL," +
                     "emotionalState TEXT NOT NULL," +
                     "teacherConcerns TEXT NOT NULL, " +
-                    "FOREIGN KEY(studentId) REFERENCES students(id)" +
+                    "FOREIGN KEY(studentId) REFERENCES students(id)," +
+                    "UNIQUE(studentId, term, week)" +
                     ")";
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
