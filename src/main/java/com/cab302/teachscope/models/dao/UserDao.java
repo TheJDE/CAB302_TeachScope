@@ -23,6 +23,12 @@ public interface UserDao {
     public void updateUserPassword(User user) throws SQLException;
 
     /**
+     * Updates existing users hashed reset code in the database
+     * @param user - the user to update
+     */
+    void updateUserResetCode(User user) throws SQLException;
+
+    /**
      * Deletes a user from the database
      * @param user - the user to delete
      */

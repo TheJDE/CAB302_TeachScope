@@ -7,7 +7,7 @@ module com.cab302.teachscope {
     requires java.desktop;
     requires org.jfree.jfreechart;
     requires org.apache.pdfbox;
-
+    requires jakarta.mail;
 
     opens com.cab302.teachscope to javafx.fxml;
     exports com.cab302.teachscope;

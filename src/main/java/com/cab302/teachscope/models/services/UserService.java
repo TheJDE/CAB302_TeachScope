@@ -3,6 +3,7 @@ package com.cab302.teachscope.models.services;
 import com.cab302.teachscope.models.dao.UserDao;
 import com.cab302.teachscope.models.entities.User;
 import com.cab302.teachscope.util.PasswordUtils;
+import jakarta.mail.MessagingException;
 
 import java.sql.SQLException;
 
@@ -32,7 +33,7 @@ public class UserService {
      * @param password The user's password.
      * @throws IllegalArgumentException If arguments are invalid or user exists already.
      */
-    public void registerUser(String email, String password) throws IllegalArgumentException{
+    public void registerUser(String email, String password, String resetCode) throws IllegalArgumentException{
         // Validate user inputs
         // Password must be 8–30 characters
 
@@ -80,8 +81,11 @@ public class UserService {
         // Hash Password
         String passwordHash = PasswordUtils.hashPassword(password);
 
+        // Hash resetCode
+        String resetCodeHash = PasswordUtils.hashResetCode(resetCode);
+
         // Create and add user
-        User user = new User(email, passwordHash);
+        User user = new User(email, passwordHash, resetCodeHash);
 
         try {
             userDAO.addUser(user);
@@ -115,4 +119,68 @@ public class UserService {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Method to generate and send a reset code to the users specified email, successful if no exceptions thrown.
+     * @param email The user's email.
+     * @throws IllegalArgumentException If arguments are invalid or if user doesn't exist.
+     */
+    public void sendPasswordResetCode(String email) throws SQLException, MessagingException {
+        User user = userDAO.getUser(email);
+        if (user == null) {
+            throw new IllegalArgumentException("No user found with that email.");
+        }
+
+        String resetCode = PasswordUtils.generatePasswordResetCode(6);
+        String hashedResetCode = PasswordUtils.hashResetCode(resetCode);
+
+        user.setResetCodeHash(hashedResetCode);
+        userDAO.updateUserResetCode(user);
+
+        PasswordUtils.sendResetCode(email, resetCode);
+    }
+
+    /**
+     * Method to validate the reset code sent to the users email, successful if no exceptions thrown.
+     * @param email The user's email.
+     * @param resetCode The user's resetCode.
+     * @throws IllegalArgumentException If arguments are invalid or if user doesn't exist.
+     */
+    public void validateResetCode(String email, String resetCode) throws IllegalArgumentException {
+        try {
+            User user = userDAO.getUser(email);
+            if (resetCode == null) {
+                throw new IllegalArgumentException("No resetCode entered");
+            }
+            if (!user.checkResetCodeMatches(resetCode)) {
+                throw new IllegalArgumentException("Incorrect resetCode");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Method to update the users password, successful if no exceptions thrown.
+     * @param email The user's email.
+     * @param newPassword The user's new password.
+     * @throws IllegalArgumentException If arguments are invalid or if user doesn't exist.
+     */
+    public void updatePassword(String email, String newPassword) throws IllegalArgumentException {
+        if (newPassword == null || !newPassword.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,30}$")) {
+            throw new IllegalArgumentException("Invalid password.");
+        }
+        try {
+            User user = userDAO.getUser(email);
+            if (user == null) {
+                throw new IllegalArgumentException("User not found.");
+            }
+            String hashedPassword = PasswordUtils.hashPassword(newPassword);
+            user.setPasswordHash(hashedPassword);
+            userDAO.updateUserPassword(user);
+        } catch (SQLException e) {
+            throw new RuntimeException("Database error while updating password", e);
+        }
+    }
+
 }

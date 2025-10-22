@@ -69,6 +69,7 @@ public class SignupController {
         String email = emailField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
+        String resetCode = "";
 
         errorLabel.setText("");
 
@@ -78,7 +79,7 @@ public class SignupController {
         }
 
         try {
-            userService.registerUser(email, password);
+            userService.registerUser(email, password, resetCode);
 
             Stage stage = (Stage) signUpButton.getScene().getWindow();
 
