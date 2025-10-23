@@ -51,7 +51,10 @@ public class GeneratePDFController {
     private final GenerateReportsService reportsService;
 
     /**
-     * Returns to the Weekly Forms page.
+     * Navigates back to the Weekly Forms page for the current student.
+     * Loads the weekly forms view and passes the student context to the new controller.
+     *
+     * @throws IOException if the FXML file cannot be loaded
      */
     @FXML
     protected void weeklyFormsClick() throws IOException {
@@ -73,16 +76,26 @@ public class GeneratePDFController {
         }
     }
 
+    /**
+     * Handles navigation to the knowledge base PDF document.
+     */
     @FXML
     protected void onKnowledgeBaseClick() {
         NavigationUtils.openPDF("/src/main/resources/images/user_introductory_tutorial.pdf");
     }
 
+    /**
+     * Handles navigation to the introductory tutorial PDF document.
+     */
     @FXML
     protected void onIntroductoryTutorialClick() {
         NavigationUtils.openPDF("/src/main/resources/images/user_introductory_tutorial.pdf");
     }
 
+    /**
+     * Handles user logout action.
+     * Navigates the user back to the login page and clears the current session.
+     */
     @FXML
     protected void onLogoutClick() {
         Stage stage = (Stage) logoutButton.getScene().getWindow();
@@ -93,6 +106,10 @@ public class GeneratePDFController {
         }
     }
 
+    /**
+     * Handles navigation to the student dashboard.
+     * Returns the user to the main dashboard view.
+     */
     @FXML
     protected void onStudentClick() {
         Stage stage = (Stage) studentNav.getScene().getWindow();
@@ -103,6 +120,9 @@ public class GeneratePDFController {
         }
     }
 
+    /**
+     * Handles navigation to the PDF generation page for all students.
+     */
     @FXML
     protected void onGeneratePDFAllStudentsClick() {
         Stage stage = (Stage) reportButton.getScene().getWindow();
@@ -113,6 +133,10 @@ public class GeneratePDFController {
         }
     }
 
+    /**
+     * Handles navigation to the timeline view.
+     * Opens the timeline page showing form completion status across all students.
+     */
     @FXML
     protected void onTimelineClick() {
         Stage stage = (Stage) timelineButton.getScene().getWindow();
@@ -124,14 +148,22 @@ public class GeneratePDFController {
     }
 
 
+    /**
+     * Constructs a new GeneratePDFController.
+     * Initializes the reports service with required data access objects.
+     */
     public GeneratePDFController() {
         this.reportsService = new GenerateReportsService(new DbFormDao(), new DbStudentDao());
     }
 
+
     /**
      * Sets the selected student for generating reports.
+     * Updates the PDF title to display the student's name.
+     *
+     * @param studentId   The unique identifier of the student
+     * @param studentName The full name of the student
      */
-
     public void setStudent(String studentId, String studentName) {
         this.studentId = studentId;
         this.studentName = studentName;
@@ -141,6 +173,7 @@ public class GeneratePDFController {
             PDFTitle.setText("Generate PDF for " + studentName);
         }
     }
+
     /**
      * Called when "Generate Report" is clicked.
      */
@@ -185,6 +218,11 @@ public class GeneratePDFController {
         }
     }
 
+    /**
+     * Handles the generation of PDF reports for all students in the class.
+     * Validates all required selections (term, from week, to week) before generation.
+     * Creates individual PDF reports for each student containing their data
+     **/
     @FXML
     protected void onGenerateAllReportsClick() {
         String termValue = term.getValue();

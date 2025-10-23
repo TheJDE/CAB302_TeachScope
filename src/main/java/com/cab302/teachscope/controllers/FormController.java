@@ -5,7 +5,6 @@ import com.cab302.teachscope.models.services.FormService;
 import com.cab302.teachscope.models.entities.WeeklyForm;
 import com.cab302.teachscope.models.dao.DbStudentDao;
 import com.cab302.teachscope.models.services.StudentService;
-import com.cab302.teachscope.controllers.GeneratePDFController;
 import com.cab302.teachscope.util.LoggedInUser;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -117,19 +116,30 @@ public class FormController {
     private final StudentService studentService = new StudentService(new DbStudentDao());
     private String studentId;
     private String studentName;
+
+    /** Contains the form currently being edited or empty if creating new form */
     private Optional<WeeklyForm> editingForm = Optional.empty();
 
-    //Navigation Bar Functions
+    /**
+     * Handles navigation to the knowledge base PDF document.
+     */
     @FXML
     protected void onKnowledgeBaseClick() {
         NavigationUtils.openPDF("/src/main/resources/images/knowledge_base_final.pdf");
     }
 
+    /**
+     * Handles navigation to the introductory tutorial PDF document.
+     */
     @FXML
     protected void onIntroductoryTutorialClick() {
         NavigationUtils.openPDF("/src/main/resources/images/user_introductory_tutorial.pdf");
     }
 
+    /**
+     * Handles user logout action.
+     * Navigates the user back to the login page and clears the current session.
+     */
     @FXML
     protected void onLogoutClick() {
         Stage stage = (Stage) logoutButton.getScene().getWindow();
@@ -140,6 +150,10 @@ public class FormController {
         }
     }
 
+    /**
+     * Handles navigation to the student dashboard.
+     * Returns the user to the main dashboard view.
+     */
     @FXML
     protected void onStudentClick() {
         Stage stage = (Stage) studentNav.getScene().getWindow();
@@ -150,6 +164,10 @@ public class FormController {
         }
     }
 
+    /**
+     * Handles navigation to the timeline view.
+     * Opens the timeline page showing form completion status across all students.
+     */
     @FXML
     protected void onTimelineClick() {
         Stage stage = (Stage) timelineButton.getScene().getWindow();
@@ -160,6 +178,9 @@ public class FormController {
         }
     }
 
+    /**
+     * Handles navigation to the PDF generation page for all students.
+     */
     @FXML
     protected void onGeneratePDFAllStudentsClick() {
         Stage stage = (Stage) reportButton.getScene().getWindow();
@@ -170,7 +191,12 @@ public class FormController {
         }
     }
 
-
+    /**
+     * Handles navigation to the weekly forms view.
+     * Displays all weekly forms for the current student organized by term.
+     *
+     * @throws IOException if the FXML file cannot be loaded
+     */
     @FXML
     protected void weeklyFormsClick() throws IOException {
         // go to weeklyforms.fxml
@@ -214,6 +240,10 @@ public class FormController {
         }
     }
 
+    /**
+     * Handles navigation to the PDF generation page for the current student.
+     * Opens the interface for generating a PDF report for a specific student.
+     */
     @FXML
     protected void generatePDFClick() {
         Stage stage = (Stage) generatePDF.getScene().getWindow();
@@ -260,7 +290,14 @@ public class FormController {
     }
 
     /**
-     * Sets up the weekly forms table with columns and action buttons.
+     * Sets up a weekly forms table with columns and action buttons.
+     * Configures the week and term columns with property value factories
+     * and adds edit functionality to the actions column.
+     *
+     * @param table The table view to configure
+     * @param weekCol The week column
+     * @param termCol The term column
+     * @param actionsCol The actions column with edit form buttons
      */
     private void setupTable(TableView<WeeklyForm> table,
                             TableColumn<WeeklyForm, Integer> weekCol,
@@ -295,7 +332,16 @@ public class FormController {
         });
     }
 
-
+    /**
+     * Sets up the timeline table for displaying form completion status across students.
+     * Configures columns for student names, completion status, and clickable form links.
+     * Links are dynamically generated to either view existing forms or create new ones.
+     *
+     * @param timelineTable The table view to configure for timeline display
+     * @param nameColumn The column for displaying student names
+     * @param statusColumn The column for displaying completion status
+     * @param formColumn The column for displaying clickable form links
+     */
     private void setupTimelineTable(TableView<Map<String, String>> timelineTable,
                                     TableColumn<Map<String, String>, String> nameColumn,
                                     TableColumn<Map<String, String>, String> statusColumn,
@@ -347,6 +393,12 @@ public class FormController {
         timelineTable.setItems(FXCollections.observableArrayList());
     }
 
+    /**
+     * Opens a new form creation page from the timeline view.
+     * Initializes the form with student context from the timeline data.
+     *
+     * @param formData Map containing student information including ID and name
+     */
     private void openNewFormFromTimeline(Map<String, String> formData) {
         try {
             String studentIdFromTimeline = formData.get("studentId");
@@ -371,7 +423,10 @@ public class FormController {
     }
 
     /**
-     * Opens the form editor from the timeline view
+     * Opens an existing form for editing from the timeline view.
+     * Fetches the form data using the form ID and loads it into the editor.
+     *
+     * @param formData Map containing form ID, student ID and student name
      */
     private void openFormFromTimeline(Map<String, String> formData) {
         try {
@@ -560,7 +615,6 @@ public class FormController {
     /**
      * Timeline Page
      */
-
     @FXML
     protected void viewTimelineStudents() {
         try {
