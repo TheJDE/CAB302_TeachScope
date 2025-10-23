@@ -24,26 +24,26 @@ public interface StudentDao {
      * Updates existing Student Enrolment Status in the database
      * @param student - the student to update
      */
-    public void updateStudent(Student student) throws SQLException;
+    void updateStudent(Student student) throws SQLException;
 
     /**
      * Deletes a student from the database
      * @param Id - the user's Id'
      */
-    public void deleteStudent(String Id) throws SQLException;
+    void deleteStudent(String Id) throws SQLException;
 
     /**
      * Retrieves a specific user from the database
      * @param id - the user to retrieve
      * @return - the user with the given userName, or null if not found.
      */
-    public Student getStudent(String id) throws SQLException;
+    Student getStudent(String id) throws SQLException;
 
     /**
      * Retrieves all users from the database
      * @return - the user with the given userName, or null if not found.
      */
-    public List<Student> getAllStudents(String teacherEmail) throws SQLException;
+    List<Student> getAllStudents(String teacherEmail) throws SQLException;
 }
 
 

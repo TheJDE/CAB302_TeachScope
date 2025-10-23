@@ -12,7 +12,9 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-
+/**
+ * Utility class for navigation and file opening functionality
+ */
 public class NavigationUtils {
     /**
      * Method to redirect to a new page in the application.

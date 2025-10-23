@@ -28,8 +28,12 @@ public class MockUserDao implements UserDao {
 
     }
 
+    /**
+     * Updates the user's password reset code.
+     * @param user - the user to update
+     */
     @Override
-    public void updateUserResetCode(User user) throws SQLException {
+    public void updateUserResetCode(User user) {
 
     }
 
