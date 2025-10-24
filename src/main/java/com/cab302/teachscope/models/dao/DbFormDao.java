@@ -281,7 +281,6 @@ public class DbFormDao implements FormDao {
      * @throws SQLException On database error
      * @throws IllegalArgumentException If no valid data is found in any category.
      */
-
     public Map<String, Double> findAverageScoresForStudent(String studentId, int term, int fromWeek, int toWeek) throws SQLException {
         String sql = "SELECT " +
                 "AVG(attentionScore) AS attentionScore, " +
@@ -490,6 +489,14 @@ public class DbFormDao implements FormDao {
         return new ArrayList<>();
     }
 
+    /**
+     *
+     * @param term The term to search in.
+     * @param fromWeek The week to search from (inclusive).
+     * @param toWeek The week to search to (inclusive).
+     * @return All students with at least 1 form within given range.
+     * @throws SQLException On misformed query.
+     */
     @Override
     public List<String> findStudentsInRange(int term, int fromWeek, int toWeek) throws SQLException {
         List<String> students = new ArrayList<>();

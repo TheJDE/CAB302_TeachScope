@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Mock database access object for users
+ */
 public class MockUserDao implements UserDao {
     private final Map<String, User> users = new HashMap<>();
 
@@ -28,8 +31,12 @@ public class MockUserDao implements UserDao {
 
     }
 
+    /**
+     * Updates the user's password reset code.
+     * @param user - the user to update
+     */
     @Override
-    public void updateUserResetCode(User user) throws SQLException {
+    public void updateUserResetCode(User user) {
 
     }
 

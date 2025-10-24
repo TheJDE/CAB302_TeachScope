@@ -4,9 +4,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Database singleton class
+ */
 public class DatabaseConnection {
+    /**
+     * Database connection instance
+     */
     private static Connection instance = null;
 
+    /**
+     * Establish connection
+     */
     private DatabaseConnection() {
         String url = "jdbc:sqlite:database.db";
         try {
@@ -16,6 +25,10 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * Connection getter
+     * @return Database instance
+     */
     public static Connection getInstance() {
         if (instance == null) {
             new DatabaseConnection();

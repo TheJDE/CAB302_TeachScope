@@ -28,7 +28,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +53,13 @@ public class GenerateReportsService {
         this.studentDao = studentDao;
     }
 
+    /**
+     * Creates a new report for a student and time range.
+     * @param studentID Student's ID
+     * @param term Term to generate
+     * @param fromWeek Week to generate from (inclusive)
+     * @param toWeek Week to generate to (inclusive)
+     */
     public void createReport(String studentID, int term, int fromWeek, int toWeek) {
         // Check student ID is valid
         if (studentID == null || !studentID.matches("^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$")) {
@@ -299,6 +305,12 @@ public class GenerateReportsService {
         }
     }
 
+    /**
+     * Generate a report for each student with at least one form within the range.
+     * @param term Term to generate
+     * @param fromWeek Week to generate from (inclusive)
+     * @param toWeek Week to generate to (inclusive)
+     */
     public void generateAll(int term, int fromWeek, int toWeek) {
         // Check term is valid
         if (term < 1 || term > 4) {
@@ -327,7 +339,6 @@ public class GenerateReportsService {
 
     /**
      * Returns a bar renderer to colour columns as specified
-     *
      * @return Bar Renderer
      */
     private static BarRenderer getBarRenderer() {

@@ -4,7 +4,14 @@ import com.cab302.teachscope.models.services.StudentService;
 
 public class LoggedInUser {
 
+    /**
+     * User's email
+     */
     private static String email;
+
+    /**
+     * Student service to use
+     */
     private static StudentService studentService;
 
     private LoggedInUser() {} // prevent instantiation

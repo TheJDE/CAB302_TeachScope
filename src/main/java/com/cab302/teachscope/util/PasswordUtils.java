@@ -46,6 +46,11 @@ public class PasswordUtils {
         }
     }
 
+    /**
+     * Generates a new reset code
+     * @param length Length of code.
+     * @return Reset code string
+     */
     public static String generatePasswordResetCode(int length) {
         StringBuilder resetCode = new StringBuilder();
         for (int i = 0; i < length; i++) {
@@ -54,6 +59,11 @@ public class PasswordUtils {
         return resetCode.toString();
     }
 
+    /**
+     * Hashes the reset code.
+     * @param resetCode Code to hash
+     * @return Hashed code as string
+     */
     public static String hashResetCode(String resetCode) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -68,6 +78,12 @@ public class PasswordUtils {
         }
     }
 
+    /**
+     * Sends the reset code to provided email
+     * @param userEmail Email to send code to
+     * @param resetCode Reset code
+     * @throws MessagingException On error
+     */
     public static void sendResetCode(String userEmail, String resetCode) throws MessagingException {
         if (userEmail == null || userEmail.isEmpty()) {
             throw new IllegalArgumentException("Email address cannot be null or empty.");

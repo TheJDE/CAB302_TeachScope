@@ -14,13 +14,13 @@ public interface UserDao {
      * Adds a new user to the database
      * @param user - the user to add
      */
-    public void addUser(User user) throws SQLException;
+    void addUser(User user) throws SQLException;
 
     /**
      * Updates existing user password in the database
      * @param user - the user to update
      */
-    public void updateUserPassword(User user) throws SQLException;
+    void updateUserPassword(User user) throws SQLException;
 
     /**
      * Updates existing users hashed reset code in the database
@@ -32,18 +32,18 @@ public interface UserDao {
      * Deletes a user from the database
      * @param user - the user to delete
      */
-    public void deleteUser(User user) throws SQLException;
+    void deleteUser(User user) throws SQLException;
 
     /**
      * Retrieves a specific user from the database
      * @param email - the user to retrieve
      * @return - the user with the given email, or null if not found.
      */
-    public User getUser(String email) throws SQLException;
+    User getUser(String email) throws SQLException;
 
     /**
      * Retrieves all users from the database
      * @return - List of user objects.
      */
-    public List<User> getAllUsers() throws SQLException;
+    List<User> getAllUsers() throws SQLException;
 }

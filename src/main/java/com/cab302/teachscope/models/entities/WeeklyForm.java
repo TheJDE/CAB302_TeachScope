@@ -8,24 +8,111 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class WeeklyForm {
+    /**
+     * Form ID
+     */
     private String id;
+
+    /**
+     * Student ID
+     */
     private String studentId;
+
+    /**
+     * Term of form
+     */
     private int term;
+
+    /**
+     * Week of form
+     */
     private int week;
+
+    /**
+     * Number of days attended in the week
+     */
     private int attendanceDays;
+
+    /**
+     * Number of days late in the week
+     */
     private int daysLate;
+
+    /**
+     * Attention score for the week (0-2)
+     */
     private int attentionScore;
+
+    /**
+     * Was homework completed this week?
+     */
     private boolean homeworkDone;
+
+    /**
+     * Participation score for the week (0-2)
+     */
     private int participationScore;
+
+    /**
+     * Literacy score for the week (0-2)
+     */
     private int literacyScore;
+
+    /**
+     * Numeracy score for the week (0-2)
+     */
     private int numeracyScore;
+
+    /**
+     * Understanding score for the week (0-2)
+     */
     private int understandingScore;
+
+    /**
+     * Behaviour score for the week (0-2)
+     */
     private int behaviourScore;
+
+    /**
+     * Peer interaction score for the week (0-2)
+     */
     private int peerInteractionScore;
+
+    /**
+     * Respect for rules score for the week (0-2)
+     */
     private int respectForRulesScore;
+
+    /**
+     * Most common emotional state for the week
+     */
     private String emotionalState;
+
+    /**
+     * Additional notes on the student for the week
+     */
     private String teacherConcerns;
 
+    /**
+     * Contructor
+     * @param id
+     * @param studentId
+     * @param term
+     * @param week
+     * @param attendanceDays
+     * @param daysLate
+     * @param attentionScore
+     * @param homeworkDone
+     * @param participationScore
+     * @param literacyScore
+     * @param numeracyScore
+     * @param understandingScore
+     * @param behaviourScore
+     * @param peerInteractionScore
+     * @param respectForRulesScore
+     * @param emotionalState
+     * @param teacherConcerns
+     */
     public WeeklyForm(Optional<String> id,
                       String studentId,
                       int term,
