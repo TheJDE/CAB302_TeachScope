@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Mock database access object for users
+ */
 public class MockUserDao implements UserDao {
     private final Map<String, User> users = new HashMap<>();
 

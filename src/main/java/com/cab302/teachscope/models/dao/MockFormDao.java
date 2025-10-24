@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Mock database access object for student forms
+ */
 public class MockFormDao implements FormDao {
 
     /**
