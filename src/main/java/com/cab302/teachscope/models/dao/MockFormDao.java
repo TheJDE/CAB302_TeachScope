@@ -120,7 +120,12 @@ public class MockFormDao implements FormDao {
      * @throws SQLException
      */
     public List<String> findStudentsInRange(int term, int fromWeek, int toWeek) throws SQLException {
-        return null;
+        return forms.values().stream()
+                .filter(form -> form.getTerm() == term)
+                .filter(form -> form.getWeek() >= fromWeek && form.getWeek() <= toWeek)
+                .map(WeeklyForm::getStudentId)
+                .distinct() // avoid duplicates
+                .toList();
     }
 
     /**
