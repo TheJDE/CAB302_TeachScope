@@ -111,15 +111,16 @@ public class StudentController {
     }
 
     /**
-     * Handles the click event for the Knowledge Base button
-     * (currently unimplemented)
+     * Handles navigation to the knowledge base PDF document.
      */
-
     @FXML
     protected void onKnowledgeBaseClick() {
         NavigationUtils.openPDF("/src/main/resources/images/knowledge_base_final.pdf");
     }
 
+    /**
+     * Handles navigation to the introductory tutorial PDF document.
+     */
     @FXML
     protected void onIntroductoryTutorialClick() {
         NavigationUtils.openPDF("/src/main/resources/images/user_introductory_tutorial.pdf");
@@ -369,6 +370,12 @@ public class StudentController {
         });
     }
 
+    /**
+     * Handles navigation to the weekly forms view.
+     * Displays all weekly forms for the current student organized by term.
+     *
+     * @throws IOException if the FXML file cannot be loaded
+     */
     @FXML
     protected void viewFormsClick() throws IOException {
         // go to weeklyforms.fxml

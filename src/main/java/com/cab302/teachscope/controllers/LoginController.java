@@ -64,6 +64,10 @@ public class LoginController {
     @FXML
     private Hyperlink forgotPasswordLink;
 
+    /**
+     * Redirects to login page.
+     * @throws IOException On failed redirect.
+     */
     @FXML
     protected void onLoginClick() throws IOException {
         errorLabel.setText("");
@@ -95,6 +99,10 @@ public class LoginController {
         NavigationUtils.navigateTo(stage, "signup", "Sign Up");
     }
 
+    /**
+     * Redirects to forgot password page.
+     * @throws IOException On failed redirect.
+     */
     @FXML
     protected void forgotPasswordClick() throws IOException {
         Stage stage = (Stage) forgotPasswordLink.getScene().getWindow();
