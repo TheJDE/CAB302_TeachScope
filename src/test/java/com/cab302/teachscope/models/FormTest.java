@@ -859,4 +859,48 @@ public class FormTest {
 
         assertDoesNotThrow(() -> generateReportsService.createReport(StudentId, term, 1, 10));
     }
+
+    @Test
+    void studentAveragesInvalidTerm() {
+        formService.createForm(
+                StudentId,
+                term,
+                week,
+                attendanceDays,
+                daysLate,
+                attentionScore,
+                homeworkDone,
+                participationScore,
+                literacyScore,
+                numeracyScore,
+                understandingScore,
+                behaviourScore,
+                peerInteractionScore,
+                respectForRulesScore,
+                emotionalState,
+                teacherConcerns
+        );
+
+        formService.createForm(
+                StudentId,
+                term,
+                week + 1,
+                attendanceDays,
+                daysLate,
+                attentionScore,
+                homeworkDone,
+                participationScore,
+                literacyScore,
+                numeracyScore,
+                understandingScore,
+                behaviourScore,
+                peerInteractionScore,
+                respectForRulesScore,
+                emotionalState,
+                teacherConcerns
+        );
+
+        assertThrows(IllegalArgumentException.class,
+                () -> generateReportsService.createReport(StudentId, 0, 1, 10));
+    }
 }
