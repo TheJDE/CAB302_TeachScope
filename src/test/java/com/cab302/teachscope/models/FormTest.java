@@ -2,7 +2,10 @@ package com.cab302.teachscope.models;
 
 import com.cab302.teachscope.models.dao.MockFormDao;
 import com.cab302.teachscope.models.dao.FormDao;
+import com.cab302.teachscope.models.dao.MockStudentDao;
+import com.cab302.teachscope.models.dao.StudentDao;
 import com.cab302.teachscope.models.services.FormService;
+import com.cab302.teachscope.models.services.GenerateReportsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FormTest {
     private FormDao formdao;
+    private StudentDao studentDao;
     private FormService formService;
+    private GenerateReportsService generateReportsService;
 
     private String id;
     private String StudentId;
@@ -38,6 +43,8 @@ public class FormTest {
     public void setup() {
         formdao = new MockFormDao();
         formService = new FormService(formdao);
+        studentDao = new MockStudentDao();
+        generateReportsService = new GenerateReportsService(formdao, studentDao);
 
         id = "e215947f-4d73-4726-baaf-dbec6258968f";
         StudentId = "e215947f-4d73-4726-baaf-dbec6258968e";
@@ -60,7 +67,24 @@ public class FormTest {
 
     @Test
     void createFormValid() {
-
+        assertDoesNotThrow(() -> formService.createForm(
+                StudentId,
+                term,
+                week,
+                attendanceDays,
+                daysLate,
+                attentionScore,
+                homeworkDone,
+                participationScore,
+                literacyScore,
+                numeracyScore,
+                understandingScore,
+                behaviourScore,
+                peerInteractionScore,
+                respectForRulesScore,
+                emotionalState,
+                teacherConcerns
+        ));
     }
 
     @Test
@@ -790,5 +814,137 @@ public class FormTest {
         } catch (RuntimeException e) {
             throw new RuntimeException();
         }
+    }
+
+    // STUDENT REPORTS TESTING
+    @Test
+    void studentAveragesValidID() {
+        formService.createForm(
+                StudentId,
+                term,
+                week,
+                attendanceDays,
+                daysLate,
+                attentionScore,
+                homeworkDone,
+                participationScore,
+                literacyScore,
+                numeracyScore,
+                understandingScore,
+                behaviourScore,
+                peerInteractionScore,
+                respectForRulesScore,
+                emotionalState,
+                teacherConcerns
+        );
+
+        formService.createForm(
+                StudentId,
+                term,
+                week + 1,
+                attendanceDays,
+                daysLate,
+                attentionScore,
+                homeworkDone,
+                participationScore,
+                literacyScore,
+                numeracyScore,
+                understandingScore,
+                behaviourScore,
+                peerInteractionScore,
+                respectForRulesScore,
+                emotionalState,
+                teacherConcerns
+        );
+
+        assertDoesNotThrow(() -> generateReportsService.createReport(StudentId, term, 1, 10));
+    }
+
+    @Test
+    void studentAveragesInvalidTerm() {
+        formService.createForm(
+                StudentId,
+                term,
+                week,
+                attendanceDays,
+                daysLate,
+                attentionScore,
+                homeworkDone,
+                participationScore,
+                literacyScore,
+                numeracyScore,
+                understandingScore,
+                behaviourScore,
+                peerInteractionScore,
+                respectForRulesScore,
+                emotionalState,
+                teacherConcerns
+        );
+
+        formService.createForm(
+                StudentId,
+                term,
+                week + 1,
+                attendanceDays,
+                daysLate,
+                attentionScore,
+                homeworkDone,
+                participationScore,
+                literacyScore,
+                numeracyScore,
+                understandingScore,
+                behaviourScore,
+                peerInteractionScore,
+                respectForRulesScore,
+                emotionalState,
+                teacherConcerns
+        );
+
+        assertThrows(IllegalArgumentException.class,
+                () -> generateReportsService.createReport(StudentId, 0, 1, 10));
+    }
+
+    @Test
+    void studentAveragesInvalidWeek() {
+        formService.createForm(
+                StudentId,
+                term,
+                week,
+                attendanceDays,
+                daysLate,
+                attentionScore,
+                homeworkDone,
+                participationScore,
+                literacyScore,
+                numeracyScore,
+                understandingScore,
+                behaviourScore,
+                peerInteractionScore,
+                respectForRulesScore,
+                emotionalState,
+                teacherConcerns
+        );
+
+        formService.createForm(
+                StudentId,
+                term,
+                week + 1,
+                attendanceDays,
+                daysLate,
+                attentionScore,
+                homeworkDone,
+                participationScore,
+                literacyScore,
+                numeracyScore,
+                understandingScore,
+                behaviourScore,
+                peerInteractionScore,
+                respectForRulesScore,
+                emotionalState,
+                teacherConcerns
+        );
+
+        assertThrows(IllegalArgumentException.class,
+                () -> generateReportsService.createReport(StudentId, 1, 1, 12));
     }
 }
