@@ -72,7 +72,7 @@ public class GenerateReportsService {
         }
 
         // Check weeks are valid
-        if (fromWeek < 0 || fromWeek > 12 || fromWeek > toWeek) {
+        if (fromWeek < 0 || toWeek > 10 || fromWeek > toWeek) {
             throw new IllegalArgumentException("Invalid term");
         }
 
